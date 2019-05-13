@@ -1,17 +1,34 @@
 import * as DEFS from '../DEFS/defs.js';
+import lightManager from '../actorManagers/lights/light_factory.js.js';
 /*
  * Handle scene actors
 */
 const _sceneManager = (function () {
 
-    var _systemManagerRef;
+    var _systemManagerRef,
+        _lineManagerRef,
+        _lightManagerRef,
+        _isInitialised = false;
     const actors = {
             camera: null,
             meshes: [],
-            lines: []
         };
     const materials = [];
     const textures = [];
+
+    var _sceneObject;
+
+    function _renderScene () {
+        _sceneObject.render();
+    }
+
+    function _createScene (engine) {
+        _sceneObject = new BABYLON.Scene(engine);
+    }
+
+    function _getScene () {
+        return _sceneObject;
+    }
 
     function _initCamera () {
         // * Check camera doesn't already exist, and create if required
@@ -143,18 +160,20 @@ const _sceneManager = (function () {
         actor.material = texture;
     }
 
-    function _initScene (systemManagerRef) {
-        _systemManagerRef = systemManagerRef
+    function _init () {
+        _isInitialised = true;
     }
 
     return {
-        initialiseScene: _initScene,
+
+        initialise: _init,
+        createScene: _createScene,
+        getScene: _getScene,
+        renderScene: _renderScene,
+
         initialiseCamera: _initCamera,
 
-        addLight: _addLight,
-
         addSimpleMesh: _addSimpleMesh,
-        addLines: _addLines,
 
         moveMeshActorAbsolutely: _moveMeshActorAbsolutely,
         moveMeshActorRelatively: _moveMeshActorRelatively,

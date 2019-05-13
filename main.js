@@ -1,5 +1,8 @@
 import * as DEFS from './DEFS/defs.js';
 
+import lightManager from './actorManagers/lights/light_manager.js';
+import lineManager from './actorManagers/lines/line_manager.js';
+
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
 
@@ -7,7 +10,21 @@ import SceneManager from './scene_manager/scene_manager.js';
  * Initialise the engine
 */
 function initialise (canvasId) {
+
+    // Initialise System Manager
     SystemManager.initialise("renderCanvas");
+
+    // Initialise Scene Manager
+    SceneManager.initialise();
+
+    // Register SceneManager to SystemManager
+    SystemManager.registerSceneManager(SceneManager);
+
+    SceneManager.createScene(SystemManager.getEngine);
+}
+
+function run () {
+    SystemManager.getEngine().runRenderLoop(SceneManager.renderScene);
 }
 
 function createScene () {

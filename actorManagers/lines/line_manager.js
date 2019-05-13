@@ -60,6 +60,8 @@ const lineManager = (function lineManager() {
             return;
         }
 
+        if(_getLines(name)) return;
+
         let processedPoints = [];
 
         for(let i = 0; i < pointsArray.length; i++) {
@@ -74,14 +76,14 @@ const lineManager = (function lineManager() {
     * PUBLIC
     * name: String
     */
-   function _getLines (name) {
-    if(!_isInitialised) return;
+    function _getLines (name) {
+        if(!_isInitialised) return;
 
-    let line = lines.find(function findLineByName (el) {
-        return el.name = name;
-    });
-    return line;
-}
+        let line = lines.find(function findLineByName (el) {
+            return el.name = name;
+        });
+        return line;
+    }
 
     /*
     * Initialise with Scene Manager

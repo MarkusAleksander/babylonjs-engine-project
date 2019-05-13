@@ -1,4 +1,3 @@
-import * as DEFS from '../DEFS/defs.js';
 /*
  * Handle and Manage System Critical elements
  * - Canvas
@@ -7,47 +6,61 @@ import * as DEFS from '../DEFS/defs.js';
 var _systemManager = (function() {
 
     var canvas = null,
-        engine = null,
-        scene = null,
-        isReady = false;
+        _engine = null,
+        _sceneManager = null, // ? Is this even needed?
+        _isInitialised = false;
 
-    function _getCanvas () {
-        return isReady ? canvas : (console.log('Engine not initialised!'), null);
+    // function _getCanvas () {
+    //     return isReady ? canvas : (console.log('Engine not initialised!'), null);
+    // }
+
+    // function _getEngine () {
+    //     return isReady ? engine : (console.log('Engine not initialised!'), null);
+    // }
+
+    // function _render () {
+    //     _engine.runRenderLoop(_sceneManager.renderScene);
+    // }
+
+    /*
+    * Initialise with CanvasID
+    * PUBLIC
+    * sceneManager: SceneManager
+    */
+    function _registerSceneManager (sceneManager) {
+        // ? Is this even needed?
+        if(!_isInitialised) return;
+
+        _sceneManager = sceneManager;
     }
 
     function _getEngine () {
-        return isReady ? engine : (console.log('Engine not initialised!'), null);
+        return _engine;
     }
 
-    function _getScene () {
-        return isReady ? scene : (console.log('Engine not initialised'), null);
-    }
-
-    function _renderLoop () {
-        scene.render();
-    }
-
-    function _render () {
-        engine.runRenderLoop(_renderLoop);
-    }
-
+    /*
+    * Initialise with CanvasID
+    * PUBLIC
+    * canvasId: String
+    */
     function _init (canvasId) {
         // * Get canvas
         canvas = document.getElementById(canvasId);
         // * Create Babylon Engine
-        canvas ? (engine = new BABYLON.Engine(canvas, true)) : console.log('No canvas');
-        // * Create the scene space
-        engine ? (scene = new BABYLON.Scene(engine)) : console.log('No engine');
+        canvas ? (_engine = new BABYLON.Engine(canvas, true)) : console.log('No canvas');
 
-        isReady = Boolean(canvas) && Boolean(engine) && Boolean(scene);
+        _isInitialised = Boolean(canvas) && Boolean(_engine);
     }
 
     return {
         initialise: _init,
-        getCanvas: _getCanvas,
         getEngine: _getEngine,
-        getScene: _getScene,
-        render: _render
+        registerSceneManager: _registerSceneManager,
+
+        // getCanvas: _getCanvas,
+        // getEngine: _getEngine,
+        //getScene: _getScene,
+        // render: _render
     }
 
 })();

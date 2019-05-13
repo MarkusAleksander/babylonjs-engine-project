@@ -19,9 +19,6 @@ function initialise(canvasId) {
     // Initialise Scene Manager
     SceneManager.initialise();
 
-    // Register SceneManager to SystemManager
-    SystemManager.registerSceneManager(SceneManager);
-
     // Create Scene
     SceneManager.createScene(SystemManager.getEngine());
 
@@ -34,10 +31,14 @@ function initialise(canvasId) {
     CameraManager.initialise(SceneManager);
     CameraManager.setCameraPosition(new BABYLON.Vector3(2, -2, -2));
     CameraManager.attachToCanvas(SystemManager.getCanvas());
+
+    // Register Update Functions
+    SystemManager.registerUpdateFunction(SceneManager.renderScene);
+    SystemManager.registerUpdateFunction(MeshManager.update);
 }
 
 function run() {
-    SystemManager.getEngine().runRenderLoop(SceneManager.renderScene);
+    SystemManager.runUpdateLoop();
 }
 
 

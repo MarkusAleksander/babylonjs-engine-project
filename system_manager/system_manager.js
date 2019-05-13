@@ -3,42 +3,32 @@
  * - Canvas
  * - Babylon Engine
 */
-var _systemManager = (function() {
+var _systemManager = (function () {
 
     var _canvas = null,
         _engine = null,
-        _sceneManager = null, // ? Is this even needed?
-        _isInitialised = false;
+        _isInitialised = false,
+        _registeredUpdaters = [];
 
-    // function _getCanvas () {
-    //     return isReady ? canvas : (console.log('Engine not initialised!'), null);
-    // }
-
-    // function _getEngine () {
-    //     return isReady ? engine : (console.log('Engine not initialised!'), null);
-    // }
-
-    // function _ () {
-    //     _engine.runRenderLoop(_sceneManager.renderScene);
-    // }
-
-    /*
-    * Initialise with CanvasID
-    * PUBLIC
-    * sceneManager: SceneManager
-    */
-    function _registerSceneManager (sceneManager) {
-        // ? Is this even needed?
-        if(!_isInitialised) return;
-
-        _sceneManager = sceneManager;
+    function _registerUpdateFunction(func) {
+        _registeredUpdaters.push(func);
     }
 
-    function _getEngine () {
+    function _update() {
+        _registeredUpdaters.forEach(function (updater) {
+            updater();
+        });
+    }
+
+    function _runUpdateLoop() {
+        _getEngine().runRenderLoop(_update);
+    }
+
+    function _getEngine() {
         return _engine;
     }
 
-    function _getCanvas () {
+    function _getCanvas() {
         return _canvas
     }
 
@@ -47,7 +37,7 @@ var _systemManager = (function() {
     * PUBLIC
     * canvasId: String
     */
-    function _init (canvasId) {
+    function _init(canvasId) {
         // * Get canvas
         _canvas = document.getElementById(canvasId);
         // * Create Babylon Engine
@@ -60,12 +50,8 @@ var _systemManager = (function() {
         initialise: _init,
         getEngine: _getEngine,
         getCanvas: _getCanvas,
-        registerSceneManager: _registerSceneManager,
-
-        // getCanvas: _getCanvas,
-        // getEngine: _getEngine,
-        //getScene: _getScene,
-        // render: _render
+        registerUpdateFunction: _registerUpdateFunction,
+        runUpdateLoop: _runUpdateLoop
     }
 
 })();

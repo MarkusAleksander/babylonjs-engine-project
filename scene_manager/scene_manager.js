@@ -6,7 +6,6 @@ const _sceneManager = (function () {
 
     var _systemManagerRef;
     const actors = {
-            lights: [],
             camera: null,
             meshes: [],
             lines: []
@@ -21,36 +20,6 @@ const _sceneManager = (function () {
             actors.camera.setPosition(new BABYLON.Vector3(2, -2, -2)),
             actors.camera.attachControl(_systemManagerRef.getCanvas(), true)
         );
-    }
-
-
-    function _createLines (meshName, type, pointsArray, options) {
-
-        switch(type) {
-            case DEFS.LINETYPES.SOLID:
-                return BABYLON.MeshBuilder.CreateLines(meshName, Object.assign({points: pointsArray}, options), _systemManagerRef.getScene());
-                break;
-            case DEFS.LINETYPES.DASHED:
-                return BABYLON.MeshBuilder.CreateDashedLines(meshName, Object.assign({points: pointsArray}, options), _systemManagerRef.getScene());
-                break;
-            default:
-                return BABYLON.MeshBuilder.CreateLines(meshName, Object.assign({points: pointsArray}, options), _systemManagerRef.getScene());
-        }
-    }
-
-    function _addLines (meshName, type, pointsArray = [], options = {}) {
-
-        if(pointsArray.length < 1) {
-            console.log('No points passed to _addLines');
-            return;
-        }
-
-        let processedPoints = [];
-        for(let i = 0; i < pointsArray.length; i++) {
-            processedPoints.push(new BABYLON.Vector3(...pointsArray[i]));
-        }
-
-        actors.lines.push({ name: meshName , actor: _createLines(meshName, type, processedPoints, options)});
     }
 
     function _createSimpleMesh (meshName, type, options) {

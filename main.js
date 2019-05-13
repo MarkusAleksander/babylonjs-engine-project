@@ -3,6 +3,7 @@ import * as DEFS from './DEFS/defs.js';
 import LightManager from './actorManagers/lights/light_manager.js';
 import LineManager from './actorManagers/lines/line_manager.js';
 import CameraManager from './actorManagers/camera/camera_manager.js';
+import MeshManager from './actorManagers/meshes/mesh_manager.js';
 
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
@@ -10,7 +11,7 @@ import SceneManager from './scene_manager/scene_manager.js';
 /*
  * Initialise the engine
 */
-function initialise (canvasId) {
+function initialise(canvasId) {
 
     // Initialise System Manager
     SystemManager.initialise(canvasId);
@@ -27,6 +28,7 @@ function initialise (canvasId) {
     // Create Actor Managers
     LineManager.initialise(SceneManager);
     LightManager.initialise(SceneManager);
+    MeshManager.initialise(SceneManager);
 
     // Create Camera
     CameraManager.initialise(SceneManager);
@@ -34,19 +36,19 @@ function initialise (canvasId) {
     CameraManager.attachToCanvas(SystemManager.getCanvas());
 }
 
-function run () {
+function run() {
     SystemManager.getEngine().runRenderLoop(SceneManager.renderScene);
 }
 
 
-function createScene () {
+function createScene() {
 
     // * Add lights
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
     LightManager.addLight(DEFS.LIGHTTYPES.POINT, "light2", (1, 0, 1));
 
     // * Create an actor
-    //SceneManager.addSimpleMesh("box1", DEFS.MESHSHAPES.BOX, {size: 0.5, updatable: true});
+    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
     // * Lines
     //SceneManager.addLines("lines1", LINETYPES.SOLID, [[0,0,0], [0,1,1], [0,1,0]]);
@@ -54,14 +56,14 @@ function createScene () {
     createWorldAxisReferenceLines();
 }
 
-function createWorldAxisReferenceLines () {
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldXRef", [[0,0,0], [2,0,0]], {colors: [new BABYLON.Color4(1,0,0,1), new BABYLON.Color4(1,0,0,1)]});
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldYRef", [[0,0,0], [0,2,0]], {colors: [new BABYLON.Color4(0,1,0,1), new BABYLON.Color4(0,1,0,1)]});
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldZRef", [[0,0,0], [0,0,2]], {colors: [new BABYLON.Color4(0,0,1,1), new BABYLON.Color4(0,0,1,1)]});
+function createWorldAxisReferenceLines() {
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldXRef", [[0, 0, 0], [2, 0, 0]], { colors: [new BABYLON.Color4(1, 0, 0, 1), new BABYLON.Color4(1, 0, 0, 1)] });
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldYRef", [[0, 0, 0], [0, 2, 0]], { colors: [new BABYLON.Color4(0, 1, 0, 1), new BABYLON.Color4(0, 1, 0, 1)] });
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldZRef", [[0, 0, 0], [0, 0, 2]], { colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)] });
 }
 
 function handleWindowEvents() {
-    window.addEventListener("resize", function() {
+    window.addEventListener("resize", function () {
         SystemManager.getEngine().resize();
     });
 }

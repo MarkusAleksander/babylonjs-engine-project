@@ -14,7 +14,7 @@ const LightManager = (function LightManager() {
     * name: String
     * position: Babylon.Vector3
     */
-    function _createLight (type, name, position) {
+    function _createLight(type, name, position) {
 
         switch (type) {
             case LIGHTTYPES.HEMISPHERIC:
@@ -33,7 +33,7 @@ const LightManager = (function LightManager() {
     * name: String
     * position: (intX, intY, intZ)
     */
-    function _createLightObject (type, name, position) {
+    function _createLightObject(type, name, position) {
         return {
             name: name,
             type: type,
@@ -44,13 +44,13 @@ const LightManager = (function LightManager() {
             rangeValue: 100,
 
             // * Swtich Light On or Off
-            switchLight: function () { this.light.setEnabled(!isLightOn); isLightOn = !isLightOn; },
+            switchLight: function () { this.light.setEnabled(!this.isLightOn); this.isLightOn = !this.isLightOn; },
 
             // * Change Intensity of light
-            changeIntensity: function (intensity) { light.intensity = intensity; intensityValue = intensity; },
+            changeIntensity: function (intensity) { this.light.intensity = intensity; this.intensityValue = intensity; },
 
             // * Change Range (Point and Spot lights Only)
-            changeRange: function (range) { light.range = range; rangeValue = range;  }
+            changeRange: function (range) { this.light.range = range; this.rangeValue = range; }
         }
     }
 
@@ -61,10 +61,10 @@ const LightManager = (function LightManager() {
     * name: String
     * position: (intX, intY, intZ)
     */
-    function _addLight (type, name, position) {
-        if(!_isInitialised) return;
+    function _addLight(type, name, position) {
+        if (!_isInitialised) return;
 
-        if(_getLight(name) == undefined) {
+        if (_getLight(name) == undefined) {
             lights.push(_createLightObject(type, name, position));
         }
     }
@@ -74,13 +74,12 @@ const LightManager = (function LightManager() {
     * PUBLIC
     * name: String
     */
-    function _getLight (name) {
-        if(!_isInitialised) return;
+    function _getLight(name) {
+        if (!_isInitialised) return;
 
-        let light = lights.find(function findLightByName (el) {
+        return lights.find(function findLightByName(el) {
             return el.name == name;
         });
-        return light;
     }
 
     /*
@@ -88,8 +87,8 @@ const LightManager = (function LightManager() {
     * PUBLIC
     * sceneManager: SceneManager
     */
-    function _init (sceneManager) {
-        if(sceneManager) {
+    function _init(sceneManager) {
+        if (sceneManager) {
             _sceneManagerRef = sceneManager;
             _isInitialised = true;
         }

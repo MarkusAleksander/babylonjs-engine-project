@@ -1,6 +1,6 @@
 import { LIGHTTYPES } from '../../DEFS/defs.js';
 
-const lightManager = (function lightManager() {
+const LightManager = (function LightManager() {
 
     const lights = [];
 
@@ -78,7 +78,7 @@ const lightManager = (function lightManager() {
         if(!_isInitialised) return;
 
         let light = lights.find(function findLightByName (el) {
-            return el.name = name;
+            return el.name == name;
         });
         return light;
     }
@@ -103,4 +103,4 @@ const lightManager = (function lightManager() {
 
 })();
 
-export default lightManager;
+export default LightManager;

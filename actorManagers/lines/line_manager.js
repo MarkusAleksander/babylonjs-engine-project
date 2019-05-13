@@ -1,6 +1,6 @@
 import { LINETYPES } from '../../DEFS/defs.js';
 
-const lineManager = (function lineManager() {
+const LineManager = (function LineManager() {
 
     const lines = [];
 
@@ -41,7 +41,7 @@ const lineManager = (function lineManager() {
             type: type,
             pointsArray: pointsArray,
             options: options,
-            lines: _createLines(type, name, processedPoints, options)
+            lines: _createLines(type, name, pointsArray, options)
         }
     }
 
@@ -80,7 +80,7 @@ const lineManager = (function lineManager() {
         if(!_isInitialised) return;
 
         let line = lines.find(function findLineByName (el) {
-            return el.name = name;
+            return el.name == name;
         });
         return line;
     }
@@ -99,10 +99,10 @@ const lineManager = (function lineManager() {
 
     return {
         initialise: _init,
-        addLine: _addLines,
-        getLine: _getLines
+        addLines: _addLines,
+        getLines: _getLines
     }
 
 })();
 
-export default lineManager;
+export default LineManager;

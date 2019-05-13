@@ -5,7 +5,7 @@
 */
 var _systemManager = (function() {
 
-    var canvas = null,
+    var _canvas = null,
         _engine = null,
         _sceneManager = null, // ? Is this even needed?
         _isInitialised = false;
@@ -18,7 +18,7 @@ var _systemManager = (function() {
     //     return isReady ? engine : (console.log('Engine not initialised!'), null);
     // }
 
-    // function _render () {
+    // function _ () {
     //     _engine.runRenderLoop(_sceneManager.renderScene);
     // }
 
@@ -38,6 +38,10 @@ var _systemManager = (function() {
         return _engine;
     }
 
+    function _getCanvas () {
+        return _canvas
+    }
+
     /*
     * Initialise with CanvasID
     * PUBLIC
@@ -45,16 +49,17 @@ var _systemManager = (function() {
     */
     function _init (canvasId) {
         // * Get canvas
-        canvas = document.getElementById(canvasId);
+        _canvas = document.getElementById(canvasId);
         // * Create Babylon Engine
-        canvas ? (_engine = new BABYLON.Engine(canvas, true)) : console.log('No canvas');
+        _canvas ? (_engine = new BABYLON.Engine(_canvas, true)) : console.log('No canvas');
 
-        _isInitialised = Boolean(canvas) && Boolean(_engine);
+        _isInitialised = Boolean(_canvas) && Boolean(_engine);
     }
 
     return {
         initialise: _init,
         getEngine: _getEngine,
+        getCanvas: _getCanvas,
         registerSceneManager: _registerSceneManager,
 
         // getCanvas: _getCanvas,

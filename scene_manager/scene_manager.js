@@ -1,16 +1,11 @@
 import * as DEFS from '../DEFS/defs.js';
-import lightManager from '../actorManagers/lights/light_factory.js.js';
 /*
  * Handle scene actors
 */
 const _sceneManager = (function () {
 
-    var _systemManagerRef,
-        _lineManagerRef,
-        _lightManagerRef,
-        _isInitialised = false;
+    var _isInitialised = false;
     const actors = {
-            camera: null,
             meshes: [],
         };
     const materials = [];

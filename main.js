@@ -1,7 +1,8 @@
 import * as DEFS from './DEFS/defs.js';
 
-import lightManager from './actorManagers/lights/light_manager.js';
-import lineManager from './actorManagers/lines/line_manager.js';
+import LightManager from './actorManagers/lights/light_manager.js';
+import LineManager from './actorManagers/lines/line_manager.js';
+import CameraManager from './actorManagers/camera/camera_manager.js';
 
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
@@ -12,7 +13,7 @@ import SceneManager from './scene_manager/scene_manager.js';
 function initialise (canvasId) {
 
     // Initialise System Manager
-    SystemManager.initialise("renderCanvas");
+    SystemManager.initialise(canvasId);
 
     // Initialise Scene Manager
     SceneManager.initialise();
@@ -20,37 +21,43 @@ function initialise (canvasId) {
     // Register SceneManager to SystemManager
     SystemManager.registerSceneManager(SceneManager);
 
-    SceneManager.createScene(SystemManager.getEngine);
+    // Create Scene
+    SceneManager.createScene(SystemManager.getEngine());
+
+    // Create Actor Managers
+    LineManager.initialise(SceneManager);
+    LightManager.initialise(SceneManager);
+
+    // Create Camera
+    CameraManager.initialise(SceneManager);
+    CameraManager.setCameraPosition(new BABYLON.Vector3(2, -2, -2));
+    CameraManager.attachToCanvas(SystemManager.getCanvas());
 }
 
 function run () {
     SystemManager.getEngine().runRenderLoop(SceneManager.renderScene);
 }
 
+
 function createScene () {
 
-    // * Initialise the Scene Manager
-    SceneManager.initialiseScene(SystemManager);
-
-    // * Add camera to the scene and attach to canvas
-    SceneManager.initialiseCamera();
-
     // * Add lights
-    SceneManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
-    SceneManager.addLight(DEFS.LIGHTTYPES.POINT, "light2", (1, 0, 1));
+    LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
+    LightManager.addLight(DEFS.LIGHTTYPES.POINT, "light2", (1, 0, 1));
 
     // * Create an actor
-    SceneManager.addSimpleMesh("box1", DEFS.MESHSHAPES.BOX, {size: 0.5, updatable: true});
+    //SceneManager.addSimpleMesh("box1", DEFS.MESHSHAPES.BOX, {size: 0.5, updatable: true});
 
     // * Lines
     //SceneManager.addLines("lines1", LINETYPES.SOLID, [[0,0,0], [0,1,1], [0,1,0]]);
     //SceneManager.addLines("lines2", LINETYPES.DASHED, [[0,1,0],[1,1,0],[0,0,0]], {dashSize: 0.2, gapSize: 0.5});
+    createWorldAxisReferenceLines();
 }
 
 function createWorldAxisReferenceLines () {
-    SceneManager.addLines("worldXRef", DEFS.LINETYPES.SOLID, [[0,0,0], [2,0,0]], {colors: [new BABYLON.Color4(1,0,0,1), new BABYLON.Color4(1,0,0,1)]});
-    SceneManager.addLines("worldYRef", DEFS.LINETYPES.SOLID, [[0,0,0], [0,2,0]], {colors: [new BABYLON.Color4(0,1,0,1), new BABYLON.Color4(0,1,0,1)]});
-    SceneManager.addLines("worldZRef", DEFS.LINETYPES.SOLID, [[0,0,0], [0,0,2]], {colors: [new BABYLON.Color4(0,0,1,1), new BABYLON.Color4(0,0,1,1)]});
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldXRef", [[0,0,0], [2,0,0]], {colors: [new BABYLON.Color4(1,0,0,1), new BABYLON.Color4(1,0,0,1)]});
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldYRef", [[0,0,0], [0,2,0]], {colors: [new BABYLON.Color4(0,1,0,1), new BABYLON.Color4(0,1,0,1)]});
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldZRef", [[0,0,0], [0,0,2]], {colors: [new BABYLON.Color4(0,0,1,1), new BABYLON.Color4(0,0,1,1)]});
 }
 
 function handleWindowEvents() {
@@ -59,16 +66,12 @@ function handleWindowEvents() {
     });
 }
 
-// * Initalise
-initialise('renderCanvas');
-
-// * Create Scene
+initialise("renderCanvas");
 createScene();
+run();
 
-createWorldAxisReferenceLines();
+//createWorldAxisReferenceLines();
 
-// * Run Rendering
-SystemManager.render();
 
 // SceneManager.moveMeshActorRelatively("box1", { x: 0, y: 1, z: 0});
 // SceneManager.moveMeshActorRelatively("box1", { x: 0, y: 0, z: 1});
@@ -79,11 +82,11 @@ SystemManager.render();
 //     SceneManager.scaleMeshActor("box1", { x: 2 });
 // }, 1000);
 
-window.setInterval(function () {
-     SceneManager.rotateMeshActorToLocalAxis("box1", { x: Math.PI / 12, y: Math.PI / 24 });
-}, 100);
+// window.setInterval(function () {
+//      SceneManager.rotateMeshActorToLocalAxis("box1", { x: Math.PI / 12, y: Math.PI / 24 });
+// }, 100);
 
-SystemManager.getScene().ambientColor = new BABYLON.Color3(1,1,1);
+// SystemManager.getScene().ambientColor = new BABYLON.Color3(1,1,1);
 
 // SceneManager.createMaterial("mat1", {
 //     diffuseColor: new BABYLON.Color4(1, 1, 1, 1),
@@ -94,10 +97,10 @@ SystemManager.getScene().ambientColor = new BABYLON.Color3(1,1,1);
 
 // SceneManager.applyMaterial("box1", "mat1");
 
-SceneManager.createTexture("bricktexture", {
-    diffuseTexture: "imgs/brick.jpg"
-})
-SceneManager.applyTexture("box1", "bricktexture");
+// SceneManager.createTexture("bricktexture", {
+//     diffuseTexture: "imgs/brick.jpg"
+// })
+// SceneManager.applyTexture("box1", "bricktexture");
 
 // * Handle resizing events
 handleWindowEvents();

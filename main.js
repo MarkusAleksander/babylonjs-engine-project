@@ -73,6 +73,22 @@ initialise("renderCanvas");
 createScene();
 run();
 
+window.setTimeout(function () {
+    MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, "box1", {x: 2, y: 2, z: 2});
+}, 1000);
+
+window.setTimeout(function () {
+    MeshManager.addAction(DEFS.ACTIONTYPES.MOVERELATIVE, "box1", {x: 1, y: -1, z: -1});
+}, 2000);
+
+window.setTimeout(function () {
+    MeshManager.addAction(DEFS.ACTIONTYPES.SCALE, "box1", {x: 2});
+}, 3000);
+
+window.setInterval(function () {
+    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, "box1", {x: Math.PI / 48});
+}, 10);
+
 //createWorldAxisReferenceLines();
 
 

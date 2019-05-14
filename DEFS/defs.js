@@ -18,4 +18,12 @@ const LINETYPES = {
     DASHED: "dashed"
 };
 
-export { LIGHTTYPES, MESHSHAPES, LINETYPES };
+const ACTIONTYPES = {
+    MOVERELATIVE: "move_relatively",
+    MOVEABSOLUTE: "move_absolutely",
+    ROTATETOWORLD: "rotate_to_world",
+    ROTATETOLOCAL: "rotate_to_local",
+    SCALE: "scale"
+};
+
+export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES };

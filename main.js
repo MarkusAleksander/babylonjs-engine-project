@@ -29,7 +29,7 @@ function initialise(canvasId) {
 
     // Create Camera
     CameraManager.initialise(SceneManager);
-    CameraManager.setCameraPosition(new BABYLON.Vector3(2, -2, -2));
+    CameraManager.setCameraPosition(new BABYLON.Vector3(10, 10, 10));
     CameraManager.attachToCanvas(SystemManager.getCanvas());
 
     // Register Update Functions
@@ -49,15 +49,32 @@ function createScene() {
     LightManager.addLight(DEFS.LIGHTTYPES.POINT, "light2", (1, 0, 1));
 
     // * Create an actor
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
+    //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
     // * Create a texture
     MeshManager.addTexture("brick", {
         diffuseTexture: "imgs/brick.jpg"
     });
 
+    // * Create lots of actors
+
+    for(let i = 0; i < 10; i++) {
+        for(let j = 0; j < 10; j++) {
+            for(let k = 0; k < 10; k++) {
+                let name = "box_" + i + "_" + j + "_" + k;
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { radius: 0.3, updatable: true } );
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, {x: i - 5, y: k - 5, z: j - 5});
+                MeshManager.applyTexture("brick", name);
+
+                window.setInterval(function () {
+                    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, {x: Math.PI});
+                }, 50)
+            }
+        }
+    }
+
     // * Apply texture
-    MeshManager.applyTexture("brick", "box1");
+    //MeshManager.applyTexture("brick", "box1");
 
     // * World Axis Lines
     createWorldAxisReferenceLines();

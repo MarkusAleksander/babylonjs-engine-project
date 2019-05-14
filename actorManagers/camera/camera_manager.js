@@ -1,13 +1,30 @@
+import { CAMERATYPES } from '../../DEFS/defs.js';
+
 const CameraManager = (function CameraManager() {
 
     var _camera = null,
         _isInitialised = false,
         _sceneManagerRef;
 
-    function _createCamera () {
-        if(!_isInitialised) return;
+    function _createCamera (type, name, options) {
+        if(!_isInitialised && _camera) return;
 
-        _camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, new BABYLON.Vector3(0,0,0), _sceneManagerRef.getScene());
+        switch (type) {
+            case CAMERATYPES.ARCROTATE:
+                _camera = new BABYLON.ArcRotateCamera(name, options.alpha, options.beta, options.radius, options.position, _sceneManagerRef.getScene());
+            case CAMERATYPES.FOLLOW:
+                _camera = new BABYLON.FollowCamera(name, new BABYLON.Vector3(0, 10, -10), _sceneManagerRef.getScene());
+            case CAMERATYPES.FLY:
+                _camera = new BABYLON.FlyCamera(name, new BABYLON.Vector3(0, 5, -10), _sceneManagerRef.getScene());
+            case CAMERATYPES.UNIVERSAL:
+                _camera = new BABYLON.UniversalCamera(name, new BABYLON.Vector3(0, 0, -10), _sceneManagerRef.getScene())
+            default:
+        }
+
+    }
+
+    function _destroyCamera () {
+        // TODO
     }
 
     function _setCameraPosition (position) {
@@ -26,12 +43,12 @@ const CameraManager = (function CameraManager() {
         if(sceneManager) {
             _sceneManagerRef = sceneManager;
             _isInitialised = true;
-            _createCamera();
         }
     }
 
     return {
         initialise: _init,
+        createCamera: _createCamera,
         setCameraPosition: _setCameraPosition,
         attachToCanvas: _attachToCanvas,
         getCamera: _getCamera

@@ -26,4 +26,11 @@ const ACTIONTYPES = {
     SCALE: "scale"
 };
 
-export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES };
+ const CAMERATYPES = {
+     UNIVERSAL: "universal",
+     ARCROTATE: "arcrotate",
+     FOLLOW: "follow",
+     FLY: "fly"
+ }
+
+export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES, CAMERATYPES };

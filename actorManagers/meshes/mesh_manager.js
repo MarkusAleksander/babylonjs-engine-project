@@ -6,11 +6,24 @@ const MeshManager = (function MeshManager() {
         materials = [],
         textures = [];
 
-    const actionList = [];
+    const _actionList = [];
 
     var _isInitialised = false,
         _sceneManagerRef;
 
+
+    // * ------------- */
+    // *  MESH CREATION
+    // * ------------- */
+
+
+    /*
+    * Create a simple mesh from BABYLON
+    * PRIVATE
+    * type: DEF.MESHSHAPES
+    * name: String
+    * options: Object describing mesh
+    */
     function _createSimpleMesh(type, name, options) {
 
         switch (type) {
@@ -27,6 +40,13 @@ const MeshManager = (function MeshManager() {
         }
     }
 
+    /*
+    * Create a manageable simple mesh object
+    * PRIVATE
+    * type: DEF.MESHSHAPES
+    * name: String
+    * options: Object describing mesh
+    */
     function _createSimpleMeshObject(type, name, options) {
         return {
             name: name,
@@ -35,6 +55,22 @@ const MeshManager = (function MeshManager() {
         }
     }
 
+    /*
+    * Create a manageable compound mesh object
+    * PRIVATE
+    TODO: Build function
+    */
+    function _createCompoundMeshObject() {
+        // * Create compound mesh from simple meshes
+    }
+
+    /*
+    * Add a simple mesh object
+    * PUBLIC
+    * type: DEF.MESHSHAPES
+    * name: String
+    * options: Object describing mesh
+    */
     function _addSimpleMesh(type, name, options) {
         if (!_isInitialised) return;
 
@@ -43,10 +79,27 @@ const MeshManager = (function MeshManager() {
         }
     }
 
-    function _createCompoundMeshObject() { }
+    /*
+    * Add a compound mesh object
+    * PUBLIC
+    TODO: Build function
+    */
+    function _addCompoundMesh() {
+        // * Add a compound mesh
+    }
 
-    function _addCompoundMesh() { }
 
+    // * ------------- */
+    // *  MESH MANIPULATION
+    // * ------------- */
+
+
+    /*
+    * Get a mesh objecy by name
+    * PUBLIC
+    * name: String
+    TODO: Should be private?
+    */
     function _getMesh(name) {
         if (!_isInitialised) return;
 
@@ -55,31 +108,65 @@ const MeshManager = (function MeshManager() {
         });
     }
 
-    // *****
-
-    function _moveMeshAbsolutely(name, newPos) {
+    /*
+    * Move a mesh object based on World Axis
+    * PRIVATE
+    * name: String
+    * newPos: Object {x, y, z}
+    */
+    function _moveMeshAbsolutely(name, newPos = {}) {
         let mesh = _getMesh(name);
+
+        if (!mesh) return;
+
         mesh.position.x = newPos.x != undefined ? newPos.x : mesh.position.x;
         mesh.position.y = newPos.y != undefined ? newPos.y : mesh.position.y;
         mesh.position.z = newPos.z != undefined ? newPos.z : mesh.position.z;
     }
 
-    function _moveMeshRelatively(name, newPos) {
+    /*
+    * Move a mesh object based on Local Axis
+    * PRIVATE
+    * name: String
+    * newPos: Object {x, y, z}
+    */
+    function _moveMeshRelatively(name, newPos = {}) {
         let mesh = _getMesh(name);
+
+        if (!mesh) return;
+
         mesh.position.x = mesh.position.x + newPos.x;
         mesh.position.y = mesh.position.y + newPos.y;
         mesh.position.z = mesh.position.z + newPos.z;
     }
 
-    function _rotateMeshToWorldAxis(name, rotation) {
+    /*
+    * Rotate a mesh object based on World Rotation
+    * PRIVATE
+    * name: String
+    * rotation: Object {x, y, z}
+    */
+    function _rotateMeshToWorldAxis(name, rotation = {}) {
         let mesh = _getMesh(name);
+
+        if (!mesh) return;
+
         mesh.rotation.x = rotation.x != undefined ? rotation.x : 0;
         mesh.rotation.y = rotation.y != undefined ? rotation.y : 0;
         mesh.rotation.z = rotation.z != undefined ? rotation.z : 0;
     }
 
+    /*
+    * Rotate a mesh object based on Local Rotation
+    * PRIVATE
+    * name: String
+    * rotation: Object {x, y, z}
+    */
     function _rotateMeshToLocalAxis(name, rotation) {
         let mesh = _getMesh(name);
+
+        if (!mesh) return;
+
         let localRotation = [
             rotation.x != undefined ? rotation.x : 0,
             rotation.y != undefined ? rotation.y : 0,
@@ -88,21 +175,57 @@ const MeshManager = (function MeshManager() {
         mesh.addRotation(...localRotation);
     }
 
+    /*
+    * Scale a mesh object
+    * PRIVATE
+    * name: String
+    * scaling: Object {x, y, z}
+    */
     function _scaleMesh(name, scaling) {
         let mesh = _getMesh(name);
+
+        if (!mesh) return;
+
         mesh.scaling.x = scaling.x != undefined ? scaling.x : mesh.scaling.x;
         mesh.scaling.y = scaling.y != undefined ? scaling.y : mesh.scaling.y;
         mesh.scaling.z = scaling.z != undefined ? scaling.z : mesh.scaling.z;
     }
 
-    function _addAction(actionType, mesh, options) { }
 
+    // * ------------- */
+    // *  MESH MANAGEMENT
+    // * ------------- */
+
+
+    /*
+    * Add an action to the Mesh Mangement updater
+    * PUBLIC
+    * actionType: DEFS.ACTIONTYPES
+    * name: String
+    * options: Object
+    */
+    function _addAction(actionType, name, options) {
+        _actionList.push({
+            actionType: actionType,
+            name: name,
+            options: options
+        })
+    }
+
+    /*
+    * Process the action list
+    * PRIVATE
+    */
     function _processActionList() {
-        while (actionList.length > 0) {
-            actionList.shift();
+        while (_actionList.length > 0) {
+            _actionList.shift();
         }
     }
 
+    /*
+    * Update the Mesh Manager
+    * PUBLIC
+    */
     function _update() {
         // * Do update here
         _processActionList();
@@ -121,12 +244,15 @@ const MeshManager = (function MeshManager() {
     }
 
     return {
-        initialise: _init,
-        update: _update,
 
         addSimpleMesh: _addSimpleMesh,
+        addCompoundMesh:_addCompoundMesh,
 
-        getMesh: _getMesh
+        getMesh: _getMesh,
+
+        addAction: _addAction,
+        update: _update,
+        initialise: _init,
     }
 })();
 

@@ -33,8 +33,8 @@ function initialise(canvasId) {
     CameraManager.attachToCanvas(SystemManager.getCanvas());
 
     // Register Update Functions
-    SystemManager.registerUpdateFunction(SceneManager.renderScene);
     SystemManager.registerUpdateFunction(MeshManager.update);
+    SystemManager.registerUpdateFunction(SceneManager.renderScene);
 }
 
 function run() {

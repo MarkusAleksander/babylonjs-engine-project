@@ -25,6 +25,7 @@ const MeshManager = (function MeshManager() {
     * options: Object describing mesh
     */
     function _createSimpleMesh(type, name, options) {
+        if (!_isInitialised) return;
 
         switch (type) {
             case MESHSHAPES.SPHERE:
@@ -203,7 +204,7 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object
     */
-    function _createMaterial (name, options) {
+    function _createMaterial(name, options) {
         let material = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
 
         material.diffuseColor = options.diffuseColor != undefined ? options.diffuseColor : material.diffuseColor;
@@ -220,7 +221,7 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object
     */
-    function _createTexture (name, options) {
+    function _createTexture(name, options) {
         let texture = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
 
         texture.diffuseTexture = options.diffuseTexture != undefined ? new BABYLON.Texture(options.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
@@ -239,7 +240,7 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object
     */
-    function _addMaterial (name, options) {
+    function _addMaterial(name, options) {
         if (!_isInitialised) return;
 
         if (_getMaterial(name) == undefined) {
@@ -257,7 +258,7 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object
     */
-    function _addTexture (name, options) {
+    function _addTexture(name, options) {
         if (!_isInitialised) return;
 
         if (_getTexture(name) == undefined) {
@@ -275,11 +276,11 @@ const MeshManager = (function MeshManager() {
     * materialName: String
     * meshName: String
     */
-    function _applyMaterial (materialName, meshName) {
+    function _applyMaterial(materialName, meshName) {
         let materialObj = _getMaterial(materialName),
             meshObj = _getMesh(meshName);
 
-        if(!materialObj || !meshObj) return;
+        if (!materialObj || !meshObj) return;
 
         meshObj.mesh.material = materialObj.material;
     }
@@ -290,11 +291,11 @@ const MeshManager = (function MeshManager() {
     * textureName: String
     * meshName: String
     */
-    function _applyTexture (textureName, meshName) {
+    function _applyTexture(textureName, meshName) {
         let textureObj = _getTexture(textureName),
             meshObj = _getMesh(meshName);
 
-        if(!textureObj || !meshObj) return;
+        if (!textureObj || !meshObj) return;
 
         meshObj.mesh.material = textureObj.texture;
     }
@@ -304,10 +305,10 @@ const MeshManager = (function MeshManager() {
     * PRIVATE
     * name: String
     */
-    function _getMaterial (name) {
+    function _getMaterial(name) {
         if (!_isInitialised) return;
 
-        return _materials.find(function findMaterialByName (el) {
+        return _materials.find(function findMaterialByName(el) {
             return el.name == name;
         })
     }
@@ -317,10 +318,10 @@ const MeshManager = (function MeshManager() {
     * PRIVATE
     * name: String
     */
-    function _getTexture (name) {
+    function _getTexture(name) {
         if (!_isInitialised) return;
 
-        return _textures.find(function findTextureByName (el) {
+        return _textures.find(function findTextureByName(el) {
             return el.name == name;
         });
     }
@@ -339,7 +340,7 @@ const MeshManager = (function MeshManager() {
         [ACTIONTYPES.ROTATETOWORLD]: _rotateMeshToWorldAxis,
         [ACTIONTYPES.ROTATETOLOCAL]: _rotateMeshToLocalAxis,
         [ACTIONTYPES.SCALE]: _scaleMesh,
-        default: function () {/* * empty default function */}
+        default: function () {/* * empty default function */ }
     };
 
     /*
@@ -395,7 +396,7 @@ const MeshManager = (function MeshManager() {
     return {
 
         addSimpleMesh: _addSimpleMesh,
-        addCompoundMesh:_addCompoundMesh,
+        addCompoundMesh: _addCompoundMesh,
 
         getMesh: _getMesh,
 
@@ -403,8 +404,8 @@ const MeshManager = (function MeshManager() {
         update: _update,
         initialise: _init,
 
-        addMaterial:_addMaterial,
-        addTexture:_addTexture,
+        addMaterial: _addMaterial,
+        addTexture: _addTexture,
         applyMaterial: _applyMaterial,
         applyTexture: _applyTexture
     }

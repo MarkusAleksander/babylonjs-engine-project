@@ -29,7 +29,29 @@ function initialise(canvasId) {
 
     // Create Camera
     CameraManager.initialise(SceneManager);
-    CameraManager.setCameraPosition(new BABYLON.Vector3(10, 10, 10));
+
+    // * ArcRotate
+    // CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "arc_camera", {
+    //     alpha: Math.PI / 2,
+    //     beta: Math.PI / 2,
+    //     radius: 10,
+    //     position: new BABYLON.Vector3(0, 0, 0)
+    // });
+    // CameraManager.setCameraPosition(new BABYLON.Vector3(10, 10, 10));
+
+    // * Universal Camera
+    // CameraManager.createCamera(DEFS.CAMERATYPES.UNIVERSAL, "universal_camera", {
+    //     position: new BABYLON.Vector3(0, 0, 0)
+    // });
+    // CameraManager.setTarget(new BABYLON.Vector3(0, 0, 0));
+
+
+
+    // * FLy Camera
+    CameraManager.createCamera(DEFS.CAMERATYPES.FLY, "fly_camera", {
+        position: new BABYLON.Vector3(0, 0, 0)
+    });
+
     CameraManager.attachToCanvas(SystemManager.getCanvas());
 
     // Register Update Functions
@@ -58,16 +80,18 @@ function createScene() {
 
     // * Create lots of actors
 
-    for(let i = 0; i < 10; i++) {
-        for(let j = 0; j < 10; j++) {
-            for(let k = 0; k < 10; k++) {
+    let rowLimit = 5;
+
+    for (let i = 0; i < rowLimit; i++) {
+        for (let j = 0; j < rowLimit; j++) {
+            for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { radius: 0.3, updatable: true } );
-                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, {x: i - 5, y: k - 5, z: j - 5});
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 0.3, updatable: true });
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: i - (rowLimit / 2), y: k - (rowLimit / 2), z: j - (rowLimit / 2) });
                 MeshManager.applyTexture("brick", name);
 
                 window.setInterval(function () {
-                    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, {x: Math.PI});
+                    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
                 }, 50)
             }
         }
@@ -96,21 +120,21 @@ initialise("renderCanvas");
 createScene();
 run();
 
-window.setTimeout(function () {
-    MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, "box1", {x: 2, y: 2, z: 2});
-}, 1000);
+// window.setTimeout(function () {
+//     MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, "box1", { x: 2, y: 2, z: 2 });
+// }, 1000);
 
-window.setTimeout(function () {
-    MeshManager.addAction(DEFS.ACTIONTYPES.MOVERELATIVE, "box1", {x: 1, y: -1, z: -1});
-}, 2000);
+// window.setTimeout(function () {
+//     MeshManager.addAction(DEFS.ACTIONTYPES.MOVERELATIVE, "box1", { x: 1, y: -1, z: -1 });
+// }, 2000);
 
-window.setTimeout(function () {
-    MeshManager.addAction(DEFS.ACTIONTYPES.SCALE, "box1", {x: 2});
-}, 3000);
+// window.setTimeout(function () {
+//     MeshManager.addAction(DEFS.ACTIONTYPES.SCALE, "box1", { x: 2 });
+// }, 3000);
 
-window.setInterval(function () {
-    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, "box1", {x: Math.PI / 48});
-}, 10);
+// window.setInterval(function () {
+//     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, "box1", { x: Math.PI / 48 });
+// }, 10);
 
 //createWorldAxisReferenceLines();
 

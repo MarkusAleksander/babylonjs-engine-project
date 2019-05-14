@@ -6,41 +6,103 @@ const CameraManager = (function CameraManager() {
         _isInitialised = false,
         _sceneManagerRef;
 
-    function _createCamera (type, name, options) {
-        if(!_isInitialised && _camera) return;
+    /*
+    * Create a camera from BABYLON
+    * PRIVATE
+    * type: DEF.CAMERATYPES
+    * name: String
+    * options: Object
+    */
+    function _createCamera(type, name, options) {
+        if (!_isInitialised && _camera) return;
 
         switch (type) {
             case CAMERATYPES.ARCROTATE:
-                _camera = new BABYLON.ArcRotateCamera(name, options.alpha, options.beta, options.radius, options.position, _sceneManagerRef.getScene());
+                return new BABYLON.ArcRotateCamera(name, options.alpha, options.beta, options.radius, options.position, _sceneManagerRef.getScene());
             case CAMERATYPES.FOLLOW:
-                _camera = new BABYLON.FollowCamera(name, new BABYLON.Vector3(0, 10, -10), _sceneManagerRef.getScene());
+                // TODO
+                return new BABYLON.FollowCamera(name, options.position, _sceneManagerRef.getScene());
             case CAMERATYPES.FLY:
-                _camera = new BABYLON.FlyCamera(name, new BABYLON.Vector3(0, 5, -10), _sceneManagerRef.getScene());
+                return new BABYLON.FlyCamera(name, options.position, _sceneManagerRef.getScene());
             case CAMERATYPES.UNIVERSAL:
-                _camera = new BABYLON.UniversalCamera(name, new BABYLON.Vector3(0, 0, -10), _sceneManagerRef.getScene())
+                return new BABYLON.UniversalCamera(name, options.position, _sceneManagerRef.getScene());
             default:
+                return new BABYLON.UniversalCamera(name, options.position, _sceneManagerRef.getScene());
         }
-
     }
 
-    function _destroyCamera () {
+    /*
+    * Create a manageable camera object
+    * PUBLIC
+    * type: DEF.MESHSHAPES
+    * name: String
+    * options: Object
+    */
+    function _createCameraObject(type, name, options) {
+        _camera = {
+            name: name,
+            type: type,
+            options: options,
+            camera: _createCamera(type, name, options)
+        };
+    }
+
+    function _destroyCamera() {
         // TODO
     }
 
-    function _setCameraPosition (position) {
-        _camera.setPosition(position);
+    /*
+    * Set position of camera
+    * PUBLIC
+    * position: Object
+    */
+    function _setCameraPosition(position) {
+        if (!_camera) return;
+
+        if (_camera.camera.hasOwnProperty('setPosition')) {
+            _camera.camera.setPosition(position);
+        }
     }
 
+    /*
+    * Set position of camera
+    * PUBLIC
+    * targetPosition: Object
+    */
+    function _setCameraTarget(targetPosition) {
+        if (!_camera) return;
+
+        if (_camera.camera.hasOwnProperty('setTarget')) {
+            _camera.camera.setTarget(targetPosition);
+        }
+    }
+    /*
+    * Attach camera to scene
+    * PUBLIC
+    * canvas: CanvasElement
+    */
     function _attachToCanvas(canvas) {
-        _camera.attachControl(canvas, true);
+        if (!_camera) return;
+
+        _camera.camera.attachControl(canvas, true);
     }
 
-    function _getCamera () {
+    /*
+    * Get camera
+    * PRIVATE
+    * position: Object
+    */
+    function _getCamera() {
         return _camera;
     }
 
-    function _init (sceneManager) {
-        if(sceneManager) {
+    /*
+    * Initialise Camera Manager
+    * PRIVATE
+    * sceneManager: SceneManager
+    */
+    function _init(sceneManager) {
+        if (sceneManager) {
             _sceneManagerRef = sceneManager;
             _isInitialised = true;
         }
@@ -48,10 +110,10 @@ const CameraManager = (function CameraManager() {
 
     return {
         initialise: _init,
-        createCamera: _createCamera,
+        createCamera: _createCameraObject,
         setCameraPosition: _setCameraPosition,
         attachToCanvas: _attachToCanvas,
-        getCamera: _getCamera
+        setTarget: _setCameraTarget
     }
 
 })();

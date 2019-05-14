@@ -2,9 +2,9 @@ import { MESHSHAPES, ACTIONTYPES } from '../../DEFS/defs.js';
 
 const MeshManager = (function MeshManager() {
 
-    const meshes = [],
-        materials = [],
-        textures = [];
+    const _meshes = [],
+        _materials = [],
+        _textures = [];
 
     const _actionList = [];
 
@@ -75,7 +75,7 @@ const MeshManager = (function MeshManager() {
         if (!_isInitialised) return;
 
         if (_getMesh(name) == undefined) {
-            meshes.push(_createSimpleMeshObject(type, name, options));
+            _meshes.push(_createSimpleMeshObject(type, name, options));
         }
     }
 
@@ -103,7 +103,7 @@ const MeshManager = (function MeshManager() {
     function _getMesh(name) {
         if (!_isInitialised) return;
 
-        return meshes.find(function findMeshByName(el) {
+        return _meshes.find(function findMeshByName(el) {
             return el.name == name;
         });
     }
@@ -193,6 +193,140 @@ const MeshManager = (function MeshManager() {
 
 
     // * ------------- */
+    // *  MATERIALS AND TEXTURES
+    // * ------------- */
+
+
+    /*
+    * Create a Material from Babylon
+    * PRIVATE
+    * name: String
+    * options: Object
+    */
+    function _createMaterial (name, options) {
+        let material = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
+
+        material.diffuseColor = options.diffuseColor != undefined ? options.diffuseColor : material.diffuseColor;
+        material.specularColor = options.specularColor != undefined ? options.specularColor : material.specularColor;
+        material.emissiveColor = options.emissiveColor != undefined ? options.emissiveColor : material.emissiveColor;
+        material.ambientColor = options.ambientColor != undefined ? options.ambientColor : material.ambientColor;
+
+        return material;
+    }
+
+    /*
+    * Create a Texture from Babylon
+    * PRIVATE
+    * name: String
+    * options: Object
+    */
+    function _createTexture (name, options) {
+        let texture = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
+
+        texture.diffuseTexture = options.diffuseTexture != undefined ? new BABYLON.Texture(options.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
+        texture.specularTexture = options.specularTexture != undefined ? new BABYLON.Texture(options.specularTexture, _sceneManagerRef.getScene()) : texture.specularTexture;
+        texture.emissiveTexture = options.emissiveTexture != undefined ? new BABYLON.Texture(options.emissiveTexture, _sceneManagerRef.getScene()) : texture.emissiveTexture;
+        texture.ambientTexture = options.ambientTexture != undefined ? new BABYLON.Texture(options.ambientTexture, _sceneManagerRef.getScene()) : texture.ambientTexture;
+        texture.alpha = options.alpha != undefined ? options.alpha : 1;
+        texture.diffuseTexture.hasAlpha = options.hasAlpha != undefined ? options.hasAlpha : false;
+
+        return texture;
+    }
+
+    /*
+    * Add a Material object
+    * PUBLIC
+    * name: String
+    * options: Object
+    */
+    function _addMaterial (name, options) {
+        if (!_isInitialised) return;
+
+        if (_getMaterial(name) == undefined) {
+            _materials.push({
+                name: name,
+                options: options,
+                material: _createMaterial(name, options)
+            });
+        }
+    }
+
+    /*
+    * Add a Texture object
+    * PUBLIC
+    * name: String
+    * options: Object
+    */
+    function _addTexture (name, options) {
+        if (!_isInitialised) return;
+
+        if (_getTexture(name) == undefined) {
+            _textures.push({
+                name: name,
+                options: options,
+                texture: _createTexture(name, options)
+            });
+        }
+    }
+
+    /*
+    * Apply a material to a material
+    * PUBLIC
+    * materialName: String
+    * meshName: String
+    */
+    function _applyMaterial (materialName, meshName) {
+        let materialObj = _getMaterial(materialName),
+            meshObj = _getMesh(meshName);
+
+        if(!materialObj || !meshObj) return;
+
+        meshObj.mesh.material = materialObj.material;
+    }
+
+    /*
+    * Apply a texture to a material
+    * PUBLIC
+    * textureName: String
+    * meshName: String
+    */
+    function _applyTexture (textureName, meshName) {
+        let textureObj = _getTexture(textureName),
+            meshObj = _getMesh(meshName);
+
+        if(!textureObj || !meshObj) return;
+
+        meshObj.mesh.material = textureObj.texture;
+    }
+
+    /*
+    * Get a material object by name
+    * PRIVATE
+    * name: String
+    */
+    function _getMaterial (name) {
+        if (!_isInitialised) return;
+
+        return _materials.find(function findMaterialByName (el) {
+            return el.name == name;
+        })
+    }
+
+    /*
+    * Get a texture object by name
+    * PRIVATE
+    * name: String
+    */
+    function _getTexture (name) {
+        if (!_isInitialised) return;
+
+        return _textures.find(function findTextureByName (el) {
+            return el.name == name;
+        });
+    }
+
+
+    // * ------------- */
     // *  MESH MANAGEMENT
     // * ------------- */
 
@@ -268,6 +402,11 @@ const MeshManager = (function MeshManager() {
         addAction: _addAction,
         update: _update,
         initialise: _init,
+
+        addMaterial:_addMaterial,
+        addTexture:_addTexture,
+        applyMaterial: _applyMaterial,
+        applyTexture: _applyTexture
     }
 })();
 

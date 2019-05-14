@@ -51,9 +51,15 @@ function createScene() {
     // * Create an actor
     MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
-    // * Lines
-    //SceneManager.addLines("lines1", LINETYPES.SOLID, [[0,0,0], [0,1,1], [0,1,0]]);
-    //SceneManager.addLines("lines2", LINETYPES.DASHED, [[0,1,0],[1,1,0],[0,0,0]], {dashSize: 0.2, gapSize: 0.5});
+    // * Create a texture
+    MeshManager.addTexture("brick", {
+        diffuseTexture: "imgs/brick.jpg"
+    });
+
+    // * Apply texture
+    MeshManager.applyTexture("brick", "box1");
+
+    // * World Axis Lines
     createWorldAxisReferenceLines();
 }
 

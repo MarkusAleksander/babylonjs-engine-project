@@ -75,6 +75,51 @@ const LightManager = (function LightManager() {
     }
 
     /*
+    * Set Diffuse colour of a light
+    * name: String
+    * colour: BABYLON.Color3()
+    */
+    function _setDiffuseColour(name, colour) {
+        if (!_isInitialised) return;
+
+        let light = _getLight(name);
+
+        if (light != undefined) {
+            light.light.diffuse = colour;
+        }
+    }
+
+    /*
+    * Set Specular colour of a light
+    * name: String
+    * colour: BABYLON.Color3()
+    */
+    function _setSpecularColour(name, colour) {
+        if (!_isInitialised) return;
+
+        let light = _getLight(name);
+
+        if (light != undefined) {
+            light.light.specular = colour;
+        }
+    }
+
+    /*
+    * Set Ground colour of a light
+    * name: String
+    * colour: BABYLON.Color3()
+    */
+    function _setGroundColour(name, colour) {
+        if (!_isInitialised) return;
+
+        let light = _getLight(name);
+
+        if (light != undefined) {
+            light.light.groundColor = colour;
+        }
+    }
+
+    /*
     * get light by name
     * PUBLIC
     * name: String
@@ -102,7 +147,9 @@ const LightManager = (function LightManager() {
     return {
         initialise: _init,
         addLight: _addLight,
-        getLight: _getLight
+        setDiffuseColour: _setDiffuseColour,
+        setSpecularColour: _setSpecularColour,
+        setGroundColour: _setGroundColour
     }
 
 })();

@@ -32,12 +32,13 @@ function initialise(canvasId) {
 
     // * ArcRotate
     CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "arc_camera", {
-        alpha: Math.PI / 2,
-        beta: Math.PI / 2,
+        alpha: Math.PI / 4,
+        beta: Math.PI / 4,
         radius: 20,
-        position: new BABYLON.Vector3(0, 0, 0)
+        target: new BABYLON.Vector3(0, 0, 0)
     });
-    CameraManager.setCameraPosition(new BABYLON.Vector3(20, 20, 20));
+    // TODO
+    //CameraManager.setCameraPosition(new BABYLON.Vector3(0, 0, 20));
 
     // * Universal Camera
     // CameraManager.createCamera(DEFS.CAMERATYPES.UNIVERSAL, "universal_camera", {
@@ -67,11 +68,13 @@ function run() {
 function createScene() {
 
     // * Add lights
-    // LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
-    // LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(5,5,5)});
-    // LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0,1,0)});
-    // LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0,-1,0) })
-    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(0, 10, 0), direction: new BABYLON.Vector3(0, -1 ,0), angle: Math.PI / 2, exponent: 2 });
+    //LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(0, 0, 20) });
+    LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
+    //LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0, 0, -1) })
+    //LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(0, 0, 4), direction: new BABYLON.Vector3(0, 0, -1), angle: Math.PI / 4, exponent: 1 });
+    LightManager.setDiffuseColour("hemilight", new BABYLON.Color3(1, 0, 0));
+    LightManager.setSpecularColour("hemilight", new BABYLON.Color3(0, 1, 0));
+    LightManager.setGroundColour("hemilight", new BABYLON.Color3(0, 1, 0));
     // * Create an actor
     //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
@@ -88,8 +91,8 @@ function createScene() {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
-                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * 1.5) - (rowLimit / 2), y: (k * 1.5) - (rowLimit / 2), z: (j * 1.5) - (rowLimit / 2)});
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { size: 1, updatable: true });
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * 1.5) - (rowLimit / 2), y: (k * 1.5) - (rowLimit / 2), z: (j * 1.5) - (rowLimit / 2) });
                 MeshManager.applyTexture("brick", name);
 
                 // window.setInterval(function () {

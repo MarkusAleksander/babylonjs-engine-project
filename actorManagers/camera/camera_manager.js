@@ -18,7 +18,7 @@ const CameraManager = (function CameraManager() {
 
         switch (type) {
             case CAMERATYPES.ARCROTATE:
-                return new BABYLON.ArcRotateCamera(name, options.alpha, options.beta, options.radius, options.position, _sceneManagerRef.getScene());
+                return new BABYLON.ArcRotateCamera(name, options.alpha, options.beta, options.radius, options.target, _sceneManagerRef.getScene());
             case CAMERATYPES.FOLLOW:
                 // TODO
                 return new BABYLON.FollowCamera(name, options.position, _sceneManagerRef.getScene());
@@ -43,7 +43,11 @@ const CameraManager = (function CameraManager() {
             name: name,
             type: type,
             options: options,
-            camera: _createCamera(type, name, options)
+            camera: _createCamera(type, name, options),
+            updatePosition: function (position) {
+                this.options.position = position;
+                this.camera.setPosition(position);
+            }
         };
     }
 
@@ -60,7 +64,7 @@ const CameraManager = (function CameraManager() {
         if (!_camera) return;
 
         if (_camera.camera.hasOwnProperty('setPosition')) {
-            _camera.camera.setPosition(position);
+            _camera.updatePosition(position);
         }
     }
 

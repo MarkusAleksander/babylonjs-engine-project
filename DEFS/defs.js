@@ -2,8 +2,10 @@
  * Definitions
 */
 const LIGHTTYPES = {
-    HEMISPHERIC: "Hemispheric",
-    POINT: "point"
+    HEMISPHERIC: "hemispheric",
+    POINT: "point",
+    DIRECTIONAL: "directional",
+    SPOT: "spot"
 };
 
 const MESHSHAPES = {

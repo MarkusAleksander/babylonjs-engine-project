@@ -31,13 +31,13 @@ function initialise(canvasId) {
     CameraManager.initialise(SceneManager);
 
     // * ArcRotate
-    // CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "arc_camera", {
-    //     alpha: Math.PI / 2,
-    //     beta: Math.PI / 2,
-    //     radius: 10,
-    //     position: new BABYLON.Vector3(0, 0, 0)
-    // });
-    // CameraManager.setCameraPosition(new BABYLON.Vector3(10, 10, 10));
+    CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "arc_camera", {
+        alpha: Math.PI / 2,
+        beta: Math.PI / 2,
+        radius: 20,
+        position: new BABYLON.Vector3(0, 0, 0)
+    });
+    CameraManager.setCameraPosition(new BABYLON.Vector3(20, 20, 20));
 
     // * Universal Camera
     // CameraManager.createCamera(DEFS.CAMERATYPES.UNIVERSAL, "universal_camera", {
@@ -48,9 +48,9 @@ function initialise(canvasId) {
 
 
     // * FLy Camera
-    CameraManager.createCamera(DEFS.CAMERATYPES.FLY, "fly_camera", {
-        position: new BABYLON.Vector3(0, 0, 0)
-    });
+    // CameraManager.createCamera(DEFS.CAMERATYPES.FLY, "fly_camera", {
+    //     position: new BABYLON.Vector3(0, 0, 0)
+    // });
 
     CameraManager.attachToCanvas(SystemManager.getCanvas());
 
@@ -67,32 +67,34 @@ function run() {
 function createScene() {
 
     // * Add lights
-    LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
-    LightManager.addLight(DEFS.LIGHTTYPES.POINT, "light2", (1, 0, 1));
-
+    // LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "light1", (0, 3, 0));
+    // LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(5,5,5)});
+    // LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0,1,0)});
+    // LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0,-1,0) })
+    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(0, 10, 0), direction: new BABYLON.Vector3(0, -1 ,0), angle: Math.PI / 2, exponent: 2 });
     // * Create an actor
     //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
     // * Create a texture
-    MeshManager.addTexture("brick", {
-        diffuseTexture: "imgs/brick.jpg"
-    });
+    // MeshManager.addTexture("brick", {
+    //     diffuseTexture: "imgs/brick.jpg"
+    // });
 
     // * Create lots of actors
 
-    let rowLimit = 5;
+    let rowLimit = 3;
 
     for (let i = 0; i < rowLimit; i++) {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 0.3, updatable: true });
-                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: i - (rowLimit / 2), y: k - (rowLimit / 2), z: j - (rowLimit / 2) });
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * 1.5) - (rowLimit / 2), y: (k * 1.5) - (rowLimit / 2), z: (j * 1.5) - (rowLimit / 2)});
                 MeshManager.applyTexture("brick", name);
 
-                window.setInterval(function () {
-                    MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
-                }, 50)
+                // window.setInterval(function () {
+                //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
+                // }, 50)
             }
         }
     }
@@ -105,9 +107,9 @@ function createScene() {
 }
 
 function createWorldAxisReferenceLines() {
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldXRef", [[0, 0, 0], [2, 0, 0]], { colors: [new BABYLON.Color4(1, 0, 0, 1), new BABYLON.Color4(1, 0, 0, 1)] });
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldYRef", [[0, 0, 0], [0, 2, 0]], { colors: [new BABYLON.Color4(0, 1, 0, 1), new BABYLON.Color4(0, 1, 0, 1)] });
-    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldZRef", [[0, 0, 0], [0, 0, 2]], { colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)] });
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldXRef", [[0, 0, 0], [5, 0, 0]], { colors: [new BABYLON.Color4(1, 0, 0, 1), new BABYLON.Color4(1, 0, 0, 1)] });
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldYRef", [[0, 0, 0], [0, 5, 0]], { colors: [new BABYLON.Color4(0, 1, 0, 1), new BABYLON.Color4(0, 1, 0, 1)] });
+    LineManager.addLines(DEFS.LINETYPES.SOLID, "worldZRef", [[0, 0, 0], [0, 0, 5]], { colors: [new BABYLON.Color4(0, 0, 1, 1), new BABYLON.Color4(0, 0, 1, 1)] });
 }
 
 function handleWindowEvents() {

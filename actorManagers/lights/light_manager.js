@@ -5,7 +5,8 @@ const LightManager = (function LightManager() {
     const lights = [];
 
     var _isInitialised = false,
-        _sceneManagerRef;
+        _sceneManagerRef,
+        _maxNumLights = 4;
 
     /*
     * Create light from BABYLON
@@ -14,15 +15,19 @@ const LightManager = (function LightManager() {
     * name: String
     * position: Babylon.Vector3
     */
-    function _createLight(type, name, position) {
+    function _createLight(type, name, options) {
 
         switch (type) {
             case LIGHTTYPES.HEMISPHERIC:
-                return new BABYLON.HemisphericLight(name, new BABYLON.Vector3(position), _sceneManagerRef.getScene());
+                return new BABYLON.HemisphericLight(name, options.direction, _sceneManagerRef.getScene());
             case LIGHTTYPES.POINT:
-                return new BABYLON.PointLight(name, new BABYLON.Vector3(position), _sceneManagerRef.getScene());
+                return new BABYLON.PointLight(name, options.position, _sceneManagerRef.getScene());
+            case LIGHTTYPES.DIRECTIONAL:
+                return new BABYLON.DirectionalLight(name, options.direction, _sceneManagerRef.getScene());
+            case LIGHTTYPES.SPOT:
+                return new BABYLON.SpotLight(name, options.position, options.direction, options.angle, options.exponent, _sceneManagerRef.getScene());
             default:
-                return new BABYLON.HemisphericLight(name, new BABYLON.Vector3(position), _sceneManagerRef.getScene());
+                return new BABYLON.HemisphericLight(name, new BABYLON.Vector3(0, 1, 0), _sceneManagerRef.getScene());
         }
     }
 
@@ -31,14 +36,14 @@ const LightManager = (function LightManager() {
     * PRIVATE
     * type: DEF.LIGHTTYPES
     * name: String
-    * position: (intX, intY, intZ)
+    * position: Object (x, y, z)
     */
-    function _createLightObject(type, name, position) {
+    function _createLightObject(type, name, options) {
         return {
             name: name,
             type: type,
-            position: position,
-            light: _createLight(type, name, position),
+            options: options,
+            light: _createLight(type, name, options),
             isLightOn: true,
             intensityValue: 1,
             rangeValue: 100,
@@ -61,11 +66,11 @@ const LightManager = (function LightManager() {
     * name: String
     * position: (intX, intY, intZ)
     */
-    function _addLight(type, name, position) {
+    function _addLight(type, name, options) {
         if (!_isInitialised) return;
 
-        if (_getLight(name) == undefined) {
-            lights.push(_createLightObject(type, name, position));
+        if (_getLight(name) == undefined && lights.length <= _maxNumLights) {
+            lights.push(_createLightObject(type, name, options));
         }
     }
 

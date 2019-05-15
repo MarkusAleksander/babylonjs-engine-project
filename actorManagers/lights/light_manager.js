@@ -120,6 +120,21 @@ const LightManager = (function LightManager() {
     }
 
     /*
+    * Set Ground colour of a light
+    * name: String
+    * intensity: float
+    */
+    function _setLightIntensity(name, intensity) {
+        if (!_isInitialised) return;
+
+        let light = _getLight(name);
+
+        if (light != undefined) {
+            light.light.intensity = intensity;
+        }
+    }
+
+    /*
     * get light by name
     * PUBLIC
     * name: String
@@ -147,9 +162,11 @@ const LightManager = (function LightManager() {
     return {
         initialise: _init,
         addLight: _addLight,
+
         setDiffuseColour: _setDiffuseColour,
         setSpecularColour: _setSpecularColour,
-        setGroundColour: _setGroundColour
+        setGroundColour: _setGroundColour,
+        setLightIntensity: _setLightIntensity
     }
 
 })();

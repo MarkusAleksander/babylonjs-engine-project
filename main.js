@@ -71,29 +71,49 @@ function createScene() {
     //LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(0, 0, 20) });
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
     //LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0, 0, -1) })
-    //LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(0, 0, 4), direction: new BABYLON.Vector3(0, 0, -1), angle: Math.PI / 4, exponent: 1 });
-    LightManager.setDiffuseColour("hemilight", new BABYLON.Color3(1, 0, 0));
-    LightManager.setSpecularColour("hemilight", new BABYLON.Color3(0, 1, 0));
-    LightManager.setGroundColour("hemilight", new BABYLON.Color3(0, 1, 0));
+    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(5, 30, 0), direction: new BABYLON.Vector3(-0.2, -1, 0), angle: Math.PI / 4, exponent: 50 });
+
+    // * Colour lights
+    LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 0, 0));
+    LightManager.setSpecularColour("spotlight", new BABYLON.Color3(1, 1, 1));
+    // LightManager.setGroundColour("hemilight", new BABYLON.Color3(0, 1, 0));
+
+    LightManager.setLightIntensity("hemilight", 0.2);
+    LightManager.setLightIntensity("spotlight", 0.8);
+
     // * Create an actor
     //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
     // * Create a texture
-    // MeshManager.addTexture("brick", {
-    //     diffuseTexture: "imgs/brick.jpg"
-    // });
+    MeshManager.addTexture("brick", {
+        diffuseTexture: "imgs/brick.jpg"
+    });
+    MeshManager.addTexture("stone", {
+        diffuseTexture: "imgs/stone.jpg"
+    });
+    MeshManager.addMaterial("mat1", {
+        diffuseColor: new BABYLON.Color3(1, 0, 1),
+        specularColor: new BABYLON.Color3(0.5, 0.6, 0.87),
+        // emissiveColor: new BABYLON.Color3(1, 1, 1)
+    });
+
+    // * Create Ground
+
+    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true });
 
     // * Create lots of actors
 
-    let rowLimit = 3;
+    let rowLimit = 3,
+        spacing = 2;
 
     for (let i = 0; i < rowLimit; i++) {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { size: 1, updatable: true });
-                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * 1.5) - (rowLimit / 2), y: (k * 1.5) - (rowLimit / 2), z: (j * 1.5) - (rowLimit / 2) });
-                MeshManager.applyTexture("brick", name);
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1.5, updatable: true });
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
+                // MeshManager.applyMaterial("mat1", name);
+                MeshManager.applyTexture("stone", name);
 
                 // window.setInterval(function () {
                 //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });

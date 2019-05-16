@@ -11,6 +11,11 @@ const MeshManager = (function MeshManager() {
     var _isInitialised = false,
         _sceneManagerRef;
 
+    const STATUS = {
+        IDLE: 'idle',
+        MOVING: 'moving',
+        FALLING: 'falling'
+    }
 
     // * ------------- */
     // *  MESH CREATION
@@ -53,6 +58,19 @@ const MeshManager = (function MeshManager() {
             name: name,
             type: type,
             mesh: _createSimpleMesh(type, name, options),
+            status: STATUS.IDLE,
+
+            moveAbsolutely: function (newPos) {
+                this.mesh.position.x = newPos.x != undefined ? newPos.x : this.mesh.position.x;
+                this.mesh.position.y = newPos.y != undefined ? newPos.y : this.mesh.position.y;
+                this.mesh.position.z = newPos.z != undefined ? newPos.z : this.mesh.position.z;
+            },
+            moveRelatively: function (newPos) {
+                this.mesh.position.x = this.mesh.position.x + (newPos.x != undefined ? newPos.x : 0);
+                this.mesh.position.y = this.mesh.position.y + (newPos.y != undefined ? newPos.y : 0);
+                this.mesh.position.z = this.mesh.position.z + (newPos.z != undefined ? newPos.z : 0);
+            }
+
         }
     }
 
@@ -118,11 +136,7 @@ const MeshManager = (function MeshManager() {
     function _moveMeshAbsolutely(name, newPos = {}) {
         let meshObj = _getMesh(name);
 
-        if (!meshObj) return;
-
-        meshObj.mesh.position.x = newPos.x != undefined ? newPos.x : meshObj.mesh.position.x;
-        meshObj.mesh.position.y = newPos.y != undefined ? newPos.y : meshObj.mesh.position.y;
-        meshObj.mesh.position.z = newPos.z != undefined ? newPos.z : meshObj.mesh.position.z;
+        if (meshObj) meshObj.moveAbsolutely(newPos);
     }
 
     /*
@@ -134,11 +148,7 @@ const MeshManager = (function MeshManager() {
     function _moveMeshRelatively(name, newPos = {}) {
         let meshObj = _getMesh(name);
 
-        if (!meshObj) return;
-
-        meshObj.mesh.position.x = meshObj.mesh.position.x + newPos.x;
-        meshObj.mesh.position.y = meshObj.mesh.position.y + newPos.y;
-        meshObj.mesh.position.z = meshObj.mesh.position.z + newPos.z;
+        if (meshObj) meshObj.moveRelatively(newPos);
     }
 
     /*

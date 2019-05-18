@@ -111,18 +111,22 @@ function createScene() {
         // emissiveColor: new BABYLON.Color3(1, 1, 1)
     });
 
-    MeshManager.addTexture("numberedfaces", {
-        diffuseTexture: "imgs/numberedfaces.jpg"
+    let DICE = "dice";
+
+    MeshManager.addTexture(DICE, {
+        diffuseTexture: "imgs/dice.jpg",
+        specularTexture: "imgs/dice.jpg",
+        bumpTexture: "imgs/dice_bumpmap.jpg"
     });
 
-    MeshManager.addMultfaceOption("numberedfaces", {
-        cols: 6,
-        rows: 1,
-        faces: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
+    MeshManager.addMultfaceOption(DICE, {
+        cols: 2,
+        rows: 3,
+        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
         wrap: true
     });
 
-    let multifaceOption = MeshManager.getMultifaceOption("numberedfaces");
+    let multifaceOption = MeshManager.getMultifaceOption(DICE);
 
     // * Create Ground
 
@@ -142,7 +146,7 @@ function createScene() {
                 MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
                 // MeshManager.applyMaterial("mat1", name);
                 // debugger;
-                MeshManager.applyTexture("numberedfaces", name);
+                MeshManager.applyTexture(DICE, name);
                 //MeshManager.applyTexture("stone", name);
 
                 // window.setInterval(function () {

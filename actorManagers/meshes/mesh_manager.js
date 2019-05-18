@@ -41,6 +41,8 @@ const MeshManager = (function MeshManager() {
                 return BABYLON.MeshBuilder.CreatePlane(name, options, _sceneManagerRef.getScene());
             case MESHSHAPES.GROUND:
                 return BABYLON.MeshBuilder.CreateGround(name, options, _sceneManagerRef.getScene());
+            case MESHSHAPES.CYLINDER:
+                return BABYLON.MeshBuilder.CreateCylinder(name, options, _sceneManagerRef.getScene());
             default:
                 return BABYLON.MeshBuilder.CreateSphere(name, options, _sceneManagerRef.getScene());
         }

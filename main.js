@@ -120,7 +120,7 @@ function createScene() {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { size: 1.5, updatable: true });
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
                 MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
                 MeshManager.applyMaterial("mat1", name);
                 //MeshManager.applyTexture("stone", name);

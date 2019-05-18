@@ -12,7 +12,8 @@ const MESHSHAPES = {
     SPHERE: "sphere",
     BOX: "box",
     PLANE: "plane",
-    GROUND: "ground"
+    GROUND: "ground",
+    CYLINDER: "cylinder"
 };
 
 const LINETYPES = {
@@ -28,11 +29,11 @@ const ACTIONTYPES = {
     SCALE: "scale"
 };
 
- const CAMERATYPES = {
-     UNIVERSAL: "universal",
-     ARCROTATE: "arcrotate",
-     FOLLOW: "follow",
-     FLY: "fly"
- }
+const CAMERATYPES = {
+    UNIVERSAL: "universal",
+    ARCROTATE: "arcrotate",
+    FOLLOW: "follow",
+    FLY: "fly"
+}
 
 export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES, CAMERATYPES };

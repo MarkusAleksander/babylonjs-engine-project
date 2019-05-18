@@ -158,7 +158,7 @@ const LightManager = (function LightManager() {
     * name: String
     */
     function _createShadowGenerator(name, lightObj) {
-        let shadowGenerator = new BABYLON.ShadowGenerator(512, lightObj.light);
+        let shadowGenerator = new BABYLON.ShadowGenerator(1024, lightObj.light);
 
         _shadowGenerators.push({
             name: name,

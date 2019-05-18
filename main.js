@@ -71,7 +71,13 @@ function createScene() {
     //LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(0, 0, 20) });
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
     //LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0, 0, -1) })
-    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(5, 30, 0), direction: new BABYLON.Vector3(-0.2, -1, 0), angle: Math.PI / 4, exponent: 50, castShadows: true });
+    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", {
+        position: new BABYLON.Vector3(-20, 30, -20),
+        direction: new BABYLON.Vector3(0.7, -1, 0.7),
+        angle: Math.PI / 4,
+        exponent: 50,
+        castShadows: true
+    });
 
     // * Colour lights
     LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 1, 1));
@@ -131,7 +137,7 @@ function createScene() {
     // * Create Ground
 
     MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true, receiveShadows: true });
-    // MeshManager.applyTexture("grass", "ground");
+    MeshManager.applyTexture("grass", "ground");
     // * Create lots of actors
 
     let rowLimit = 3,

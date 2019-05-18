@@ -74,7 +74,7 @@ function createScene() {
     LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(5, 30, 0), direction: new BABYLON.Vector3(-0.2, -1, 0), angle: Math.PI / 4, exponent: 50 });
 
     // * Colour lights
-    LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 0, 0));
+    LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 1, 1));
     LightManager.setSpecularColour("spotlight", new BABYLON.Color3(1, 1, 1));
     // LightManager.setGroundColour("hemilight", new BABYLON.Color3(0, 1, 0));
 
@@ -91,16 +91,26 @@ function createScene() {
     MeshManager.addTexture("stone", {
         diffuseTexture: "imgs/stone.jpg"
     });
+    MeshManager.addTexture("grass", {
+        diffuseTexture: "imgs/grass.jpg",
+        uScale: 4,
+        vScale: 4,
+        vOffset: 0.5,
+        uOffset: 0.5,
+        specularTexture: "imgs/grass.jpg",
+        bumpTexture: "imgs/grass_bumpmap.jpg",
+    });
     MeshManager.addMaterial("mat1", {
-        diffuseColor: new BABYLON.Color3(1, 0, 1),
-        specularColor: new BABYLON.Color3(0.5, 0.6, 0.87),
+        diffuseColor: new BABYLON.Color3(0.52, 0.81, 0.98),
+        specularColor: new BABYLON.Color3(0.6, 0.9, 1),
+        alpha: 0.7
         // emissiveColor: new BABYLON.Color3(1, 1, 1)
     });
 
     // * Create Ground
 
     MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true });
-
+    MeshManager.applyTexture("grass", "ground");
     // * Create lots of actors
 
     let rowLimit = 3,
@@ -110,10 +120,10 @@ function createScene() {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1.5, updatable: true });
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.SPHERE, name, { size: 1.5, updatable: true });
                 MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
-                // MeshManager.applyMaterial("mat1", name);
-                MeshManager.applyTexture("stone", name);
+                MeshManager.applyMaterial("mat1", name);
+                //MeshManager.applyTexture("stone", name);
 
                 // window.setInterval(function () {
                 //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });

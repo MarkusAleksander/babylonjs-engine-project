@@ -221,6 +221,8 @@ const MeshManager = (function MeshManager() {
         material.specularColor = options.specularColor != undefined ? options.specularColor : material.specularColor;
         material.emissiveColor = options.emissiveColor != undefined ? options.emissiveColor : material.emissiveColor;
         material.ambientColor = options.ambientColor != undefined ? options.ambientColor : material.ambientColor;
+        material.alpha = options.alpha != undefined ? options.alpha : 1;
+        material.pointsCloud = options.pointsCloud != undefined ? options.pointsCloud : material.pointsCloud;
 
         return material;
     }
@@ -235,11 +237,21 @@ const MeshManager = (function MeshManager() {
         let texture = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
 
         texture.diffuseTexture = options.diffuseTexture != undefined ? new BABYLON.Texture(options.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
+        texture.diffuseTexture.hasAlpha = options.hasAlpha != undefined ? options.hasAlpha : false;
+
+        texture.diffuseTexture.uScale = options.uScale != undefined ? options.uScale : texture.diffuseTexture.uScale;
+        texture.diffuseTexture.vScale = options.vScale != undefined ? options.vScale : texture.diffuseTexture.vScale;
+        texture.diffuseTexture.uOffset = options.uOffset != undefined ? options.uOffset : texture.diffuseTexture.uOffset;
+        texture.diffuseTexture.vOffset = options.vOffset != undefined ? options.vOffset : texture.diffuseTexture.vOffset;
+
         texture.specularTexture = options.specularTexture != undefined ? new BABYLON.Texture(options.specularTexture, _sceneManagerRef.getScene()) : texture.specularTexture;
         texture.emissiveTexture = options.emissiveTexture != undefined ? new BABYLON.Texture(options.emissiveTexture, _sceneManagerRef.getScene()) : texture.emissiveTexture;
         texture.ambientTexture = options.ambientTexture != undefined ? new BABYLON.Texture(options.ambientTexture, _sceneManagerRef.getScene()) : texture.ambientTexture;
         texture.alpha = options.alpha != undefined ? options.alpha : 1;
-        texture.diffuseTexture.hasAlpha = options.hasAlpha != undefined ? options.hasAlpha : false;
+        texture.backFaceCulling = options.backFaceCulling != undefined ? options.backFaceCulling : texture.backFaceCulling;
+        texture.opacityTexture = options.opacityTexture != undefined ? new BABYLON.Texture(options.opacityTexture, _sceneManagerRef.getScene()) : texture.opacityTexture;
+
+        texture.bumpTexture = options.bumpTexture != undefined ? new BABYLON.Texture(options.bumpTexture, _sceneManagerRef.getScene()) : texture.bumpTexture;
 
         return texture;
     }

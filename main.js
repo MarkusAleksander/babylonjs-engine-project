@@ -4,6 +4,7 @@ import LightManager from './actorManagers/lights/light_manager.js';
 import LineManager from './actorManagers/lines/line_manager.js';
 import CameraManager from './actorManagers/camera/camera_manager.js';
 import MeshManager from './actorManagers/meshes/mesh_manager.js';
+import AnimationManager from './actorManagers/animation/animation_manager.js';
 
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
@@ -25,7 +26,9 @@ function initialise(canvasId) {
     // Create Actor Managers
     LineManager.initialise(SceneManager);
     LightManager.initialise(SceneManager);
+
     MeshManager.initialise(SceneManager);
+    AnimationManager.initialise(SceneManager, MeshManager);
 
     // Create Camera
     CameraManager.initialise(SceneManager);
@@ -138,8 +141,26 @@ function createScene() {
 
     MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true, receiveShadows: true });
     MeshManager.applyTexture("grass", "ground");
-    // * Create lots of actors
 
+    // * Create an animation
+    AnimationManager.addAnimationObject("scaleX", {
+        property: "scaling.x",
+        fps: 30,
+        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+        keys: [{
+            frame: 0,
+            value: 1
+        }, {
+            frame: 20,
+            value: 0.2
+        }, {
+            frame: 100,
+            value: 1
+        }]
+    });
+
+    // * Create lots of actors
     let rowLimit = 3,
         spacing = 2;
 
@@ -166,13 +187,16 @@ function createScene() {
                 // debugger;
                 LightManager.addMeshToShadowMap("spotlight", MeshManager.getMesh(name));
                 //MeshManager.applyTexture("stone", name);
-
+                //debugger;
+                AnimationManager.addAnimationToMesh("scaleX", name);
                 // window.setInterval(function () {
                 //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
                 // }, 50)
             }
         }
     }
+
+    // AnimationManager.runAnimations();
 
     // * Apply texture
     //MeshManager.applyTexture("brick", "box1");

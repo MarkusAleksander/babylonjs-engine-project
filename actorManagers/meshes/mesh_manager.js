@@ -12,6 +12,7 @@ const MeshManager = (function MeshManager() {
     var _isInitialised = false,
         _sceneManagerRef;
 
+    // TODO
     const STATUS = {
         IDLE: 'idle',
         MOVING: 'moving',

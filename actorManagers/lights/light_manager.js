@@ -2,7 +2,8 @@ import { LIGHTTYPES } from '../../DEFS/defs.js';
 
 const LightManager = (function LightManager() {
 
-    const lights = [];
+    const lights = [],
+        _shadowGenerators = [];
 
     var _isInitialised = false,
         _sceneManagerRef,
@@ -71,6 +72,10 @@ const LightManager = (function LightManager() {
 
         if (_getLight(name) == undefined && lights.length <= _maxNumLights) {
             lights.push(_createLightObject(type, name, options));
+        }
+
+        if (options.castShadows) {
+            _createShadowGenerator(name, _getLight(name));
         }
     }
 
@@ -148,6 +153,42 @@ const LightManager = (function LightManager() {
     }
 
     /*
+    * Create a shadow generator
+    * PRIVATE
+    * name: String
+    */
+    function _createShadowGenerator(name, lightObj) {
+        let shadowGenerator = new BABYLON.ShadowGenerator(512, lightObj.light);
+
+        _shadowGenerators.push({
+            name: name,
+            shadowGenerator: shadowGenerator
+        });
+    }
+
+    /*
+    * Add object to shadow map
+    * PUBLIC
+    * name: String
+    */
+    function _addMeshToShadowMap(name, meshObj) {
+        let shadowGenerator = _getShadowGenerator(name);
+        shadowGenerator.shadowGenerator.getShadowMap().renderList.push(meshObj.mesh);
+    }
+
+    /*
+    * Get Shadow Generator
+    * name: String
+    */
+    function _getShadowGenerator(name) {
+        if (!_isInitialised) return;
+
+        return _shadowGenerators.find(function findShadowGeneratorByName(el) {
+            return el.name == name;
+        });
+    }
+
+    /*
     * Initialise with Scene Manager
     * PUBLIC
     * sceneManager: SceneManager
@@ -166,7 +207,9 @@ const LightManager = (function LightManager() {
         setDiffuseColour: _setDiffuseColour,
         setSpecularColour: _setSpecularColour,
         setGroundColour: _setGroundColour,
-        setLightIntensity: _setLightIntensity
+        setLightIntensity: _setLightIntensity,
+
+        addMeshToShadowMap: _addMeshToShadowMap
     }
 
 })();

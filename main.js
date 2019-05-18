@@ -71,7 +71,7 @@ function createScene() {
     //LightManager.addLight(DEFS.LIGHTTYPES.POINT, "pointlight", { position: new BABYLON.Vector3(0, 0, 20) });
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
     //LightManager.addLight(DEFS.LIGHTTYPES.DIRECTIONAL, "directional", { direction: new BABYLON.Vector3(0, 0, -1) })
-    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(5, 30, 0), direction: new BABYLON.Vector3(-0.2, -1, 0), angle: Math.PI / 4, exponent: 50 });
+    LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", { position: new BABYLON.Vector3(5, 30, 0), direction: new BABYLON.Vector3(-0.2, -1, 0), angle: Math.PI / 4, exponent: 50, castShadows: true });
 
     // * Colour lights
     LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 1, 1));
@@ -130,8 +130,8 @@ function createScene() {
 
     // * Create Ground
 
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true });
-    MeshManager.applyTexture("grass", "ground");
+    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true, receiveShadows: true });
+    // MeshManager.applyTexture("grass", "ground");
     // * Create lots of actors
 
     let rowLimit = 3,
@@ -141,12 +141,24 @@ function createScene() {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { faceUV: multifaceOption.faceUV, wrap: multifaceOption.wrap, size: 1, updatable: true });
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, {
+                    faceUV: multifaceOption.faceUV,
+                    wrap: multifaceOption.wrap,
+                    size: 1,
+                    updatable: true,
+                    receiveShadows: true
+                });
                 // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
-                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
+                MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, {
+                    x: (i * spacing) - (rowLimit / 2),
+                    y: (k * spacing) + 1,
+                    z: (j * spacing) - (rowLimit / 2)
+                });
                 // MeshManager.applyMaterial("mat1", name);
                 // debugger;
                 MeshManager.applyTexture(DICE, name);
+                // debugger;
+                LightManager.addMeshToShadowMap("spotlight", MeshManager.getMesh(name));
                 //MeshManager.applyTexture("stone", name);
 
                 // window.setInterval(function () {

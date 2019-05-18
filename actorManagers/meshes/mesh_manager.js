@@ -99,6 +99,12 @@ const MeshManager = (function MeshManager() {
         if (_getMesh(name) == undefined) {
             _meshes.push(_createSimpleMeshObject(type, name, options));
         }
+
+        if (options.receiveShadows) {
+            let meshObj = _getMesh(name);
+
+            meshObj.mesh.receiveShadows = options.receiveShadows;
+        }
     }
 
     /*
@@ -120,7 +126,6 @@ const MeshManager = (function MeshManager() {
     * Get a mesh objecy by name
     * PUBLIC
     * name: String
-    TODO: Should be private?
     */
     function _getMesh(name) {
         if (!_isInitialised) return;

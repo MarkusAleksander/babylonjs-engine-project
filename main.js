@@ -88,9 +88,11 @@ function createScene() {
     MeshManager.addTexture("brick", {
         diffuseTexture: "imgs/brick.jpg"
     });
+
     MeshManager.addTexture("stone", {
         diffuseTexture: "imgs/stone.jpg"
     });
+
     MeshManager.addTexture("grass", {
         diffuseTexture: "imgs/grass.jpg",
         uScale: 4,
@@ -100,12 +102,27 @@ function createScene() {
         specularTexture: "imgs/grass.jpg",
         bumpTexture: "imgs/grass_bumpmap.jpg",
     });
+
+
     MeshManager.addMaterial("mat1", {
         diffuseColor: new BABYLON.Color3(0.52, 0.81, 0.98),
         specularColor: new BABYLON.Color3(0.6, 0.9, 1),
         alpha: 0.7
         // emissiveColor: new BABYLON.Color3(1, 1, 1)
     });
+
+    MeshManager.addTexture("numberedfaces", {
+        diffuseTexture: "imgs/numberedfaces.jpg"
+    });
+
+    MeshManager.addMultfaceOption("numberedfaces", {
+        cols: 6,
+        rows: 1,
+        faces: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
+        wrap: true
+    });
+
+    let multifaceOption = MeshManager.getMultifaceOption("numberedfaces");
 
     // * Create Ground
 
@@ -120,9 +137,12 @@ function createScene() {
         for (let j = 0; j < rowLimit; j++) {
             for (let k = 0; k < rowLimit; k++) {
                 let name = "box_" + i + "_" + j + "_" + k;
-                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
+                MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { faceUV: multifaceOption.faceUV, wrap: multifaceOption.wrap, size: 1, updatable: true });
+                // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, { size: 1, updatable: true });
                 MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, { x: (i * spacing) - (rowLimit / 2), y: (k * spacing) + 1, z: (j * spacing) - (rowLimit / 2) });
-                MeshManager.applyMaterial("mat1", name);
+                // MeshManager.applyMaterial("mat1", name);
+                // debugger;
+                MeshManager.applyTexture("numberedfaces", name);
                 //MeshManager.applyTexture("stone", name);
 
                 // window.setInterval(function () {

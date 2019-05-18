@@ -4,7 +4,8 @@ const MeshManager = (function MeshManager() {
 
     const _meshes = [],
         _materials = [],
-        _textures = [];
+        _textures = [],
+        _multifaceTextureOptions = [];
 
     const _actionList = [];
 
@@ -295,6 +296,49 @@ const MeshManager = (function MeshManager() {
     }
 
     /*
+    * Add a multiface texture obkect
+    * PUBLIC
+    * name: String,
+    * options: Object
+    * cols: int,
+    * rows: int,
+    * faces: array of [col, row]
+    */
+    function _addMultifaceOptionObject(name, options) {
+
+        let faceUV = new Array(options.faces.length),
+            colDivision = 1 / options.cols,
+            rowDivision = 1 / options.rows;
+
+        for (let i = 0; i < options.faces.length; i++) {
+            faceUV[i] = new BABYLON.Vector4(
+                options.faces[i][0] * colDivision,
+                options.faces[i][1] * rowDivision,
+                (options.faces[i][0] + 1) * colDivision,
+                (options.faces[i][1] + 1) * rowDivision
+            );
+        }
+
+        _multifaceTextureOptions.push({
+            name: name,
+            faceUV: faceUV,
+            wrap: options.wrap
+        })
+    }
+
+    /*
+    * Get a multifaceOptionObfect
+    * name: String
+    */
+    function _getMultifaceOptionObject(name) {
+        if (!_isInitialised) return;
+
+        return _multifaceTextureOptions.find(function findMultifaceObjectByName(el) {
+            return el.name == name;
+        });
+    }
+
+    /*
     * Apply a material to a material
     * PUBLIC
     * materialName: String
@@ -431,7 +475,9 @@ const MeshManager = (function MeshManager() {
         addMaterial: _addMaterial,
         addTexture: _addTexture,
         applyMaterial: _applyMaterial,
-        applyTexture: _applyTexture
+        applyTexture: _applyTexture,
+        addMultfaceOption: _addMultifaceOptionObject,
+        getMultifaceOption: _getMultifaceOptionObject
     }
 })();
 

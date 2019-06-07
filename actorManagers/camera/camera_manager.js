@@ -26,6 +26,8 @@ const CameraManager = (function CameraManager() {
                 return new BABYLON.FlyCamera(name, options.position, _sceneManagerRef.getScene());
             case CAMERATYPES.UNIVERSAL:
                 return new BABYLON.UniversalCamera(name, options.position, _sceneManagerRef.getScene());
+            case CAMERATYPES.FREE:
+                return new BABYLON.FreeCamera(name, options.position, _sceneManagerRef.getScene());
             default:
                 return new BABYLON.UniversalCamera(name, options.position, _sceneManagerRef.getScene());
         }
@@ -89,6 +91,10 @@ const CameraManager = (function CameraManager() {
         if (!_camera) return;
 
         _camera.camera.attachControl(canvas, true);
+        /* ! TESTING */
+        _camera.camera.checkCollisions = true;
+        _camera.camera.applyGravity = true;
+        _camera.camera.collisionRadius = new BABYLON.Vector3(1, 1, 1);
     }
 
     /*

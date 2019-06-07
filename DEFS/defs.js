@@ -33,7 +33,8 @@ const CAMERATYPES = {
     UNIVERSAL: "universal",
     ARCROTATE: "arcrotate",
     FOLLOW: "follow",
-    FLY: "fly"
+    FLY: "fly",
+    FREE: "free"
 }
 
 export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES, CAMERATYPES };

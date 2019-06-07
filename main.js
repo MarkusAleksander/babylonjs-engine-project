@@ -5,6 +5,7 @@ import LineManager from './actorManagers/lines/line_manager.js';
 import CameraManager from './actorManagers/camera/camera_manager.js';
 import MeshManager from './actorManagers/meshes/mesh_manager.js';
 import AnimationManager from './actorManagers/animation/animation_manager.js';
+import PhysicsManager from './physics_manager/physics_manager.js';
 
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
@@ -30,6 +31,8 @@ function initialise(canvasId) {
     MeshManager.initialise(SceneManager);
     AnimationManager.initialise(SceneManager, MeshManager);
 
+    PhysicsManager.initialise(SceneManager);
+
     // Create Camera
     CameraManager.initialise(SceneManager);
 
@@ -40,6 +43,7 @@ function initialise(canvasId) {
         radius: 20,
         target: new BABYLON.Vector3(0, 0, 0)
     });
+
     // TODO
     //CameraManager.setCameraPosition(new BABYLON.Vector3(0, 0, 20));
 
@@ -54,6 +58,11 @@ function initialise(canvasId) {
     // * FLy Camera
     // CameraManager.createCamera(DEFS.CAMERATYPES.FLY, "fly_camera", {
     //     position: new BABYLON.Vector3(0, 0, 0)
+    // });
+
+    // * Free Camera
+    // CameraManager.createCamera(DEFS.CAMERATYPES.FREE, "free_camera", {
+    //         position: new BABYLON.Vector3(0, 20, -30)
     // });
 
     CameraManager.attachToCanvas(SystemManager.getCanvas());
@@ -90,22 +99,17 @@ function createScene() {
     LightManager.setLightIntensity("hemilight", 0.2);
     LightManager.setLightIntensity("spotlight", 0.8);
 
+    // * Create Physics
+    PhysicsManager.createGravity(new BABYLON.Vector3(0, -9.81, 0));
+
     // * Create an actor
     //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
 
     // * Create a texture
-    MeshManager.addTexture("brick", {
-        diffuseTexture: "imgs/brick.jpg"
-    });
-
-    MeshManager.addTexture("stone", {
-        diffuseTexture: "imgs/stone.jpg"
-    });
-
     MeshManager.addTexture("grass", {
         diffuseTexture: "imgs/grass.jpg",
-        uScale: 4,
-        vScale: 4,
+        uScale: 16,
+        vScale: 16,
         vOffset: 0.5,
         uOffset: 0.5,
         specularTexture: "imgs/grass.jpg",
@@ -139,8 +143,9 @@ function createScene() {
 
     // * Create Ground
 
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 25, height: 25, subdivisions: 10, updatable: true, receiveShadows: true });
+    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 125, height: 125, subdivisions: 24, updatable: true, receiveShadows: true });
     MeshManager.applyTexture("grass", "ground");
+    MeshManager.getMesh("ground").mesh.checkCollisions = true;
 
     // * Create an animation
     AnimationManager.addAnimationObject("rotationX", {
@@ -220,9 +225,9 @@ function createScene() {
                 LightManager.addMeshToShadowMap("spotlight", MeshManager.getMesh(name));
                 //MeshManager.applyTexture("stone", name);
                 //debugger;
-                AnimationManager.addAnimationToMesh("rotationX", name);
-                AnimationManager.addAnimationToMesh("rotationY", name);
-                AnimationManager.addAnimationToMesh("rotationZ", name);
+                //AnimationManager.addAnimationToMesh("rotationX", name);
+                //AnimationManager.addAnimationToMesh("rotationY", name);
+                //AnimationManager.addAnimationToMesh("rotationZ", name);
                 // window.setInterval(function () {
                 //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
                 // }, 50)

@@ -41,7 +41,10 @@ var _systemManager = (function () {
         // * Get canvas
         _canvas = document.getElementById(canvasId);
         // * Create Babylon Engine
-        _canvas ? (_engine = new BABYLON.Engine(_canvas, true)) : console.log('No canvas');
+        _canvas ? (_engine = new BABYLON.Engine(_canvas, true, {
+            deterministicLockstep: true,
+            lockstepMaxSteps: 4
+        })) : console.log('No canvas');
 
         _isInitialised = Boolean(_canvas) && Boolean(_engine);
     }

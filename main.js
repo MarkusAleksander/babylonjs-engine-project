@@ -143,25 +143,57 @@ function createScene() {
     MeshManager.applyTexture("grass", "ground");
 
     // * Create an animation
-    AnimationManager.addAnimationObject("scaleX", {
-        property: "scaling.x",
+    AnimationManager.addAnimationObject("rotationX", {
+        property: "rotation.x",
         fps: 30,
         type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
         mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
         keys: [{
             frame: 0,
-            value: 1
+            value: 0
         }, {
-            frame: 20,
-            value: 0.2
+            frame: 50,
+            value: Math.PI
         }, {
             frame: 100,
-            value: 1
+            value: Math.PI * 2
+        }]
+    });
+    AnimationManager.addAnimationObject("rotationY", {
+        property: "rotation.y",
+        fps: 30,
+        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+        keys: [{
+            frame: 0,
+            value: 0
+        }, {
+            frame: 50,
+            value: Math.PI
+        }, {
+            frame: 100,
+            value: Math.PI * 2
+        }]
+    });
+    AnimationManager.addAnimationObject("rotationZ", {
+        property: "rotation.z",
+        fps: 30,
+        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+        keys: [{
+            frame: 0,
+            value: 0
+        }, {
+            frame: 50,
+            value: Math.PI
+        }, {
+            frame: 100,
+            value: Math.PI * 2
         }]
     });
 
     // * Create lots of actors
-    let rowLimit = 3,
+    let rowLimit = 2,
         spacing = 2;
 
     for (let i = 0; i < rowLimit; i++) {
@@ -188,7 +220,9 @@ function createScene() {
                 LightManager.addMeshToShadowMap("spotlight", MeshManager.getMesh(name));
                 //MeshManager.applyTexture("stone", name);
                 //debugger;
-                AnimationManager.addAnimationToMesh("scaleX", name);
+                AnimationManager.addAnimationToMesh("rotationX", name);
+                AnimationManager.addAnimationToMesh("rotationY", name);
+                AnimationManager.addAnimationToMesh("rotationZ", name);
                 // window.setInterval(function () {
                 //     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, name, { x: Math.PI / 12 });
                 // }, 50)

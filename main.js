@@ -40,7 +40,7 @@ function initialise(canvasId) {
     CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "arc_camera", {
         alpha: Math.PI / 4,
         beta: Math.PI / 4,
-        radius: 20,
+        radius: 50,
         target: new BABYLON.Vector3(0, 0, 0)
     });
 
@@ -100,7 +100,7 @@ function createScene() {
     LightManager.setLightIntensity("spotlight", 0.8);
 
     // * Create Physics
-    PhysicsManager.createGravity(new BABYLON.Vector3(0, -9.81, 0));
+    PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
 
     // * Create an actor
     //MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, "box1", { size: 0.5, updatable: true });
@@ -144,6 +144,7 @@ function createScene() {
     // * Create Ground
 
     MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", { width: 125, height: 125, subdivisions: 24, updatable: true, receiveShadows: true });
+    MeshManager.getMesh("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMesh("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
     MeshManager.applyTexture("grass", "ground");
     MeshManager.getMesh("ground").mesh.checkCollisions = true;
 
@@ -198,8 +199,8 @@ function createScene() {
     });
 
     // * Create lots of actors
-    let rowLimit = 2,
-        spacing = 2;
+    let rowLimit = 1,
+        spacing = 5;
 
     for (let i = 0; i < rowLimit; i++) {
         for (let j = 0; j < rowLimit; j++) {
@@ -223,6 +224,8 @@ function createScene() {
                 MeshManager.applyTexture(DICE, name);
                 // debugger;
                 LightManager.addMeshToShadowMap("spotlight", MeshManager.getMesh(name));
+
+                MeshManager.getMesh(name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMesh(name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
                 //MeshManager.applyTexture("stone", name);
                 //debugger;
                 //AnimationManager.addAnimationToMesh("rotationX", name);

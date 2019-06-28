@@ -48,7 +48,7 @@ const AnimationManager = (function AnimationManager() {
         if (!_isInitialised) return;
 
         let animationObj = _getAnimationObject(animationName);
-        let meshObj = _meshManagerRef.getMesh(meshName);
+        let meshObj = _meshManagerRef.getMeshInterface(meshName);
 
         if (!meshObj.mesh.animations) {
             meshObj.mesh.animations = [];
@@ -76,7 +76,7 @@ const AnimationManager = (function AnimationManager() {
 
         // for (let i = 0; i < _animations.length; i++) {
         //     if (_animations[i].meshName) {
-        //         let mesh = _meshManagerRef.getMesh(_animations[i].meshName);
+        //         let mesh = _meshManagerRef.getMeshInterface(_animations[i].meshName);
 
         //         _sceneManagerRef.beginAnimation(mesh.mesh, 0, 100, true);
         //     }

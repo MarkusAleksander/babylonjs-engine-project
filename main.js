@@ -80,7 +80,7 @@ function createScene() {
     });
     LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 1, 1));
     LightManager.setSpecularColour("spotlight", new BABYLON.Color3(1, 1, 1));
-    LightManager.setLightIntensity("spotlight", 0.8);
+    LightManager.setLightIntensity("spotlight", 1);
 
 
     /*
@@ -112,6 +112,8 @@ function createScene() {
     * Create Actors
     */
 
+    const DEBUG_Create_Multiple = true;
+
     // * Create some useful data
     const DICETEMPLATE = {
         name: "dice",
@@ -128,133 +130,147 @@ function createScene() {
         faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
         wrap: true
     });
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
-        faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
-        wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
-        size: DICETEMPLATE.size,
-        updatable: true,
-        receiveShadows: true
-    });
     // * Create texture for dice actor and apply
     MeshManager.addTexture(DICETEMPLATE.name, {
         diffuseTexture: DICETEMPLATE.texture,
         specularTexture: DICETEMPLATE.texture,
         bumpTexture: DICETEMPLATE.bumpMap
     });
-    MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
 
-    // * Position dice from origin
-    MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, DICETEMPLATE.name, {
-        x: 0,
-        y: DICETEMPLATE.size * 2,
-        z: 0
-    });
+    if(!DEBUG_Create_Multiple) {
 
-    // * Inform light manager which meshes are to cast shadows
-    LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(DICETEMPLATE.name));
+        // * Create a single mesh
+        MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
+            faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
+            wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
+            size: DICETEMPLATE.size,
+            updatable: true,
+            receiveShadows: true
+        });
 
-    // * Create lots of actors
-    let rowLimit = 1,
-        spacing = 10;
-        //d = MeshManager.getMeshInterface("cube").mesh.physicsImpostor;//.getVerticesData(BABYLON.VertexBuffer.PositionKind);
-        //debugger;
+        MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
 
-    // for (let i = 0; i < rowLimit; i++) {
-    //     for (let j = 0; j < rowLimit; j++) {
-    //         for (let k = 0; k < rowLimit; k++) {
-    //             let name = "box_" + i + "_" + j + "_" + k;
-    //             MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, {
-    //                 faceUV: multifaceOption.faceUV,
-    //                 wrap: multifaceOption.wrap,
-    //                 size: 1,
-    //                 updatable: true,
-    //                 receiveShadows: true
-    //             });
-    //             MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, {
-    //                 x: (i * spacing) - (rowLimit / 2),
-    //                 y: (k * spacing) + 1,
-    //                 z: (j * spacing) - (rowLimit / 2)
-    //             });
-    //             MeshManager.applyTexture(DICE, name);
-    //             LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(name));
+        //* Position dice from origin - TODO - setting position this way impacts on physics solver
+        MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, DICETEMPLATE.name, {
+            x: 0,
+            y: DICETEMPLATE.size * 2,
+            z: 0
+        });
 
-    //         }
-    //     }
-    // }
+        //* Inform light manager which meshes are to cast shadows
+        LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(DICETEMPLATE.name));
+
+        // * Create an animation
+        AnimationManager.addAnimationObject("rotationX", {
+            property: "rotation.x",
+            fps: 30,
+            type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+            keys: [{
+                frame: 0,
+                value: 0
+            }, {
+                frame: 50,
+                value: Math.PI
+            }, {
+                frame: 100,
+                value: Math.PI * 2
+            }]
+        });
+        AnimationManager.addAnimationObject("rotationY", {
+            property: "rotation.y",
+            fps: 30,
+            type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+            keys: [{
+                frame: 0,
+                value: 0
+            }, {
+                frame: 50,
+                value: Math.PI
+            }, {
+                frame: 100,
+                value: Math.PI * 2
+            }]
+        });
+        AnimationManager.addAnimationObject("rotationZ", {
+            property: "rotation.z",
+            fps: 30,
+            type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+            keys: [{
+                frame: 0,
+                value: 0
+            }, {
+                frame: 50,
+                value: Math.PI
+            }, {
+                frame: 100,
+                value: Math.PI * 2
+            }]
+        });
+
+        // * Assign animation to mesh
+        AnimationManager.addAnimationToMesh("rotationZ", DICETEMPLATE.name);
 
 
-    // * Create an animation
-    // AnimationManager.addAnimationObject("rotationX", {
-    //     property: "rotation.x",
-    //     fps: 30,
-    //     type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-    //     mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-    //     keys: [{
-    //         frame: 0,
-    //         value: 0
-    //     }, {
-    //         frame: 50,
-    //         value: Math.PI
-    //     }, {
-    //         frame: 100,
-    //         value: Math.PI * 2
-    //     }]
-    // });
-    // AnimationManager.addAnimationObject("rotationY", {
-    //     property: "rotation.y",
-    //     fps: 30,
-    //     type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-    //     mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-    //     keys: [{
-    //         frame: 0,
-    //         value: 0
-    //     }, {
-    //         frame: 50,
-    //         value: Math.PI
-    //     }, {
-    //         frame: 100,
-    //         value: Math.PI * 2
-    //     }]
-    // });
-    // AnimationManager.addAnimationObject("rotationZ", {
-    //     property: "rotation.z",
-    //     fps: 30,
-    //     type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-    //     mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-    //     keys: [{
-    //         frame: 0,
-    //         value: 0
-    //     }, {
-    //         frame: 50,
-    //         value: Math.PI
-    //     }, {
-    //         frame: 100,
-    //         value: Math.PI * 2
-    //     }]
-    // });
+    } else {
+        // * Create lots of actors
+        let rowLimit = 6,
+            spacing = 5;
 
+        for (let i = 0; i < rowLimit; i++) {
+            for (let j = 0; j < rowLimit; j++) {
+                for (let k = 0; k < rowLimit; k++) {
+                    let name = DICETEMPLATE.name + "_" + i + "_" + j + "_" + k;
+                    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, name, {
+                        faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
+                        wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
+                        size: DICETEMPLATE.size,
+                        updatable: true,
+                        receiveShadows: true
+                    });
+                    MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, name, {
+                        x: (i * spacing) - (rowLimit / 2) * DICETEMPLATE.size + Math.random(),
+                        y: (k * spacing) + 1 * DICETEMPLATE.size + Math.random(),
+                        z: (j * spacing) - (rowLimit / 2) * DICETEMPLATE.size + Math.random()
+                    });
+                    MeshManager.applyTexture(DICETEMPLATE.name, name);
+                    LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(name));
+                }
+            }
+        }
+    }
 
     /*
     *   Enable Physics
     */
     PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
 
-    // for (let i = 0; i < rowLimit; i++) {
-    //     for (let j = 0; j < rowLimit; j++) {
-    //         for (let k = 0; k < rowLimit; k++) {
-    //             let name = "box_" + i + "_" + j + "_" + k;
-    //             MeshManager.getMeshInterface(name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
-    //         }
-    //     }
-    // }
     window.setTimeout(function() {
-        MeshManager.getMeshInterface(DICETEMPLATE.name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(DICETEMPLATE.name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
+
+        if(DEBUG_Create_Multiple) {
+            let rowLimit = 6;
+            for (let i = 0; i < rowLimit; i++) {
+                for (let j = 0; j < rowLimit; j++) {
+                    for (let k = 0; k < rowLimit; k++) {
+                        let name = DICETEMPLATE.name + "_" + i + "_" + j + "_" + k;
+                        MeshManager.getMeshInterface(name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.5 }, SceneManager.getScene());
+                    }
+                }
+            }
+        } else {
+            // * Apply physics to mesh
+            MeshManager.getMeshInterface(DICETEMPLATE.name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(DICETEMPLATE.name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
+        }
+        // * Apply physics to ground
         MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9}, SceneManager.getScene());
-    }, 1000);
+    }, 3000);
 
-    // AnimationManager.runAnimations();
+    // * Begin animations
+    AnimationManager.runAnimations();
 
-    // * World Axis Lines - DEBUG ONLU
+    // * World Axis Lines - DEBUG ONLy
     createWorldAxisReferenceLines();
 }
 
@@ -273,54 +289,6 @@ function handleWindowEvents() {
 initialise("renderCanvas");
 createScene();
 run();
-
-// window.setTimeout(function () {
-//     MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, "box1", { x: 2, y: 2, z: 2 });
-// }, 1000);
-
-// window.setTimeout(function () {
-//     MeshManager.addAction(DEFS.ACTIONTYPES.MOVERELATIVE, "box1", { x: 1, y: -1, z: -1 });
-// }, 2000);
-
-// window.setTimeout(function () {
-//     MeshManager.addAction(DEFS.ACTIONTYPES.SCALE, "box1", { x: 2 });
-// }, 3000);
-
-// window.setInterval(function () {
-//     MeshManager.addAction(DEFS.ACTIONTYPES.ROTATETOLOCAL, "box1", { x: Math.PI / 48 });
-// }, 10);
-
-//createWorldAxisReferenceLines();
-
-
-// SceneManager.moveMeshActorRelatively("box1", { x: 0, y: 1, z: 0});
-// SceneManager.moveMeshActorRelatively("box1", { x: 0, y: 0, z: 1});
-//SceneManager.moveMeshActorAbsolutely("box1", { x: 0, y: 0, z: 1});
-
-// window.setTimeout(function() {
-//     SceneManager.moveMeshActorRelatively("box1", { x: 1, y: 0, z: 0});
-//     SceneManager.scaleMeshActor("box1", { x: 2 });
-// }, 1000);
-
-// window.setInterval(function () {
-//      SceneManager.rotateMeshActorToLocalAxis("box1", { x: Math.PI / 12, y: Math.PI / 24 });
-// }, 100);
-
-// SystemManager.getScene().ambientColor = new BABYLON.Color3(1,1,1);
-
-// SceneManager.createMaterial("mat1", {
-//     diffuseColor: new BABYLON.Color4(1, 1, 1, 1),
-//     // specularColor: new BABYLON.Color3(0, 0, 1),
-//     // emissiveColor: new BABYLON.Color3(1, 0, 0),
-//     // ambientColor: new BABYLON.Color4(1, 0, 0, 0)
-// })
-
-// SceneManager.applyMaterial("box1", "mat1");
-
-// SceneManager.createTexture("bricktexture", {
-//     diffuseTexture: "imgs/brick.jpg"
-// })
-// SceneManager.applyTexture("box1", "bricktexture");
 
 // * Handle resizing events
 handleWindowEvents();

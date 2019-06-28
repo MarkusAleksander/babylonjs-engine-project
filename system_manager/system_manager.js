@@ -10,25 +10,55 @@ var _systemManager = (function () {
         _isInitialised = false,
         _registeredUpdaters = [];
 
+    /*
+    * Attach an update function to be handled by the System Manager
+    * PUBLIC
+    */
     function _registerUpdateFunction(func) {
+        if(!_isInitialised) return;
+
         _registeredUpdaters.push(func);
     }
 
+    /*
+    * Update registered update functions
+    * PRIVATE
+    */
     function _update() {
+        if(!_isInitialised || _registeredUpdaters.length == 0) return;
+
         _registeredUpdaters.forEach(function (updater) {
             updater();
         });
     }
 
+    /*
+    * Run the Engine Loop
+    * PUBLIC
+    */
     function _runUpdateLoop() {
+        if(!_isInitialised) return;
+
         _getEngine().runRenderLoop(_update);
     }
 
+    /*
+    * Get the Engine object
+    * PUBLIC
+    */
     function _getEngine() {
+        if(!_isInitialised) return;
+
         return _engine;
     }
 
+    /*
+    * Get the Canvas object
+    * PUBLIC
+    */
     function _getCanvas() {
+        if(!_isInitialised) return;
+
         return _canvas
     }
 

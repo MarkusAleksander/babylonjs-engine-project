@@ -472,7 +472,7 @@ const MeshManager = (function MeshManager() {
         addSimpleMesh: _addSimpleMesh,
         addCompoundMesh: _addCompoundMesh,
 
-        getMesh: _getMesh,
+        getMeshInterface: _getMesh,
 
         addAction: _addAction,
         update: _update,

@@ -25,7 +25,6 @@ const MeshManager = (function MeshManager() {
     // *  MESH CREATION
     // * ------------- */
 
-
     /*
     * Create a simple mesh from BABYLON
     * PRIVATE
@@ -53,34 +52,6 @@ const MeshManager = (function MeshManager() {
     }
 
     /*
-    * Create a manageable simple mesh object
-    * PRIVATE
-    * type: DEF.MESHSHAPES
-    * name: String
-    * options: Object describing mesh
-    */
-    /* function _createMeshObject(type, name, options) {
-         return {
-             name: name,
-             type: type,
-             mesh: _createSimpleMesh(type, name, options),
-             status: STATUS.IDLE,
- 
-             moveAbsolutely: function (newPos) {
-                 this.mesh.position.x = newPos.x != undefined ? newPos.x : this.mesh.position.x;
-                 this.mesh.position.y = newPos.y != undefined ? newPos.y : this.mesh.position.y;
-                 this.mesh.position.z = newPos.z != undefined ? newPos.z : this.mesh.position.z;
-             },
-             moveRelatively: function (newPos) {
-                 this.mesh.position.x = this.mesh.position.x + (newPos.x != undefined ? newPos.x : 0);
-                 this.mesh.position.y = this.mesh.position.y + (newPos.y != undefined ? newPos.y : 0);
-                 this.mesh.position.z = this.mesh.position.z + (newPos.z != undefined ? newPos.z : 0);
-             }
- 
-         }
-     }*/
-
-    /*
     * Add a simple mesh object
     * PUBLIC
     * type: DEF.MESHSHAPES
@@ -91,8 +62,12 @@ const MeshManager = (function MeshManager() {
         if (!_isInitialised) return;
 
         // *    Check Mesh doesn't already exists then return new mesh
-        if (!_getMesh(name)) {
-            return _createMeshObject(meshObject);
+        if (!_getMeshByName(meshObject.meshName)) {
+            debugger;
+            let newMesh = _createMeshObject(meshObject);
+            newMesh.checkCollisions = meshObject.meshOptions.checkCollisions;
+
+            return newMesh;
         }
 
         return null;
@@ -104,7 +79,22 @@ const MeshManager = (function MeshManager() {
     *   meshObject: Mesh to Register
     */
     function _registerMesh(meshObject) {
-        _meshes.push(meshObject);
+        if (!_isInitialised) return;
+
+        _meshes.push({ meshObject: meshObject });
+    }
+
+    /*
+    * Get a mesh object by name
+    * PUBLIC
+    * name: String
+    */
+    function _getMeshByName(name) {
+        if (!_isInitialised) return;
+
+        return _meshes.find(function findMeshByName(el) {
+            return el.meshObject.name == name;
+        });
     }
 
     /*
@@ -117,25 +107,116 @@ const MeshManager = (function MeshManager() {
         return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
     }
 
-    // TODO - ACTOR MANAGEMENT
+
+    // * ------------- */
+    // *  TEXTURE CREATION
+    // * ------------- */
+
+    /*
+    *   Create a Texture object
+    *   PUBLIC
+    *   textureObject: Object describing the texture
+    */
+    function _createTextureObject(textureObject) {
+        if (!_isInitialised) return;
+
+        let texture = new BABYLON.StandardMaterial(textureObject.textureName, _sceneManagerRef.getScene());
+
+        texture.diffuseTexture = textureObject.diffuseTexture != undefined ? new BABYLON.Texture(textureObject.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
+        texture.diffuseTexture.hasAlpha = textureObject.hasAlpha != undefined ? textureObject.hasAlpha : false;
+
+        texture.diffuseTexture.uScale = textureObject.uScale != undefined ? textureObject.uScale : texture.diffuseTexture.uScale;
+        texture.diffuseTexture.vScale = textureObject.vScale != undefined ? textureObject.vScale : texture.diffuseTexture.vScale;
+        texture.diffuseTexture.uOffset = textureObject.uOffset != undefined ? textureObject.uOffset : texture.diffuseTexture.uOffset;
+        texture.diffuseTexture.vOffset = textureObject.vOffset != undefined ? textureObject.vOffset : texture.diffuseTexture.vOffset;
+
+        texture.specularTexture = textureObject.specularTexture != undefined ? new BABYLON.Texture(textureObject.specularTexture, _sceneManagerRef.getScene()) : texture.specularTexture;
+        texture.emissiveTexture = textureObject.emissiveTexture != undefined ? new BABYLON.Texture(textureObject.emissiveTexture, _sceneManagerRef.getScene()) : texture.emissiveTexture;
+        texture.ambientTexture = textureObject.ambientTexture != undefined ? new BABYLON.Texture(textureObject.ambientTexture, _sceneManagerRef.getScene()) : texture.ambientTexture;
+        texture.alpha = textureObject.alpha != undefined ? textureObject.alpha : 1;
+        texture.backFaceCulling = textureObject.backFaceCulling != undefined ? textureObject.backFaceCulling : texture.backFaceCulling;
+        texture.opacityTexture = textureObject.opacityTexture != undefined ? new BABYLON.Texture(textureObject.opacityTexture, _sceneManagerRef.getScene()) : texture.opacityTexture;
+
+        texture.bumpTexture = textureObject.bumpTexture != undefined ? new BABYLON.Texture(textureObject.bumpTexture, _sceneManagerRef.getScene()) : texture.bumpTexture;
+
+        return texture;
+    }
+
+    /*
+    *   Create Texture
+    *   PUBLIC
+    *   textureObject: object describing the texture
+    */
+    function _createTexture(textureObject) {
+        if (!_isInitialised) return;
+
+        // *    Check texture doesn't already exist then return new texture
+        if (!_getTextureByName(textureObject.textureName)) {
+            return _createTextureObject(textureObject);
+        }
+
+        return null;
+    }
+
+    /*
+    *   Register Texture to the MeshManager
+    *   PUBLIC
+    *   textureObject: textureObject to Register
+    */
+    function _registerTexture(textureObject) {
+        if (!_isInitialised) return;
+
+        _textures.push({ textureObject: textureObject });
+    }
+
+    /*
+    * Get a texture object by name
+    * PRIVATE
+    * name: String
+    */
+    function _getTextureByName(name) {
+        if (!_isInitialised) return;
+
+        return _textures.find(function findTextureByName(el) {
+            return el.textureObject.name == name;
+        });
+    }
+
+    /*
+    *   Apply a texture to a material before registration
+    *   PUBLIC
+    *   meshObject: Mesh Object
+    *   textureObject: Texture Object
+    */
+    function _applyTextureByObject(meshObject, textureObject) {
+        // TODO - Applying texture after registration
+
+        if (!textureObject || !meshObject) return;
+
+        meshObject.material = textureObject;
+    }
+
+    /*
+    *   Apply a texture to a material after registration
+    *   PUBLIC
+    *   meshName: String
+    *   textureName: String
+    */
+    function _applyTextureByName(meshName, textureName) {
+        let textureObject = _getTextureByName(textureName),
+            meshObject = _getMeshByName(meshName);
+
+        if (!textureObject || !meshObject) return;
+
+        meshObject.material = textureObject.texture;
+    }
 
     // * ------------- */
     // *  MESH MANIPULATION
     // * ------------- */
 
 
-    /*
-    * Get a mesh objecy by name
-    * PUBLIC
-    * name: String
-    */
-    function _getMesh(name) {
-        if (!_isInitialised) return;
-
-        return _meshes.find(function findMeshByName(el) {
-            return el.name == name;
-        });
-    }
+    // TODO - ACTOR MANAGEMENT
 
     /*
     * Move a mesh object based on World Axis
@@ -238,35 +319,6 @@ const MeshManager = (function MeshManager() {
     }
 
     /*
-    * Create a Texture from Babylon
-    * PRIVATE
-    * name: String
-    * options: Object
-    */
-    function _createTexture(name, options) {
-        let texture = new BABYLON.StandardMaterial(name, _sceneManagerRef.getScene());
-
-        texture.diffuseTexture = options.diffuseTexture != undefined ? new BABYLON.Texture(options.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
-        texture.diffuseTexture.hasAlpha = options.hasAlpha != undefined ? options.hasAlpha : false;
-
-        texture.diffuseTexture.uScale = options.uScale != undefined ? options.uScale : texture.diffuseTexture.uScale;
-        texture.diffuseTexture.vScale = options.vScale != undefined ? options.vScale : texture.diffuseTexture.vScale;
-        texture.diffuseTexture.uOffset = options.uOffset != undefined ? options.uOffset : texture.diffuseTexture.uOffset;
-        texture.diffuseTexture.vOffset = options.vOffset != undefined ? options.vOffset : texture.diffuseTexture.vOffset;
-
-        texture.specularTexture = options.specularTexture != undefined ? new BABYLON.Texture(options.specularTexture, _sceneManagerRef.getScene()) : texture.specularTexture;
-        texture.emissiveTexture = options.emissiveTexture != undefined ? new BABYLON.Texture(options.emissiveTexture, _sceneManagerRef.getScene()) : texture.emissiveTexture;
-        texture.ambientTexture = options.ambientTexture != undefined ? new BABYLON.Texture(options.ambientTexture, _sceneManagerRef.getScene()) : texture.ambientTexture;
-        texture.alpha = options.alpha != undefined ? options.alpha : 1;
-        texture.backFaceCulling = options.backFaceCulling != undefined ? options.backFaceCulling : texture.backFaceCulling;
-        texture.opacityTexture = options.opacityTexture != undefined ? new BABYLON.Texture(options.opacityTexture, _sceneManagerRef.getScene()) : texture.opacityTexture;
-
-        texture.bumpTexture = options.bumpTexture != undefined ? new BABYLON.Texture(options.bumpTexture, _sceneManagerRef.getScene()) : texture.bumpTexture;
-
-        return texture;
-    }
-
-    /*
     * Add a Material object
     * PUBLIC
     * name: String
@@ -360,20 +412,7 @@ const MeshManager = (function MeshManager() {
         meshObj.mesh.material = materialObj.material;
     }
 
-    /*
-    * Apply a texture to a material
-    * PUBLIC
-    * textureName: String
-    * meshName: String
-    */
-    function _applyTexture(textureName, meshName) {
-        let textureObj = _getTexture(textureName),
-            meshObj = _getMesh(meshName);
 
-        if (!textureObj || !meshObj) return;
-
-        meshObj.mesh.material = textureObj.texture;
-    }
 
     /*
     * Get a material object by name
@@ -388,18 +427,6 @@ const MeshManager = (function MeshManager() {
         })
     }
 
-    /*
-    * Get a texture object by name
-    * PRIVATE
-    * name: String
-    */
-    function _getTexture(name) {
-        if (!_isInitialised) return;
-
-        return _textures.find(function findTextureByName(el) {
-            return el.name == name;
-        });
-    }
 
 
     // * ------------- */
@@ -474,16 +501,16 @@ const MeshManager = (function MeshManager() {
         registerMesh: _registerMesh,
         mergeMeshes: _mergeMeshes,
 
-        getMeshInterface: _getMesh,
+        createTexture: _createTexture,
+        registerTexture: _registerTexture,
+        applyTextureByObject: _applyTextureByObject,
+        applyTextureByName: _applyTextureByName,
 
-        addAction: _addAction,
         update: _update,
         initialise: _init,
 
         addMaterial: _addMaterial,
-        addTexture: _addTexture,
         applyMaterial: _applyMaterial,
-        applyTexture: _applyTexture,
         addMultfaceOption: _addMultifaceOptionObject,
         getMultifaceOption: _getMultifaceOptionObject
     }

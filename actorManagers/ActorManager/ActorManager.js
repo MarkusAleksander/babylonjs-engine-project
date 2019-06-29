@@ -115,10 +115,10 @@ const ActorManager = (function ActorManager() {
 
         // *    Check non-required options and apply defaults if not specified
         actorObject.meshes.forEach((mesh, i) => {
-            mesh.meshName = mesh.meshName != undefined || mesh.meshName != "" ? mesh.meshName : actorObject.actorName + "_" + i;
-            mesh.meshOptions.updatable = mesh.updatable != undefined ? mesh.updatable : false;
-            mesh.meshOptions.receiveShadows = mesh.receiveShadows != undefined ? mesh.receiveShadows : false;
-            mesh.meshOptions.checkCollisions = mesh.hasCollisions !== undefined ? actorObject.hasCollisions : false;
+            mesh.meshName = mesh.meshName != undefined && mesh.meshName != "" ? mesh.meshName : actorObject.actorName + "_" + i;
+            mesh.meshOptions.updatable = mesh.meshOptions.updatable != undefined ? mesh.meshOptions.updatable : false;
+            mesh.meshOptions.receiveShadows = mesh.meshOptions.receiveShadows != undefined ? mesh.meshOptions.receiveShadows : false;
+            mesh.meshOptions.checkCollisions = mesh.meshOptions.checkCollisions !== undefined ? mesh.meshOptions.checkCollisions : false;
         });
 
         /*
@@ -126,7 +126,7 @@ const ActorManager = (function ActorManager() {
         *   If no texture base options applied, we can assume texture per mesh and ignore creating an overall texture
         *   If there is to be no texture per mesh, this can be handled later per mesh
         */
-        actorObject.hasFullMeshTexture = _checkIsValid(actorObject.textureOptions);
+        actorObject.hasBaseMeshTexture = _checkIsValid(actorObject.textureOptions);
 
         /*
         *   Check if physics options applied
@@ -134,31 +134,64 @@ const ActorManager = (function ActorManager() {
         actorObject.hasPhysics = _checkIsValid(actorObject.physicsOptions)
 
         // * Step 1 .. create Meshes
-        // * Step 2 .. create Textures
-        // * Step 3 .. Apply Textures
-        // * Step 4 .. Merge 
+        // * Step 2 .. create Textures (full mesh texture and individual textures)
+        // * Step 3 .. Apply Textures (full mesh texture and individual textures)
+        // * Step 4 .. Merge Meshes (if required)
         // * Step 5 .. Register Final Actor Mesh
-        // * Step 5 .. Apply Physics
+        // * Step 6 .. Apply Physics
 
         let meshes = [];
-        debugger;
-        // * STEP 1
+
+        // *    STEP 1
         actorObject.meshes.forEach(mesh => {
             meshes.push(_createMesh(mesh));
         });
 
-        // * STEP 2
-        // * Check if full texture before individual mesh textures
-        if (actorObject.hasFullMeshTexture) {
+        // *    STEP 2 and 3
+        // *    Check if full texture before individual mesh textures
+        if (actorObject.hasBaseMeshTexture) {
 
+            // *    Attach name to texture
+            if (!actorObject.textureOptions.textureName) actorObject.textureOptions.textureName = actorObject.actorName + "_base_texture";
+
+            // *    Create texture
+            let texture = MeshManager.createTexture(actorObject.textureOptions);
+
+            // *    For each mesh, apply the base texture
+            meshes.forEach(mesh => {
+                MeshManager.applyTextureByObject(mesh, texture);
+            });
+
+            // *    Register the texture to the MeshManager
+            MeshManager.registerTexture(texture);
         }
+        // *    Go through each mesh and if there is a texture options present, apply it
+        actorObject.meshes.forEach((mesh, i) => {
 
-        // * STEP 5
+            // *    First check if there is a texture to apply
+            if (mesh.textureOptions) {
+
+                // *    Attach a texture name if required
+                if (!mesh.textureOptions.textureName) mesh.textureOptions.textureName = mesh.meshName + "_texture";
+
+                // *    Create the texture
+                let texture = MeshManager.createTexture(mesh.textureOptions);
+
+                // *    Apply the texture to the object
+                MeshManager.applyTextureByObject(meshes[i], texture);
+            }
+
+        });
+
+        // *    STEP 4 and 5
         if (actorObject.doMerge) {
             MeshManager.registerMesh(MeshManager.mergeMeshes(meshes));
         } else {
             MeshManager.registerMesh(meshes[0]);
         }
+
+
+
     }
 
     function _getActorByName(name) {

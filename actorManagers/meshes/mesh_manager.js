@@ -63,8 +63,16 @@ const MeshManager = (function MeshManager() {
 
         // *    Check Mesh doesn't already exists then return new mesh
         if (!_getMeshByName(meshObject.meshName)) {
-            debugger;
-            let newMesh = _createMeshObject(meshObject);
+            let newMesh, multifaceOption;
+
+            // * Check if mesh requires multiface option applying
+            if (meshObject.multifaceOption) {
+                multifaceOption = _createMultfaceOptionObject(meshObject.multifaceOption);
+                meshObject.meshOptions.faceUV = multifaceOption.faceUV;
+                meshObject.meshOptions.wrap = multifaceOption.wrap;
+            }
+
+            newMesh = _createMeshObject(meshObject);
             newMesh.checkCollisions = meshObject.meshOptions.checkCollisions;
 
             return newMesh;
@@ -107,6 +115,35 @@ const MeshManager = (function MeshManager() {
         return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
     }
 
+    /*
+    * Add a multiface texture obkect
+    * PRIVATE
+    * name: String,
+    * options: Object
+    * cols: int,
+    * rows: int,
+    * faces: array of [col, row]
+    */
+    function _createMultfaceOptionObject(multifaceOptions) {
+
+        let faceUV = new Array(multifaceOptions.faces.length),
+            colDivision = 1 / multifaceOptions.cols,
+            rowDivision = 1 / multifaceOptions.rows;
+
+        for (let i = 0; i < multifaceOptions.faces.length; i++) {
+            faceUV[i] = new BABYLON.Vector4(
+                multifaceOptions.faces[i][0] * colDivision,
+                multifaceOptions.faces[i][1] * rowDivision,
+                (multifaceOptions.faces[i][0] + 1) * colDivision,
+                (multifaceOptions.faces[i][1] + 1) * rowDivision
+            );
+        }
+
+        return {
+            faceUV: faceUV,
+            wrap: multifaceOptions.wrap
+        };
+    }
 
     // * ------------- */
     // *  TEXTURE CREATION
@@ -354,36 +391,6 @@ const MeshManager = (function MeshManager() {
         }
     }
 
-    /*
-    * Add a multiface texture obkect
-    * PUBLIC
-    * name: String,
-    * options: Object
-    * cols: int,
-    * rows: int,
-    * faces: array of [col, row]
-    */
-    function _addMultifaceOptionObject(name, options) {
-
-        let faceUV = new Array(options.faces.length),
-            colDivision = 1 / options.cols,
-            rowDivision = 1 / options.rows;
-
-        for (let i = 0; i < options.faces.length; i++) {
-            faceUV[i] = new BABYLON.Vector4(
-                options.faces[i][0] * colDivision,
-                options.faces[i][1] * rowDivision,
-                (options.faces[i][0] + 1) * colDivision,
-                (options.faces[i][1] + 1) * rowDivision
-            );
-        }
-
-        _multifaceTextureOptions.push({
-            name: name,
-            faceUV: faceUV,
-            wrap: options.wrap
-        })
-    }
 
     /*
     * Get a multifaceOptionObfect
@@ -511,8 +518,6 @@ const MeshManager = (function MeshManager() {
 
         addMaterial: _addMaterial,
         applyMaterial: _applyMaterial,
-        addMultfaceOption: _addMultifaceOptionObject,
-        getMultifaceOption: _getMultifaceOptionObject
     }
 })();
 

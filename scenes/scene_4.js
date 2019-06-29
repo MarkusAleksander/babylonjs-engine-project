@@ -53,6 +53,10 @@ function createScene() {
     PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
 
     /*
+    * Create Actors
+    */
+
+    /*
     * Create Ground
     */
     ActorManager.createActor({
@@ -62,12 +66,12 @@ function createScene() {
             meshOptions: {
                 width: 125,
                 height: 125,
-                subdivisions: 24,
-                updatable: true,
-                receiveShadows: true,
-                checkCollisions: true
+                subdivisions: 24
             },
         }],
+        updatable: true,
+        receiveShadows: true,
+        checkCollisions: true,
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         textureOptions: {
             diffuseTexture: "imgs/grass.jpg",
@@ -83,6 +87,65 @@ function createScene() {
             options: { mass: 0, restitution: 0.9 }
         },
     });
+
+    /*
+    *   Create 'Dice block'
+    */
+    ActorManager.createActor({
+        actorName: 'Dice_1',
+        actorType: DEFS.ACTORTYPES.PHYSICAL,
+        meshes: [{
+            meshShape: DEFS.MESHSHAPES.BOX,
+            meshOptions: {
+                size: 2
+            },
+            multifaceOption: {
+                cols: 2,
+                rows: 3,
+                faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+                wrap: true
+            },
+        }],
+        updatable: true,
+        receiveShadows: true,
+        textureOptions: {
+            diffuseTexture: "imgs/dice.jpg",
+            specularTexture: "imgs/dice.jpg",
+            bumpTexture: "imgs/dice_bumpmap.jpg"
+        }
+    });
+
+    // const DICETEMPLATE = {
+    //     name: "dice",
+    //     texture: "imgs/dice.jpg",
+    //     bumpMap: "imgs/dice_bumpmap.jpg",
+    //     size: 2
+    // }
+    // // * Create multiface option for dice actor
+    // // TODO - Should come after mesh creation - not before
+    // MeshManager.addMultfaceOption(DICETEMPLATE.name, {
+    //     cols: 2,
+    //     rows: 3,
+    //     faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+    //     wrap: true
+    // });
+    // // * Create texture for dice actor and apply
+    // MeshManager.addTexture(DICETEMPLATE.name, {
+    //     diffuseTexture: DICETEMPLATE.texture,
+    //     specularTexture: DICETEMPLATE.texture,
+    //     bumpTexture: DICETEMPLATE.bumpMap
+    // });
+
+    // // * Create a single mesh
+    // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
+    //     faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
+    //     wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
+    //     size: DICETEMPLATE.size,
+    //     updatable: true,
+    //     receiveShadows: true
+    // });
+
+    // MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
 
     //MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
 
@@ -108,9 +171,7 @@ function createScene() {
     // MeshManager.getMeshInterface("ground").mesh.checkCollisions = true;
 
 
-    /*
-    * Create Actors
-    */
+
     // * Create some useful data
     // const DICETEMPLATE = {
     //     name: "dice",

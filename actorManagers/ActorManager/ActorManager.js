@@ -116,9 +116,9 @@ const ActorManager = (function ActorManager() {
         // *    Check non-required options and apply defaults if not specified
         actorObject.meshes.forEach((mesh, i) => {
             mesh.meshName = mesh.meshName != undefined && mesh.meshName != "" ? mesh.meshName : actorObject.actorName + "_" + i;
-            mesh.meshOptions.updatable = mesh.meshOptions.updatable != undefined ? mesh.meshOptions.updatable : false;
-            mesh.meshOptions.receiveShadows = mesh.meshOptions.receiveShadows != undefined ? mesh.meshOptions.receiveShadows : false;
-            mesh.meshOptions.checkCollisions = mesh.meshOptions.checkCollisions !== undefined ? mesh.meshOptions.checkCollisions : false;
+            mesh.meshOptions.updatable = actorObject.updatable != undefined ? actorObject.updatable : false;
+            mesh.meshOptions.receiveShadows = actorObject.receiveShadows != undefined ? actorObject.receiveShadows : false;
+            mesh.meshOptions.checkCollisions = actorObject.checkCollisions !== undefined ? actorObject.checkCollisions : false;
         });
 
         /*

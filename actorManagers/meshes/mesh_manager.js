@@ -1,6 +1,7 @@
 import { MESHSHAPES, ACTIONTYPES } from '../../DEFS/defs.js';
 
 // TODO - Reduce functionality and move Mesh Interface to Actor Manager as an Actor Interface
+// TODO - MERGE MESH FUNCTIONALIT
 
 const MeshManager = (function MeshManager() {
 
@@ -333,6 +334,7 @@ const MeshManager = (function MeshManager() {
 
     // * ------------- */
     // *  MATERIALS AND TEXTURES
+    // *  TODO
     // * ------------- */
 
 
@@ -373,36 +375,6 @@ const MeshManager = (function MeshManager() {
         }
     }
 
-    /*
-    * Add a Texture object
-    * PUBLIC
-    * name: String
-    * options: Object
-    */
-    function _addTexture(name, options) {
-        if (!_isInitialised) return;
-
-        if (_getTexture(name) == undefined) {
-            _textures.push({
-                name: name,
-                options: options,
-                texture: _createTexture(name, options)
-            });
-        }
-    }
-
-
-    /*
-    * Get a multifaceOptionObfect
-    * name: String
-    */
-    function _getMultifaceOptionObject(name) {
-        if (!_isInitialised) return;
-
-        return _multifaceTextureOptions.find(function findMultifaceObjectByName(el) {
-            return el.name == name;
-        });
-    }
 
     /*
     * Apply a material to a material
@@ -432,61 +404,6 @@ const MeshManager = (function MeshManager() {
         return _materials.find(function findMaterialByName(el) {
             return el.name == name;
         })
-    }
-
-
-
-    // * ------------- */
-    // *  MESH MANAGEMENT
-    // * ------------- */
-
-    /*
-    * Action Dispatch Table
-    */
-    var _actionDispatchTable = {
-        [ACTIONTYPES.MOVERELATIVE]: _moveMeshRelatively,
-        [ACTIONTYPES.MOVEABSOLUTE]: _moveMeshAbsolutely,
-        [ACTIONTYPES.ROTATETOWORLD]: _rotateMeshToWorldAxis,
-        [ACTIONTYPES.ROTATETOLOCAL]: _rotateMeshToLocalAxis,
-        [ACTIONTYPES.SCALE]: _scaleMesh,
-        default: function () {/* * empty default function */ }
-    };
-
-    /*
-    * Add an action to the Mesh Mangement updater
-    * PUBLIC
-    * actionType: DEFS.ACTIONTYPES
-    * name: String
-    * options: Object
-    */
-    function _addAction(actionType, name, options) {
-        _actionList.push({
-            actionType: actionType,
-            name: name,
-            options: options
-        })
-    }
-
-    /*
-    * Process the action list
-    * PRIVATE
-    */
-    function _processActionList() {
-        while (_actionList.length > 0) {
-            let action = _actionList.shift();
-            _actionDispatchTable.hasOwnProperty(action.actionType)
-                ? _actionDispatchTable[action.actionType](action.name, action.options)
-                : _actionDispatchTable['default']();
-        }
-    }
-
-    /*
-    * Update the Mesh Manager
-    * PUBLIC
-    */
-    function _update() {
-        // * Do update here
-        _processActionList();
     }
 
     /*

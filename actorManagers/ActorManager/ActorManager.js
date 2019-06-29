@@ -3,6 +3,7 @@ import * as DEFS from './../../DEFS/defs.js';
 import MeshManager from './../meshes/mesh_manager.js';
 
 // todo - Add Debugging options
+// TODO - UPDATE MESH FUNCTIONALity
 
 /*
 *   All actor management will be handled via the Actor Manager
@@ -16,7 +17,8 @@ import MeshManager from './../meshes/mesh_manager.js';
 
 const ActorManager = (function ActorManager() {
 
-    const _actors = [];
+    const _actors = [],
+        _actionList = [];
 
     var _isInitialised = false,
         _sceneManagerRef;
@@ -189,19 +191,67 @@ const ActorManager = (function ActorManager() {
         } else {
             MeshManager.registerMesh(meshes[0]);
         }
-
-
-
     }
 
+    /*
+    *   Get Actor By Name
+    */
     function _getActorByName(name) {
         if (!_isInitialised) return;
 
         return _actors.find(function findActorByName(actor) {
             return actor.name == name;
         });
+    }
 
 
+    // * ------------- */
+    // *  ACTOR ACTIONS
+    // * ------------- */
+
+
+    // * ------------- */
+    // *  GENERAL MANAGEMENT
+    // * ------------- */
+
+    /*
+    * Action Dispatch Table
+    */
+    var _actionDispatchTable = {
+        // [ACTIONTYPES.MOVERELATIVE]: _moveMeshRelatively,
+        // [ACTIONTYPES.MOVEABSOLUTE]: _moveMeshAbsolutely,
+        // [ACTIONTYPES.ROTATETOWORLD]: _rotateMeshToWorldAxis,
+        // [ACTIONTYPES.ROTATETOLOCAL]: _rotateMeshToLocalAxis,
+        // [ACTIONTYPES.SCALE]: _scaleMesh,
+        default: function () {/* * empty default function */ }
+    };
+
+    /*
+    * Add an action to the Actor Mangement updater
+    * PUBLIC
+    * actionType: DEFS.ACTIONTYPES
+    * name: String
+    * options: Object
+    */
+    function _addAction(actionType, name, options) {
+        _actionList.push({
+            actionType: actionType,
+            name: name,
+            options: options
+        })
+    }
+
+    /*
+    * Process the action list
+    * PRIVATE
+    */
+    function _processActionList() {
+        while (_actionList.length > 0) {
+            let action = _actionList.shift();
+            _actionDispatchTable.hasOwnProperty(action.actionType)
+                ? _actionDispatchTable[action.actionType](action.name, action.options)
+                : _actionDispatchTable['default']();
+        }
     }
 
     /*
@@ -211,7 +261,7 @@ const ActorManager = (function ActorManager() {
     */
     function _update() {
         // * Do update here
-        // * TODO ...
+        _processActionList();
     }
 
     /*
@@ -230,7 +280,10 @@ const ActorManager = (function ActorManager() {
         initialise: _init,
         update: _update,
 
-        createActor: _createActor
+        createActor: _createActor,
+
+        addAction: _addAction,
+
     }
 
 })();

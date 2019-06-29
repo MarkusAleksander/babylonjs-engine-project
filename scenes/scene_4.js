@@ -48,6 +48,11 @@ function createScene() {
     LightManager.setLightIntensity("spotlight", 1);
 
     /*
+    *   Enable Physics
+    */
+    PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
+
+    /*
     * Create Ground
     */
     ActorManager.createActor({
@@ -62,7 +67,8 @@ function createScene() {
                 receiveShadows: true
             },
             updatable: true,
-            receiveShadows: true
+            receiveShadows: true,
+            hasCollisions: true
         }],
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         textureOptions: {
@@ -78,7 +84,6 @@ function createScene() {
             imposter: BABYLON.PhysicsImpostor.BoxImpostor,
             options: { mass: 0, restitution: 0.9 }
         },
-        hasCollisions: true
     });
 
     //MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
@@ -151,10 +156,7 @@ function createScene() {
     //* Inform light manager which meshes are to cast shadows
     LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(DICETEMPLATE.name));
 
-    /*
-    *   Enable Physics
-    */
-    PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
+
 
     window.setTimeout(function () {
 

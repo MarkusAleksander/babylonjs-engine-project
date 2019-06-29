@@ -38,17 +38,17 @@ const MeshManager = (function MeshManager() {
 
         switch (meshObject.meshShape) {
             case MESHSHAPES.SPHERE:
-                return BABYLON.MeshBuilder.CreateSphere(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateSphere(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
             case MESHSHAPES.BOX:
-                return BABYLON.MeshBuilder.CreateBox(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateBox(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
             case MESHSHAPES.PLANE:
-                return BABYLON.MeshBuilder.CreatePlane(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreatePlane(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
             case MESHSHAPES.GROUND:
-                return BABYLON.MeshBuilder.CreateGround(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateGround(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
             case MESHSHAPES.CYLINDER:
-                return BABYLON.MeshBuilder.CreateCylinder(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateCylinder(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
             default:
-                return BABYLON.MeshBuilder.CreateSphere(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateSphere(meshObject.meshName, meshObject.meshOptions, _sceneManagerRef.getScene());
         }
     }
 

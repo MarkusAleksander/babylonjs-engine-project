@@ -26,7 +26,7 @@ const ActorManager = (function ActorManager() {
         // ! REQUIRED PROPERTIES
         actorName: '',
         meshes: [{
-            meshName: '',
+            actorName: '',
             meshShape: DEFS.MESHSHAPES.BOX,
             meshOptions: {},
             multifaceOption: null || {},
@@ -115,9 +115,10 @@ const ActorManager = (function ActorManager() {
 
         // *    Check non-required options and apply defaults if not specified
         actorObject.meshes.forEach((mesh, i) => {
-            mesh.meshName = mesh.meshName == undefined || mesh.meshName == "" ? actorObject.meshName + "_" + i : mesh.meshName;
-            mesh.updatable = mesh.updatable === true ? mesh.updatable : false;
-            mesh.receiveShadows = mesh.receiveShadows === true ? mesh.receiveShadows : false;
+            mesh.meshName = mesh.meshName != undefined || mesh.meshName != "" ? mesh.meshName : actorObject.actorName + "_" + i;
+            mesh.meshOptions.updatable = mesh.updatable != undefined ? mesh.updatable : false;
+            mesh.meshOptions.receiveShadows = mesh.receiveShadows != undefined ? mesh.receiveShadows : false;
+            mesh.meshOptions.checkCollisions = mesh.hasCollisions !== undefined ? actorObject.hasCollisions : false;
         });
 
         /*
@@ -140,11 +141,17 @@ const ActorManager = (function ActorManager() {
         // * Step 5 .. Apply Physics
 
         let meshes = [];
-
+        debugger;
         // * STEP 1
         actorObject.meshes.forEach(mesh => {
             meshes.push(_createMesh(mesh));
         });
+
+        // * STEP 2
+        // * Check if full texture before individual mesh textures
+        if (actorObject.hasFullMeshTexture) {
+
+        }
 
         // * STEP 5
         if (actorObject.doMerge) {

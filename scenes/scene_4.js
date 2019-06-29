@@ -64,11 +64,9 @@ function createScene() {
                 height: 125,
                 subdivisions: 24,
                 updatable: true,
-                receiveShadows: true
+                receiveShadows: true,
+                hasCollisions: true
             },
-            updatable: true,
-            receiveShadows: true,
-            hasCollisions: true
         }],
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         textureOptions: {

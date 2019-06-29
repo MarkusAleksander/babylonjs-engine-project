@@ -1,5 +1,7 @@
 import { MESHSHAPES, ACTIONTYPES } from '../../DEFS/defs.js';
 
+// TODO - Reduce functionality and move Mesh Interface to Actor Manager as an Actor Interface
+
 const MeshManager = (function MeshManager() {
 
     const _meshes = [],

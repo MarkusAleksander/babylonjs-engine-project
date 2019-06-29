@@ -4,6 +4,16 @@ import MeshManager from './../meshes/mesh_manager.js';
 
 // todo - Add Debugging options
 
+/*
+*   All actor management will be handled via the Actor Manager
+*   - Creating Actors
+*   - Updating Actor position, rotation, scale etc
+*   All internal management will be handled by other smaller managers
+*   - Mesh Management
+*   - Animation Management
+*   All will be dealt with directly through the Actor Manager
+*/
+
 const ActorManager = (function ActorManager() {
 
     const _actors = [];
@@ -79,8 +89,8 @@ const ActorManager = (function ActorManager() {
     *   PRIVATE
     *   Call to MeshManager to create meshes
     */
-    function _creatMesh(meshObject) {
-
+    function _createMesh(meshObject) {
+        return MeshManager.createMesh(meshObject);
     }
 
     /*
@@ -90,6 +100,12 @@ const ActorManager = (function ActorManager() {
     */
     function _createActor(actorObject) {
 
+        if (!_isInitialised) return;
+
+        // * Check Actor doesn't already exist with same name
+        if (_getActorByName(actorObject.name)) return;
+
+        // *    Validate that actor meets minimum requirements 
         if (!_validateActorObject(actorObject)) return null;
 
         // *    Check what processing needs doing on the Actor
@@ -119,12 +135,33 @@ const ActorManager = (function ActorManager() {
         // * Step 1 .. create Meshes
         // * Step 2 .. create Textures
         // * Step 3 .. Apply Textures
-        // * Step 4 .. Merge Meshes
+        // * Step 4 .. Merge 
+        // * Step 5 .. Register Final Actor Mesh
         // * Step 5 .. Apply Physics
 
+        let meshes = [];
+
+        // * STEP 1
         actorObject.meshes.forEach(mesh => {
-            _createMesh(mesh);
-        })
+            meshes.push(_createMesh(mesh));
+        });
+
+        // * STEP 5
+        if (actorObject.doMerge) {
+            MeshManager.registerMesh(MeshManager.mergeMeshes(meshes));
+        } else {
+            MeshManager.registerMesh(meshes[0]);
+        }
+    }
+
+    function _getActorByName(name) {
+        if (!_isInitialised) return;
+
+        return _actors.find(function findActorByName(actor) {
+            return actor.name == name;
+        });
+
+
     }
 
     /*

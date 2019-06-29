@@ -33,22 +33,22 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object describing mesh
     */
-    function _createSimpleMesh(type, name, options) {
+    function _createMeshObject(meshObject) {
         if (!_isInitialised) return;
 
-        switch (type) {
+        switch (meshObject.meshShape) {
             case MESHSHAPES.SPHERE:
-                return BABYLON.MeshBuilder.CreateSphere(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateSphere(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
             case MESHSHAPES.BOX:
-                return BABYLON.MeshBuilder.CreateBox(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateBox(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
             case MESHSHAPES.PLANE:
-                return BABYLON.MeshBuilder.CreatePlane(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreatePlane(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
             case MESHSHAPES.GROUND:
-                return BABYLON.MeshBuilder.CreateGround(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateGround(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
             case MESHSHAPES.CYLINDER:
-                return BABYLON.MeshBuilder.CreateCylinder(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateCylinder(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
             default:
-                return BABYLON.MeshBuilder.CreateSphere(name, options, _sceneManagerRef.getScene());
+                return BABYLON.MeshBuilder.CreateSphere(meshObject.name, meshObject.options, _sceneManagerRef.getScene());
         }
     }
 
@@ -59,35 +59,26 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object describing mesh
     */
-    function _createSimpleMeshObject(type, name, options) {
-        return {
-            name: name,
-            type: type,
-            mesh: _createSimpleMesh(type, name, options),
-            status: STATUS.IDLE,
-
-            moveAbsolutely: function (newPos) {
-                this.mesh.position.x = newPos.x != undefined ? newPos.x : this.mesh.position.x;
-                this.mesh.position.y = newPos.y != undefined ? newPos.y : this.mesh.position.y;
-                this.mesh.position.z = newPos.z != undefined ? newPos.z : this.mesh.position.z;
-            },
-            moveRelatively: function (newPos) {
-                this.mesh.position.x = this.mesh.position.x + (newPos.x != undefined ? newPos.x : 0);
-                this.mesh.position.y = this.mesh.position.y + (newPos.y != undefined ? newPos.y : 0);
-                this.mesh.position.z = this.mesh.position.z + (newPos.z != undefined ? newPos.z : 0);
-            }
-
-        }
-    }
-
-    /*
-    * Create a manageable compound mesh object
-    * PRIVATE
-    TODO: Build function
-    */
-    function _createCompoundMeshObject() {
-        // * Create compound mesh from simple meshes
-    }
+    /* function _createMeshObject(type, name, options) {
+         return {
+             name: name,
+             type: type,
+             mesh: _createSimpleMesh(type, name, options),
+             status: STATUS.IDLE,
+ 
+             moveAbsolutely: function (newPos) {
+                 this.mesh.position.x = newPos.x != undefined ? newPos.x : this.mesh.position.x;
+                 this.mesh.position.y = newPos.y != undefined ? newPos.y : this.mesh.position.y;
+                 this.mesh.position.z = newPos.z != undefined ? newPos.z : this.mesh.position.z;
+             },
+             moveRelatively: function (newPos) {
+                 this.mesh.position.x = this.mesh.position.x + (newPos.x != undefined ? newPos.x : 0);
+                 this.mesh.position.y = this.mesh.position.y + (newPos.y != undefined ? newPos.y : 0);
+                 this.mesh.position.z = this.mesh.position.z + (newPos.z != undefined ? newPos.z : 0);
+             }
+ 
+         }
+     }*/
 
     /*
     * Add a simple mesh object
@@ -96,29 +87,37 @@ const MeshManager = (function MeshManager() {
     * name: String
     * options: Object describing mesh
     */
-    function _addSimpleMesh(type, name, options) {
+    function _createMesh(meshObject) {
         if (!_isInitialised) return;
 
-        if (_getMesh(name) == undefined) {
-            _meshes.push(_createSimpleMeshObject(type, name, options));
+        // *    Check Mesh doesn't already exists then return new mesh
+        if (!_getMesh(name)) {
+            return _createMeshObject(meshObject);
         }
 
-        if (options.receiveShadows) {
-            let meshObj = _getMesh(name);
-
-            meshObj.mesh.receiveShadows = options.receiveShadows;
-        }
+        return null;
     }
 
     /*
-    * Add a compound mesh object
-    * PUBLIC
-    TODO: Build function
+    *   Register Meshes to the MeshManager
+    *   PUBLIC
+    *   meshObject: Mesh to Register
     */
-    function _addCompoundMesh() {
-        // * Add a compound mesh
+    function _registerMesh(meshObject) {
+        _meshes.push(meshObject);
     }
 
+    /*
+    *   Merge Mesh Objects
+    *   PUBLIC
+    *   meshArray: Array of Meshes to Merge
+    *   return compounded Mesh
+    */
+    function _mergeMeshes(meshArray) {
+        return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
+    }
+
+    // TODO - ACTOR MANAGEMENT
 
     // * ------------- */
     // *  MESH MANIPULATION
@@ -471,8 +470,9 @@ const MeshManager = (function MeshManager() {
 
     return {
 
-        addSimpleMesh: _addSimpleMesh,
-        addCompoundMesh: _addCompoundMesh,
+        createMesh: _createMesh,
+        registerMesh: _registerMesh,
+        mergeMeshes: _mergeMeshes,
 
         getMeshInterface: _getMesh,
 

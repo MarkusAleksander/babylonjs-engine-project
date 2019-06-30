@@ -75,6 +75,7 @@ const MeshManager = (function MeshManager() {
 
             newMesh = _createMeshObject(meshObject);
             newMesh.checkCollisions = meshObject.meshOptions.checkCollisions;
+            newMesh.receiveShadows = meshObject.meshOptions.receiveShadows;
 
             return newMesh;
         }

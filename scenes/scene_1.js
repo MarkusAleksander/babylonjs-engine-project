@@ -151,59 +151,6 @@ function createScene() {
         LightManager.addMeshToShadowMap("spotlight", mesh);
     });
 
-    // * Create an animation
-    AnimationManager.addAnimationObject("rotationX", {
-        property: "rotation.x",
-        fps: 30,
-        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-        keys: [{
-            frame: 0,
-            value: 0
-        }, {
-            frame: 50,
-            value: Math.PI
-        }, {
-            frame: 100,
-            value: Math.PI * 2
-        }]
-    });
-    AnimationManager.addAnimationObject("rotationY", {
-        property: "rotation.y",
-        fps: 30,
-        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-        keys: [{
-            frame: 0,
-            value: 0
-        }, {
-            frame: 50,
-            value: Math.PI
-        }, {
-            frame: 100,
-            value: Math.PI * 2
-        }]
-    });
-    AnimationManager.addAnimationObject("rotationZ", {
-        property: "rotation.z",
-        fps: 30,
-        type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-        mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-        keys: [{
-            frame: 0,
-            value: 0
-        }, {
-            frame: 50,
-            value: Math.PI
-        }, {
-            frame: 100,
-            value: Math.PI * 2
-        }]
-    });
-
-    // * Assign animation to mesh
-    // AnimationManager.addAnimationToMesh("rotationZ", DICETEMPLATE.name);
-
     // * Begin animations
     AnimationManager.runAnimations();
 

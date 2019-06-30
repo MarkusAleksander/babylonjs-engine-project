@@ -2,12 +2,9 @@ import * as DEFS from './../DEFS/defs.js';
 
 import CameraManager from './../actorManagers/camera/camera_manager.js';
 import LightManager from './../actorManagers/lights/light_manager.js';
-import MeshManager from './../actorManagers/meshes/mesh_manager.js';
 import SystemManager from './../system_manager/system_manager.js';
 import PhysicsManager from './../physics_manager/physics_manager.js';
-import SceneManager from './../scene_manager/scene_manager.js';
 
-import actorManager from './../actorManagers/ActorManager/ActorManager.js';
 import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 
 /*
@@ -50,7 +47,7 @@ function createScene() {
     /*
     *   Enable Physics
     */
-    PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
+    //PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
 
     /*
     * Create Actors
@@ -120,116 +117,6 @@ function createScene() {
         }
     });
 
-    // const DICETEMPLATE = {
-    //     name: "dice",
-    //     texture: "imgs/dice.jpg",
-    //     bumpMap: "imgs/dice_bumpmap.jpg",
-    //     size: 2
-    // }
-    // // * Create multiface option for dice actor
-    // // TODO - Should come after mesh creation - not before
-    // MeshManager.addMultfaceOption(DICETEMPLATE.name, {
-    //     cols: 2,
-    //     rows: 3,
-    //     faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-    //     wrap: true
-    // });
-    // // * Create texture for dice actor and apply
-    // MeshManager.addTexture(DICETEMPLATE.name, {
-    //     diffuseTexture: DICETEMPLATE.texture,
-    //     specularTexture: DICETEMPLATE.texture,
-    //     bumpTexture: DICETEMPLATE.bumpMap
-    // });
-
-    // // * Create a single mesh
-    // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
-    //     faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
-    //     wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
-    //     size: DICETEMPLATE.size,
-    //     updatable: true,
-    //     receiveShadows: true
-    // });
-
-    // MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
-
-    //MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
-
-    // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", {
-    //     width: 125,
-    //     height: 125,
-    //     subdivisions: 24,
-    //     updatable: true,
-    //     receiveShadows: true
-    // });
-    // // * Create and apply a texture to the ground
-    // MeshManager.addTexture("grass", {
-    //     diffuseTexture: "imgs/grass.jpg",
-    //     uScale: 16,
-    //     vScale: 16,
-    //     vOffset: 0.5,
-    //     uOffset: 0.5,
-    //     specularTexture: "imgs/grass.jpg",
-    //     bumpTexture: "imgs/grass_bumpmap.jpg",
-    // });
-    // MeshManager.applyTexture("grass", "ground");
-    // // * Apply collisions to the ground mesh
-    // MeshManager.getMeshInterface("ground").mesh.checkCollisions = true;
-
-
-
-    // * Create some useful data
-    // const DICETEMPLATE = {
-    //     name: "dice",
-    //     texture: "imgs/dice.jpg",
-    //     bumpMap: "imgs/dice_bumpmap.jpg",
-    //     size: 2
-    // }
-    // // * Create multiface option for dice actor
-    // // TODO - Should come after mesh creation - not before
-    // MeshManager.addMultfaceOption(DICETEMPLATE.name, {
-    //     cols: 2,
-    //     rows: 3,
-    //     faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-    //     wrap: true
-    // });
-    // // * Create texture for dice actor and apply
-    // MeshManager.addTexture(DICETEMPLATE.name, {
-    //     diffuseTexture: DICETEMPLATE.texture,
-    //     specularTexture: DICETEMPLATE.texture,
-    //     bumpTexture: DICETEMPLATE.bumpMap
-    // });
-
-    // // * Create a single mesh
-    // MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
-    //     faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
-    //     wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
-    //     size: DICETEMPLATE.size,
-    //     updatable: true,
-    //     receiveShadows: true
-    // });
-
-    // MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
-
-    // //* Position dice from origin - TODO - setting position this way impacts on physics solver
-    // MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, DICETEMPLATE.name, {
-    //     x: 0,
-    //     y: DICETEMPLATE.size * 2,
-    //     z: 0
-    // });
-
-    // //* Inform light manager which meshes are to cast shadows
-    // LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(DICETEMPLATE.name));
-
-
-
-    // window.setTimeout(function () {
-
-    //     // * Apply physics to mesh
-    //     MeshManager.getMeshInterface(DICETEMPLATE.name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(DICETEMPLATE.name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
-
-    //     // * Apply physics to ground
-    //     //MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
-    // }, 3000);
 }
 
 export default createScene;

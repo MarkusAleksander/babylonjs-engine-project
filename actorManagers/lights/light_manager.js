@@ -173,7 +173,7 @@ const LightManager = (function LightManager() {
     */
     function _addMeshToShadowMap(name, meshObj) {
         let shadowGenerator = _getShadowGenerator(name);
-        shadowGenerator.shadowGenerator.getShadowMap().renderList.push(meshObj.mesh);
+        shadowGenerator.shadowGenerator.getShadowMap().renderList.push(meshObj);
     }
 
     /*

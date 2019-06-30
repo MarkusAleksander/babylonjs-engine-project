@@ -2,10 +2,10 @@ import * as DEFS from './../DEFS/defs.js';
 
 import CameraManager from './../actorManagers/camera/camera_manager.js';
 import LightManager from './../actorManagers/lights/light_manager.js';
-import MeshManager from './../actorManagers/meshes/mesh_manager.js';
 import SystemManager from './../system_manager/system_manager.js';
-import AnimationManager from './../actorManagers/animation/animation_manager.js';
 
+import AnimationManager from './../actorManagers/animation/animation_manager.js';
+import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 
 /*
 *   Scene 1 Example
@@ -48,70 +48,108 @@ function createScene() {
     /*
     * Create Ground
     */
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.GROUND, "ground", {
-        width: 125,
-        height: 125,
-        subdivisions: 24,
+    ActorManager.createActor({
+        actorName: "ground",
+        meshes: [{
+            meshShape: DEFS.MESHSHAPES.GROUND,
+            meshOptions: {
+                width: 125,
+                height: 125,
+                subdivisions: 24
+            },
+        }],
         updatable: true,
-        receiveShadows: true
+        receiveShadows: true,
+        checkCollisions: true,
+        actorType: DEFS.ACTORTYPES.PHYSICAL,
+        textureOptions: {
+            diffuseTexture: "imgs/grass.jpg",
+            uScale: 16,
+            vScale: 16,
+            vOffset: 0.5,
+            uOffset: 0.5,
+            specularTexture: "imgs/grass.jpg",
+            bumpTexture: "imgs/grass_bumpmap.jpg",
+        },
+        physicsOptions: {
+            imposter: BABYLON.PhysicsImpostor.BoxImpostor,
+            options: { mass: 0, restitution: 0.9 }
+        },
     });
-    // * Create and apply a texture to the ground
-    MeshManager.addTexture("grass", {
-        diffuseTexture: "imgs/grass.jpg",
-        uScale: 16,
-        vScale: 16,
-        vOffset: 0.5,
-        uOffset: 0.5,
-        specularTexture: "imgs/grass.jpg",
-        bumpTexture: "imgs/grass_bumpmap.jpg",
-    });
-    MeshManager.applyTexture("grass", "ground");
 
     /*
-    * Create Actors
+    *   Create 'Dice block'
     */
-    // * Create some useful data
-    const DICETEMPLATE = {
-        name: "dice",
-        texture: "imgs/dice.jpg",
-        bumpMap: "imgs/dice_bumpmap.jpg",
-        size: 2
-    }
-    // * Create multiface option for dice actor
-    // TODO - Should come after mesh creation - not before
-    MeshManager.addMultfaceOption(DICETEMPLATE.name, {
-        cols: 2,
-        rows: 3,
-        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-        wrap: true
-    });
-    // * Create texture for dice actor and apply
-    MeshManager.addTexture(DICETEMPLATE.name, {
-        diffuseTexture: DICETEMPLATE.texture,
-        specularTexture: DICETEMPLATE.texture,
-        bumpTexture: DICETEMPLATE.bumpMap
-    });
-
-    // * Create a single mesh
-    MeshManager.addSimpleMesh(DEFS.MESHSHAPES.BOX, DICETEMPLATE.name, {
-        faceUV: MeshManager.getMultifaceOption(DICETEMPLATE.name).faceUV,
-        wrap: MeshManager.getMultifaceOption(DICETEMPLATE.name).wrap,
-        size: DICETEMPLATE.size,
+    ActorManager.createActor({
+        actorName: 'Dice_1',
+        actorType: DEFS.ACTORTYPES.PHYSICAL,
+        meshes: [{
+            meshShape: DEFS.MESHSHAPES.BOX,
+            meshOptions: {
+                size: 2
+            },
+            multifaceOption: {
+                cols: 2,
+                rows: 3,
+                faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+                wrap: true
+            },
+            animations: [{
+                animationName: "rotationX",
+                animationOptions: {
+                    property: "rotation.x",
+                    fps: 30,
+                    type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                    mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                    keys: [{
+                        frame: 0,
+                        value: 0
+                    }, {
+                        frame: 50,
+                        value: Math.PI
+                    }, {
+                        frame: 100,
+                        value: Math.PI * 2
+                    }]
+                }
+            }, {
+                animationName: "rotationY",
+                animationOptions: {
+                    property: "rotation.y",
+                    fps: 30,
+                    type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                    mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                    keys: [{
+                        frame: 0,
+                        value: 0
+                    }, {
+                        frame: 50,
+                        value: Math.PI
+                    }, {
+                        frame: 100,
+                        value: Math.PI * 2
+                    }]
+                }
+            }]
+        }],
         updatable: true,
-        receiveShadows: true
-    });
-
-    MeshManager.applyTexture(DICETEMPLATE.name, DICETEMPLATE.name);
-
-    //* Position dice from origin - TODO - setting position this way impacts on physics solver
-    MeshManager.addAction(DEFS.ACTIONTYPES.MOVEABSOLUTE, DICETEMPLATE.name, {
-        x: 0,
-        y: DICETEMPLATE.size * 2,
-        z: 0
+        receiveShadows: true,
+        position: {
+            x: 2,
+            y: 2,
+            z: 2
+        },
+        textureOptions: {
+            diffuseTexture: "imgs/dice.jpg",
+            specularTexture: "imgs/dice.jpg",
+            bumpTexture: "imgs/dice_bumpmap.jpg"
+        }
     });
 
     //* Inform light manager which meshes are to cast shadows
-    LightManager.addMeshToShadowMap("spotlight", MeshManager.getMeshInterface(DICETEMPLATE.name));
+    ActorManager.getActorByName("Dice_1").meshes.forEach(function addMeshToShadowMap(mesh) {
+        LightManager.addMeshToShadowMap("spotlight", mesh);
+    });
 
     // * Create an animation
     AnimationManager.addAnimationObject("rotationX", {
@@ -164,7 +202,7 @@ function createScene() {
     });
 
     // * Assign animation to mesh
-    AnimationManager.addAnimationToMesh("rotationZ", DICETEMPLATE.name);
+    // AnimationManager.addAnimationToMesh("rotationZ", DICETEMPLATE.name);
 
     // * Begin animations
     AnimationManager.runAnimations();

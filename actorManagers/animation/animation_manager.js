@@ -44,18 +44,15 @@ const AnimationManager = (function AnimationManager() {
         });
     }
 
-    function _addAnimationToMesh(animationName, meshName) {
+    function _addAnimationToMesh(animationName, meshObject) {
         if (!_isInitialised) return;
 
         let animationObj = _getAnimationObject(animationName);
-        let meshObj = _meshManagerRef.getMeshInterface(meshName);
+        // let meshObj = _meshManagerRef.getMeshInterface(meshName);
 
-        if (!meshObj.mesh.animations) {
-            meshObj.mesh.animations = [];
-        }
-        meshObj.mesh.animations.push(animationObj.animation);
+        meshObject.animations.push(animationObj.animation);
 
-        _sceneManagerRef.getScene().beginAnimation(meshObj.mesh, 0, 100, true);
+        _sceneManagerRef.getScene().beginAnimation(meshObject, 0, 100, true);
         // _animatedMeshes.push(meshName);
     }
 

@@ -1,6 +1,7 @@
 import * as DEFS from './../../DEFS/defs.js';
 
 import MeshManager from './../meshes/mesh_manager.js';
+import AnimationManager from './../animation/animation_manager.js';
 
 // todo - Add Debugging options
 // TODO - UPDATE MESH FUNCTIONALity
@@ -140,7 +141,8 @@ const ActorManager = (function ActorManager() {
         // * Step 3 .. Apply Textures (full mesh texture and individual textures)
         // * Step 4 .. Merge Meshes (if required)
         // * Step 5 .. Register Final Actor Mesh
-        // * Step 6 .. Apply Physics
+        // * Step 6 .. Apply Animations (if required) 
+        // * Step  .. Apply Physics
 
         let meshes = [];
 
@@ -185,6 +187,17 @@ const ActorManager = (function ActorManager() {
 
         });
 
+        // *    Check for animations
+        actorObject.meshes.forEach((mesh, i) => {
+            // * Check if mesh has animation property
+            if (_checkIsValid(mesh.animations)) {
+                mesh.animations.forEach(animation => {
+                    AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
+                    AnimationManager.addAnimationToMesh(animation.animationName, meshes[i]);
+                });
+            }
+        });
+
         let processedMesh;
 
         // *    STEP 4 and 5
@@ -193,16 +206,22 @@ const ActorManager = (function ActorManager() {
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
 
         MeshManager.registerMesh(processedMesh);
+
+
+        _actors.push({
+            actorName: actorObject.actorName,
+            meshes: meshes
+        });
     }
 
     /*
     *   Get Actor By Name
     */
-    function _getActorByName(name) {
+    function _getActorByName(actorName) {
         if (!_isInitialised) return;
 
         return _actors.find(function findActorByName(actor) {
-            return actor.name == name;
+            return actor.actorName == actorName;
         });
     }
 
@@ -283,6 +302,8 @@ const ActorManager = (function ActorManager() {
         update: _update,
 
         createActor: _createActor,
+
+        getActorByName: _getActorByName,
 
         addAction: _addAction,
 

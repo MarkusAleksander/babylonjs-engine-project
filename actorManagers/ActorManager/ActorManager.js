@@ -185,12 +185,14 @@ const ActorManager = (function ActorManager() {
 
         });
 
+        let processedMesh;
+
         // *    STEP 4 and 5
-        if (actorObject.doMerge) {
-            MeshManager.registerMesh(MeshManager.mergeMeshes(meshes));
-        } else {
-            MeshManager.registerMesh(meshes[0]);
-        }
+        processedMesh = actorObject.doMerge ? MeshManager.mergeMeshes(meshes) : meshes[0];
+
+        if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
+
+        MeshManager.registerMesh(processedMesh);
     }
 
     /*

@@ -116,39 +116,11 @@ const MeshManager = (function MeshManager() {
         return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
     }
 
-    /*
-    * Add a multiface texture obkect
-    * PRIVATE
-    * name: String,
-    * options: Object
-    * cols: int,
-    * rows: int,
-    * faces: array of [col, row]
-    */
-    function _createMultfaceOptionObject(multifaceOptions) {
-
-        let faceUV = new Array(multifaceOptions.faces.length),
-            colDivision = 1 / multifaceOptions.cols,
-            rowDivision = 1 / multifaceOptions.rows;
-
-        for (let i = 0; i < multifaceOptions.faces.length; i++) {
-            faceUV[i] = new BABYLON.Vector4(
-                multifaceOptions.faces[i][0] * colDivision,
-                multifaceOptions.faces[i][1] * rowDivision,
-                (multifaceOptions.faces[i][0] + 1) * colDivision,
-                (multifaceOptions.faces[i][1] + 1) * rowDivision
-            );
-        }
-
-        return {
-            faceUV: faceUV,
-            wrap: multifaceOptions.wrap
-        };
-    }
 
     // * ------------- */
     // *  TEXTURE CREATION
     // * ------------- */
+
 
     /*
     *   Create a Texture object
@@ -249,12 +221,48 @@ const MeshManager = (function MeshManager() {
         meshObject.material = textureObject.texture;
     }
 
+    /*
+    * Add a multiface texture obkect
+    * PRIVATE
+    * name: String,
+    * options: Object
+    * cols: int,
+    * rows: int,
+    * faces: array of [col, row]
+    */
+    function _createMultfaceOptionObject(multifaceOptions) {
+
+        let faceUV = new Array(multifaceOptions.faces.length),
+            colDivision = 1 / multifaceOptions.cols,
+            rowDivision = 1 / multifaceOptions.rows;
+
+        for (let i = 0; i < multifaceOptions.faces.length; i++) {
+            faceUV[i] = new BABYLON.Vector4(
+                multifaceOptions.faces[i][0] * colDivision,
+                multifaceOptions.faces[i][1] * rowDivision,
+                (multifaceOptions.faces[i][0] + 1) * colDivision,
+                (multifaceOptions.faces[i][1] + 1) * rowDivision
+            );
+        }
+
+        return {
+            faceUV: faceUV,
+            wrap: multifaceOptions.wrap
+        };
+    }
+
+
     // * ------------- */
     // *  MESH MANIPULATION
     // * ------------- */
 
 
-    // TODO - ACTOR MANAGEMENT
+    function _setMeshPositionByObject(meshObject, newPos = {}) {
+        if (!_isInitialised || !meshObject) return;
+
+        meshObject.position = new BABYLON.Vector3(newPos.x, newPos.y, newPos.z);
+    }
+
 
     /*
     * Move a mesh object based on World Axis
@@ -430,7 +438,9 @@ const MeshManager = (function MeshManager() {
         applyTextureByObject: _applyTextureByObject,
         applyTextureByName: _applyTextureByName,
 
-        update: _update,
+        setMeshPositionByObject: _setMeshPositionByObject,
+
+        //update: _update,
         initialise: _init,
 
         addMaterial: _addMaterial,

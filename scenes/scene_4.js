@@ -108,6 +108,11 @@ function createScene() {
         }],
         updatable: true,
         receiveShadows: true,
+        position: {
+            x: 2,
+            y: 2,
+            z: 2
+        },
         textureOptions: {
             diffuseTexture: "imgs/dice.jpg",
             specularTexture: "imgs/dice.jpg",

@@ -47,7 +47,7 @@ function initialise(canvasId) {
 
     // * Register Update Functions
     SystemManager.registerUpdateFunction(ActorManager.update);
-    SystemManager.registerUpdateFunction(MeshManager.update);
+    // SystemManager.registerUpdateFunction(MeshManager.update);
     SystemManager.registerUpdateFunction(SceneManager.renderScene);
 }
 

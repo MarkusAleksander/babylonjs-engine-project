@@ -5,14 +5,14 @@ import LineManager from './actorManagers/lines/line_manager.js';
 import CameraManager from './actorManagers/camera/camera_manager.js';
 import MeshManager from './actorManagers/meshes/mesh_manager.js';
 import AnimationManager from './actorManagers/animation/animation_manager.js';
-import PhysicsManager from './physics_manager/physics_manager.js';
+import PhysicsManager from './actorManagers/physics_manager/physics_manager.js';
 
 import SystemManager from './system_manager/system_manager.js';
 import SceneManager from './scene_manager/scene_manager.js';
 
 import ActorManager from './actorManagers/ActorManager/ActorManager.js';
 
-import createScene from './scenes/scene_1.js';
+import createScene from './scenes/scene_2.js';
 
 /*
  * Initialise the engine

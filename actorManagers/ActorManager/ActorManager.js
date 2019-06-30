@@ -2,6 +2,7 @@ import * as DEFS from './../../DEFS/defs.js';
 
 import MeshManager from './../meshes/mesh_manager.js';
 import AnimationManager from './../animation/animation_manager.js';
+import PhysicsManager from './../physics_manager/physics_manager.js';
 
 // todo - Add Debugging options
 // TODO - UPDATE MESH FUNCTIONALity
@@ -131,11 +132,6 @@ const ActorManager = (function ActorManager() {
         */
         actorObject.hasBaseMeshTexture = _checkIsValid(actorObject.textureOptions);
 
-        /*
-        *   Check if physics options applied
-        */
-        actorObject.hasPhysics = _checkIsValid(actorObject.physicsOptions)
-
         // * Step 1 .. create Meshes
         // * Step 2 .. create Textures (full mesh texture and individual textures)
         // * Step 3 .. Apply Textures (full mesh texture and individual textures)
@@ -205,7 +201,15 @@ const ActorManager = (function ActorManager() {
 
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
 
+        // * Register Mesh
         MeshManager.registerMesh(processedMesh);
+
+        /*
+        *   Check if physics options applied
+        */
+        if (_checkIsValid(actorObject.physicsOptions)) {
+            PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
+        }
 
 
         _actors.push({

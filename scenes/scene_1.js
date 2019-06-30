@@ -9,7 +9,7 @@ import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 
 /*
 *   Scene 1 Example
-*   Animation
+*   Ground and Single Block Animation
 */
 function createScene() {
     /*
@@ -70,11 +70,7 @@ function createScene() {
             uOffset: 0.5,
             specularTexture: "imgs/grass.jpg",
             bumpTexture: "imgs/grass_bumpmap.jpg",
-        },
-        physicsOptions: {
-            imposter: BABYLON.PhysicsImpostor.BoxImpostor,
-            options: { mass: 0, restitution: 0.9 }
-        },
+        }
     });
 
     /*
@@ -146,6 +142,7 @@ function createScene() {
         }
     });
 
+    // TODO - should be part of the actor creation process 
     //* Inform light manager which meshes are to cast shadows
     ActorManager.getActorByName("Dice_1").meshes.forEach(function addMeshToShadowMap(mesh) {
         LightManager.addMeshToShadowMap("spotlight", mesh);

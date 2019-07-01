@@ -104,7 +104,7 @@ function createScene() {
         receiveShadows: true,
         position: {
             x: 2,
-            y: 2,
+            y: 20,
             z: 2
         },
         textureOptions: {
@@ -114,7 +114,7 @@ function createScene() {
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-            options: { mass: 0, restitution: 0.9 }
+            options: { mass: 1, restitution: 0.5 }
         },
     });
 
@@ -124,18 +124,8 @@ function createScene() {
         LightManager.addMeshToShadowMap("spotlight", mesh);
     });
 
-    //    PhysicsManager.applyPhysics();
-
-    // window.setTimeout(function () {
-
-    //     // * Apply physics to mesh
-    // TODO - PHYSICS INSNT WORKING
-    let mesh = MeshManager.getMeshByName("Dice_1_0").meshObject;
-    mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
-
-    //     // * Apply physics to ground
-    //    MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());
-    // }, 3000);
+    // * Apply physics to all the objects
+    PhysicsManager.applyPhysics();
 }
 
 export default createScene;

@@ -130,6 +130,9 @@ function createScene() {
         }],
         updatable: true,
         receiveShadows: true,
+        castShadows: true,
+        addToShadowMaps: ["spotlight"],
+        checkCollisions: true,
         position: {
             x: 2,
             y: 2,
@@ -140,12 +143,6 @@ function createScene() {
             specularTexture: "imgs/dice.jpg",
             bumpTexture: "imgs/dice_bumpmap.jpg"
         }
-    });
-
-    // TODO - should be part of the actor creation process 
-    //* Inform light manager which meshes are to cast shadows
-    ActorManager.getActorByName("Dice_1").meshes.forEach(function addMeshToShadowMap(mesh) {
-        LightManager.addMeshToShadowMap("spotlight", mesh);
     });
 
     // * Begin animations

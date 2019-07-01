@@ -3,6 +3,7 @@ import * as DEFS from './../../DEFS/defs.js';
 import MeshManager from './../meshes/mesh_manager.js';
 import AnimationManager from './../animation/animation_manager.js';
 import PhysicsManager from './../physics_manager/physics_manager.js';
+import LightManager from './../lights/light_manager.js';
 
 // todo - Add Debugging options
 // TODO - UPDATE MESH FUNCTIONALity
@@ -203,6 +204,12 @@ const ActorManager = (function ActorManager() {
 
         // * Register Mesh
         MeshManager.registerMesh(processedMesh);
+
+        if (actorObject.castShadows && actorObject.addToShadowMaps && actorObject.addToShadowMaps.length > 0) {
+            actorObject.addToShadowMaps.forEach(function addToShadowMap(shadowMapLight) {
+                LightManager.addMeshToShadowMap("spotlight", processedMesh);
+            });
+        }
 
         /*
         *   Check if physics options applied

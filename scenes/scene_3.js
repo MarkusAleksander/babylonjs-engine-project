@@ -114,6 +114,9 @@ function createScene() {
                     }],
                     updatable: true,
                     receiveShadows: true,
+                    castShadows: true,
+                    addToShadowMaps: ["spotlight"],
+                    checkCollisions: true,
                     position: {
                         x: (i * spacing) - (rowLimit / 2) * 2 + Math.random(),
                         y: (k * spacing) + 1 * 2 + Math.random(),

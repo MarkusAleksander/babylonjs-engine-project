@@ -90,43 +90,43 @@ function createScene() {
                 faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
                 wrap: true
             },
-            animations: [{
-                animationName: "rotationX",
-                animationOptions: {
-                    property: "rotation.x",
-                    fps: 30,
-                    type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                    mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-                    keys: [{
-                        frame: 0,
-                        value: 0
-                    }, {
-                        frame: 50,
-                        value: Math.PI
-                    }, {
-                        frame: 100,
-                        value: Math.PI * 2
-                    }]
-                }
-            }, {
-                animationName: "rotationY",
-                animationOptions: {
-                    property: "rotation.y",
-                    fps: 30,
-                    type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                    mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-                    keys: [{
-                        frame: 0,
-                        value: 0
-                    }, {
-                        frame: 50,
-                        value: Math.PI
-                    }, {
-                        frame: 100,
-                        value: Math.PI * 2
-                    }]
-                }
-            }]
+        }],
+        animations: [{
+            animationName: "rotationX",
+            animationOptions: {
+                property: "rotation.x",
+                fps: 30,
+                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                keys: [{
+                    frame: 0,
+                    value: 0
+                }, {
+                    frame: 50,
+                    value: Math.PI
+                }, {
+                    frame: 100,
+                    value: Math.PI * 2
+                }]
+            }
+        }, {
+            animationName: "rotationY",
+            animationOptions: {
+                property: "rotation.y",
+                fps: 30,
+                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                keys: [{
+                    frame: 0,
+                    value: 0
+                }, {
+                    frame: 50,
+                    value: Math.PI
+                }, {
+                    frame: 100,
+                    value: Math.PI * 2
+                }]
+            }
         }],
         updatable: true,
         receiveShadows: true,

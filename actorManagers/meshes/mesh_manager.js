@@ -149,7 +149,6 @@ const MeshManager = (function MeshManager() {
         texture.opacityTexture = textureObject.opacityTexture != undefined ? new BABYLON.Texture(textureObject.opacityTexture, _sceneManagerRef.getScene()) : texture.opacityTexture;
 
         texture.bumpTexture = textureObject.bumpTexture != undefined ? new BABYLON.Texture(textureObject.bumpTexture, _sceneManagerRef.getScene()) : texture.bumpTexture;
-
         return texture;
     }
 

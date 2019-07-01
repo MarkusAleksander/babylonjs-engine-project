@@ -185,20 +185,28 @@ const ActorManager = (function ActorManager() {
         });
 
         // *    Check for animations
-        actorObject.meshes.forEach((mesh, i) => {
-            // * Check if mesh has animation property
-            if (_checkIsValid(mesh.animations)) {
-                mesh.animations.forEach(animation => {
-                    AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
-                    AnimationManager.addAnimationToMesh(animation.animationName, meshes[i]);
-                });
-            }
-        });
+        // actorObject.meshes.forEach((mesh, i) => {
+        //     // * Check if mesh has animation property
+        //     if (_checkIsValid(mesh.animations)) {
+        //         mesh.animations.forEach(animation => {
+        //             AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
+        //             AnimationManager.addAnimationToMesh(animation.animationName, meshes[i]);
+        //         });
+        //     }
+        // });
+
 
         let processedMesh;
 
         // *    STEP 4 and 5
         processedMesh = actorObject.doMerge ? MeshManager.mergeMeshes(meshes) : meshes[0];
+
+        if (actorObject.animations && actorObject.animations.length > 0) {
+            actorObject.animations.forEach(animation => {
+                AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
+                AnimationManager.addAnimationToMesh(animation.animationName, processedMesh);
+            });
+        }
 
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
 

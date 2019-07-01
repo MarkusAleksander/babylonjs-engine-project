@@ -3,13 +3,13 @@ import * as DEFS from './../DEFS/defs.js';
 import CameraManager from './../actorManagers/camera/camera_manager.js';
 import LightManager from './../actorManagers/lights/light_manager.js';
 import SystemManager from './../system_manager/system_manager.js';
-import PhysicsManager from './../physics_manager/physics_manager.js';
 
+import AnimationManager from './../actorManagers/animation/animation_manager.js';
 import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 
 /*
 *   Scene 4 Example
-*   Rebuilding With ActorManager interface for Actors
+*   Merged Meshes
 */
 function createScene() {
     /*
@@ -20,7 +20,7 @@ function createScene() {
     CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "main_camera", {
         alpha: Math.PI / 4,
         beta: Math.PI / 3,
-        radius: 50,
+        radius: 75,
         target: new BABYLON.Vector3(0, 0, 0)
     });
 
@@ -78,12 +78,9 @@ function createScene() {
             uOffset: 0.5,
             specularTexture: "imgs/grass.jpg",
             bumpTexture: "imgs/grass_bumpmap.jpg",
-        },
-        physicsOptions: {
-            imposter: BABYLON.PhysicsImpostor.BoxImpostor,
-            options: { mass: 0, restitution: 0.9 }
-        },
+        }
     });
+
 
     /*
     *   Create 'Dice block'
@@ -91,24 +88,72 @@ function createScene() {
     ActorManager.createActor({
         actorName: 'Dice_1',
         actorType: DEFS.ACTORTYPES.PHYSICAL,
-        meshes: [{
-            meshShape: DEFS.MESHSHAPES.BOX,
-            meshOptions: {
-                size: 2
+        meshes: [
+            {
+                meshShape: DEFS.MESHSHAPES.BOX,
+                meshOptions: {
+                    size: 8
+                },
+                multifaceOption: {
+                    cols: 2,
+                    rows: 3,
+                    faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+                    wrap: true
+                }
             },
-            multifaceOption: {
-                cols: 2,
-                rows: 3,
-                faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-                wrap: true
-            },
+            {
+                meshShape: DEFS.MESHSHAPES.SPHERE,
+                meshOptions: {
+                    diameter: 10
+                }
+            }
+        ],
+        animations: [{
+            animationName: "rotationX",
+            animationOptions: {
+                property: "rotation.x",
+                fps: 30,
+                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                keys: [{
+                    frame: 0,
+                    value: 0
+                }, {
+                    frame: 50,
+                    value: Math.PI
+                }, {
+                    frame: 100,
+                    value: Math.PI * 2
+                }]
+            }
+        }, {
+            animationName: "rotationY",
+            animationOptions: {
+                property: "rotation.y",
+                fps: 30,
+                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
+                keys: [{
+                    frame: 0,
+                    value: 0
+                }, {
+                    frame: 50,
+                    value: Math.PI
+                }, {
+                    frame: 100,
+                    value: Math.PI * 2
+                }]
+            }
         }],
         updatable: true,
         receiveShadows: true,
+        castShadows: true,
+        addToShadowMaps: ["spotlight"],
+        checkCollisions: true,
         position: {
-            x: 2,
-            y: 2,
-            z: 2
+            x: 10,
+            y: 15,
+            z: 10
         },
         textureOptions: {
             diffuseTexture: "imgs/dice.jpg",
@@ -117,6 +162,8 @@ function createScene() {
         }
     });
 
+    // * Begin animations
+    AnimationManager.runAnimations();
 }
 
 export default createScene;

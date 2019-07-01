@@ -2,10 +2,8 @@ import * as DEFS from './../DEFS/defs.js';
 
 import CameraManager from './../actorManagers/camera/camera_manager.js';
 import LightManager from './../actorManagers/lights/light_manager.js';
-import MeshManager from './../actorManagers/meshes/mesh_manager.js';
 import SystemManager from './../system_manager/system_manager.js';
 import PhysicsManager from './../actorManagers/physics_manager/physics_manager.js';
-import SceneManager from './../scene_manager/scene_manager.js';
 
 import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 

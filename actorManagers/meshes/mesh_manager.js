@@ -441,6 +441,8 @@ const MeshManager = (function MeshManager() {
 
         setMeshPositionByObject: _setMeshPositionByObject,
 
+        getMeshByName: _getMeshByName,
+
         //update: _update,
         initialise: _init,
 

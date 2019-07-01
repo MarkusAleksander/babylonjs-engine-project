@@ -130,7 +130,8 @@ function createScene() {
 
     //     // * Apply physics to mesh
     // TODO - PHYSICS INSNT WORKING
-    MeshManager.getMeshInterface(DICETEMPLATE.name).mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface(DICETEMPLATE.name).mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
+    let mesh = MeshManager.getMeshByName("Dice_1_0").meshObject;
+    mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, restitution: 0.9 }, SceneManager.getScene());
 
     //     // * Apply physics to ground
     //    MeshManager.getMeshInterface("ground").mesh.physicsImpostor = new BABYLON.PhysicsImpostor(MeshManager.getMeshInterface("ground").mesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, SceneManager.getScene());

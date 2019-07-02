@@ -32,6 +32,8 @@ const _physicsManager = (function () {
         switch (type) {
             case DEFS.PHYSICSIMPOSTERS.BOX:
                 return BABYLON.PhysicsImpostor.BoxImpostor;
+            case DEFS.PHYSICSIMPOSTERS.SPHERE:
+                return BABYLON.PhysicsImpostor.SphereImpostor;
             default:
                 return BABYLON.PhysicsImpostor.BoxImpostor;
         }

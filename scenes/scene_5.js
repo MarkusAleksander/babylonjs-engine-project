@@ -9,7 +9,7 @@ import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
 
 /*
 *   Scene 5 Example
-*   Merged Meshes with Physics
+*   Merged Meshes with Physics and lots of colour
 */
 function createScene() {
     /*
@@ -32,7 +32,7 @@ function createScene() {
     * Add lights to the scene and configure
     */
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
-    LightManager.setLightIntensity("hemilight", 0.2);
+    LightManager.setLightIntensity("hemilight", 0.6);
     LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", {
         position: new BABYLON.Vector3(-20, 30, -20),
         direction: new BABYLON.Vector3(0.7, -1, 0.7),
@@ -90,7 +90,7 @@ function createScene() {
     *   Create 'Dice block'
     */
 
-    let numSpheres = 10,
+    let numSpheres = 500,
         sphereSize = 4;
 
     for(let i = 0; i < numSpheres; i++) {
@@ -127,11 +127,14 @@ function createScene() {
                 y: (sphereSize / 2) + (sphereSize * i),
                 z: Math.random()
             },
-            textureOptions: {
-                diffuseColor: new BABYLON.Color3(1, 0, 0),
-                specularTexture: "imgs/dice.jpg",
-                bumpTexture: "imgs/dice_bumpmap.jpg"
+            materialOptions: {
+                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
             },
+            // textureOptions: {
+            //     diffuseTexture: "imgs/dice.jpg",
+            //     specularTexture: "imgs/dice.jpg",
+            //     bumpTexture: "imgs/dice_bumpmap.jpg"
+            // },
             physicsOptions: {
                 imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
                 options: { mass: 1, restitution: 0.5 }

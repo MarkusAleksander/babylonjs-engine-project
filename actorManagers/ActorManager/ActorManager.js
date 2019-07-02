@@ -131,6 +131,7 @@ const ActorManager = (function ActorManager() {
         *   If no texture base options applied, we can assume texture per mesh and ignore creating an overall texture
         *   If there is to be no texture per mesh, this can be handled later per mesh
         */
+        actorObject.hasBaseMeshMaterial = _checkIsValid(actorObject.materialOptions);
         actorObject.hasBaseMeshTexture = _checkIsValid(actorObject.textureOptions);
 
         // * Step 1 .. create Meshes
@@ -150,6 +151,21 @@ const ActorManager = (function ActorManager() {
 
         // *    STEP 2 and 3
         // *    Check if full texture before individual mesh textures
+
+        if(actorObject.hasBaseMeshMaterial) {
+
+            if(!actorObject.materialOptions.materialName) actorObject.materialOptions.materialName = actorObject.actorName + "_base_material";
+
+            let material = MeshManager.createMaterial(actorObject.materialOptions);
+
+            meshes.forEach(mesh => {
+                MeshManager.applyMaterialByObject(mesh, material);
+            });
+
+            MeshManager.registerMaterial(material);
+
+        }
+
         if (actorObject.hasBaseMeshTexture) {
 
             // *    Attach name to texture

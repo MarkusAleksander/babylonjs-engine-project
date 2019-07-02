@@ -122,109 +122,6 @@ const MeshManager = (function MeshManager() {
     // *  TEXTURE CREATION
     // * ------------- */
 
-     /*
-    * Create a Material from Babylon
-    * PRIVATE
-    * name: String
-    * options: Object
-    */
-    function _createMaterialObject(materialObject) {
-        let material = new BABYLON.StandardMaterial(materialObject.materialName, _sceneManagerRef.getScene());
-
-        material.diffuseColor = materialObject.diffuseColor != undefined ? materialObject.diffuseColor : material.diffuseColor;
-        material.specularColor = materialObject.specularColor != undefined ? materialObject.specularColor : material.specularColor;
-        material.emissiveColor = materialObject.emissiveColor != undefined ? materialObject.emissiveColor : material.emissiveColor;
-        material.ambientColor = materialObject.ambientColor != undefined ? materialObject.ambientColor : material.ambientColor;
-        material.alpha = materialObject.alpha != undefined ? materialObject.alpha : 1;
-        material.pointsCloud = materialObject.pointsCloud != undefined ? materialObject.pointsCloud : material.pointsCloud;
-
-        return material;
-    }
-
-    /*
-    * Add a Material object
-    * PUBLIC
-    * name: String
-    * options: Object
-    */
-    function _createMaterial(materialObject) {
-        if (!_isInitialised) return;
-
-        if (!_getMaterialByName(materialObject.materialName)) {
-                return _createMaterialObject(materialObject)
-        }
-
-        return null;
-    }
-
-    /*
-    *   Register Texture to the MeshManager
-    *   PUBLIC
-    *   textureObject: textureObject to Register
-    */
-   function _registerMaterial(materialObject) {
-    if (!_isInitialised) return;
-
-    _materials.push({ materialObject: materialObject });
-}
-
-    /*
-    * Apply a material to a material
-    * PUBLIC
-    * materialName: String
-    * meshName: String
-    */
-    function _applyMaterial(materialName, meshName) {
-        let materialObj = _getMaterial(materialName),
-            meshObj = _getMesh(meshName);
-
-        if (!materialObj || !meshObj) return;
-
-        meshObj.mesh.material = materialObj.material;
-    }
-
-    /*
-    * Get a material object by name
-    * PRIVATE
-    * name: String
-    */
-    function _getMaterialByName(name) {
-        if (!_isInitialised) return;
-
-        return _materials.find(function findMaterialByName(el) {
-            return el.materialObject.name == name;
-        })
-    }
-
-    /*
-    *   Apply a texture to a material before registration
-    *   PUBLIC
-    *   meshObject: Mesh Object
-    *   textureObject: Texture Object
-    */
-   function _applyMaterialByObject(meshObject, materialObject) {
-    // TODO - Applying texture after registration
-
-    if (!materialObject || !meshObject) return;
-
-    meshObject.material = materialObject;
-    }
-
-    /*
-    *   Apply a texture to a material after registration
-    *   PUBLIC
-    *   meshName: String
-    *   textureName: String
-    */
-    function _applyMaterialByName(meshName, materialName) {
-        let materialObject = _getMaterialByName(materialName),
-            meshObject = _getMeshByName(meshName);
-
-        if (!materialObject || !meshObject) return;
-
-        meshObject.material = materialObject.material;
-    }
-
     /*
     *   Create a Texture object
     *   PUBLIC
@@ -235,13 +132,21 @@ const MeshManager = (function MeshManager() {
 
         let texture = new BABYLON.StandardMaterial(textureObject.textureName, _sceneManagerRef.getScene());
 
-        texture.diffuseTexture = textureObject.diffuseTexture != undefined ? new BABYLON.Texture(textureObject.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
-        texture.diffuseTexture.hasAlpha = textureObject.hasAlpha != undefined ? textureObject.hasAlpha : false;
+        texture.diffuseColor = textureObject.diffuseColor != undefined ? textureObject.diffuseColor : texture.diffuseColor;
+        texture.specularColor = textureObject.specularColor != undefined ? textureObject.specularColor : texture.specularColor;
+        texture.emissiveColor = textureObject.emissiveColor != undefined ? textureObject.emissiveColor : texture.emissiveColor;
+        texture.ambientColor = textureObject.ambientColor != undefined ? textureObject.ambientColor : texture.ambientColor;
+        texture.pointsCloud = textureObject.pointsCloud != undefined ? textureObject.pointsCloud : texture.pointsCloud;
 
-        texture.diffuseTexture.uScale = textureObject.uScale != undefined ? textureObject.uScale : texture.diffuseTexture.uScale;
-        texture.diffuseTexture.vScale = textureObject.vScale != undefined ? textureObject.vScale : texture.diffuseTexture.vScale;
-        texture.diffuseTexture.uOffset = textureObject.uOffset != undefined ? textureObject.uOffset : texture.diffuseTexture.uOffset;
-        texture.diffuseTexture.vOffset = textureObject.vOffset != undefined ? textureObject.vOffset : texture.diffuseTexture.vOffset;
+        texture.diffuseTexture = textureObject.diffuseTexture != undefined ? new BABYLON.Texture(textureObject.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
+
+        if(texture.diffuseTexture) {
+            texture.diffuseTexture.hasAlpha = textureObject.hasAlpha != undefined ? textureObject.hasAlpha : false;
+            texture.diffuseTexture.uScale = textureObject.uScale != undefined ? textureObject.uScale : texture.diffuseTexture.uScale;
+            texture.diffuseTexture.vScale = textureObject.vScale != undefined ? textureObject.vScale : texture.diffuseTexture.vScale;
+            texture.diffuseTexture.uOffset = textureObject.uOffset != undefined ? textureObject.uOffset : texture.diffuseTexture.uOffset;
+            texture.diffuseTexture.vOffset = textureObject.vOffset != undefined ? textureObject.vOffset : texture.diffuseTexture.vOffset;
+        }
 
         texture.specularTexture = textureObject.specularTexture != undefined ? new BABYLON.Texture(textureObject.specularTexture, _sceneManagerRef.getScene()) : texture.specularTexture;
         texture.emissiveTexture = textureObject.emissiveTexture != undefined ? new BABYLON.Texture(textureObject.emissiveTexture, _sceneManagerRef.getScene()) : texture.emissiveTexture;
@@ -466,11 +371,6 @@ const MeshManager = (function MeshManager() {
         createMesh: _createMesh,
         registerMesh: _registerMesh,
         mergeMeshes: _mergeMeshes,
-
-        createMaterial: _createMaterial,
-        registerMaterial: _registerMaterial,
-        applyMaterialByObject: _applyMaterialByObject,
-        applyMaterialByName: _applyMaterialByName,
 
         createTexture: _createTexture,
         registerTexture: _registerTexture,

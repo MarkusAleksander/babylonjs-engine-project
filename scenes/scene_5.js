@@ -127,14 +127,12 @@ function createScene() {
                 y: (sphereSize / 2) + (sphereSize * i),
                 z: Math.random()
             },
-            materialOptions: {
-                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
+            textureOptions: {
+                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random()),
+                diffuseTexture: "imgs/dice.jpg",
+                specularTexture: "imgs/dice.jpg",
+                bumpTexture: "imgs/dice_bumpmap.jpg"
             },
-            // textureOptions: {
-            //     diffuseTexture: "imgs/dice.jpg",
-            //     specularTexture: "imgs/dice.jpg",
-            //     bumpTexture: "imgs/dice_bumpmap.jpg"
-            // },
             physicsOptions: {
                 imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
                 options: { mass: 1, restitution: 0.5 }

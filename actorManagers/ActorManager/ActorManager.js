@@ -116,7 +116,7 @@ const ActorManager = (function ActorManager() {
         // *    Check what processing needs doing on the Actor
 
         // *    Flag if more than 1 mesh
-        actorObject.doMerge = actorObject.meshes.length > 1;
+        actorObject.isCompoundBody = actorObject.meshes.length > 1;
 
         // *    Check non-required options and apply defaults if not specified
         actorObject.meshes.forEach((mesh, i) => {
@@ -146,6 +146,11 @@ const ActorManager = (function ActorManager() {
         // *    STEP 1
         actorObject.meshes.forEach(mesh => {
             meshes.push(_createMesh(mesh));
+        });
+
+        // * Set mesh relative positions
+        actorObject.meshes.forEach((mesh, i) => {
+            if(mesh.relativePosition) MeshManager.setMeshPositionByObject(meshes[i], mesh.relativePosition);
         });
 
         // *    STEP 2 and 3
@@ -186,22 +191,11 @@ const ActorManager = (function ActorManager() {
 
         });
 
-        // *    Check for animations
-        // actorObject.meshes.forEach((mesh, i) => {
-        //     // * Check if mesh has animation property
-        //     if (_checkIsValid(mesh.animations)) {
-        //         mesh.animations.forEach(animation => {
-        //             AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
-        //             AnimationManager.addAnimationToMesh(animation.animationName, meshes[i]);
-        //         });
-        //     }
-        // });
-
 
         let processedMesh;
 
         // *    STEP 4 and 5
-        processedMesh = actorObject.doMerge ? MeshManager.mergeMeshes(meshes) : meshes[0];
+        processedMesh = actorObject.isCompoundBody ? MeshManager.compoundMeshes(meshes) : meshes[0];
 
         if (actorObject.animations && actorObject.animations.length > 0) {
             actorObject.animations.forEach(animation => {
@@ -224,6 +218,13 @@ const ActorManager = (function ActorManager() {
         /*
         *   Check if physics options applied
         */
+
+        actorObject.meshes.forEach((mesh, i) => {
+            if(mesh.physicsOptions) {
+                PhysicsManager.createPhyiscsObject(meshes[i], mesh.physicsOptions);
+            }
+        });
+
         if (_checkIsValid(actorObject.physicsOptions)) {
             PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
         }

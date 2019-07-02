@@ -45,7 +45,8 @@ const ACTORTYPES = {
 const PHYSICSIMPOSTERS = {
     BOX: "box",
     SPHERE: "sphere",
-    MESH: "mesh"
+    MESH: "mesh",
+    NOIMPOSTER: "noimposter"
 }
 
 export { LIGHTTYPES, MESHSHAPES, LINETYPES, ACTIONTYPES, CAMERATYPES, ACTORTYPES, PHYSICSIMPOSTERS };

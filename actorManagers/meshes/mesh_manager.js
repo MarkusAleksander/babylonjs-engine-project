@@ -113,8 +113,16 @@ const MeshManager = (function MeshManager() {
     *   meshArray: Array of Meshes to Merge
     *   return compounded Mesh
     */
-    function _mergeMeshes(meshArray) {
-        return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
+    function _compoundMeshes(meshArray) {
+        let compoundMesh = new BABYLON.Mesh("", _sceneManagerRef.getScene());
+
+        for(let i = 0; i < meshArray.length; i++) {
+            compoundMesh.addChild(meshArray[i]);
+        }
+
+        return compoundMesh;
+
+        //return BABYLON.Mesh.MergeMeshes(meshArray, true, true, undefined, false, true);
     }
 
 
@@ -370,7 +378,7 @@ const MeshManager = (function MeshManager() {
 
         createMesh: _createMesh,
         registerMesh: _registerMesh,
-        mergeMeshes: _mergeMeshes,
+        compoundMeshes: _compoundMeshes,
 
         createTexture: _createTexture,
         registerTexture: _registerTexture,

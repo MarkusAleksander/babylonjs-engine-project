@@ -12,7 +12,7 @@ import SceneManager from './scene_manager/scene_manager.js';
 
 import ActorManager from './actorManagers/ActorManager/ActorManager.js';
 
-import createScene from './scenes/scene_5.js';
+import createScene from './scenes/scene_6.js';
 
 /*
  * Initialise the engine

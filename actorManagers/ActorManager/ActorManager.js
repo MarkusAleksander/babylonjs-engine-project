@@ -220,6 +220,8 @@ const ActorManager = (function ActorManager() {
 
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
 
+        if (actorObject.rotation) MeshManager.setMeshRotationByObject(processedMesh, actorObject.rotation);
+
         // * Register Mesh
         MeshManager.registerMesh(processedMesh);
 

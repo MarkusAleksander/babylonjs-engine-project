@@ -22,7 +22,7 @@ function createScene() {
     CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "main_camera", {
         alpha: Math.PI / 4,
         beta: Math.PI / 3,
-        radius: 75,
+        radius: 175,
         target: new BABYLON.Vector3(0, 0, 0)
     });
 
@@ -83,62 +83,65 @@ function createScene() {
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-            options: { mass: 0, restitution: 0.9 }
+            options: { mass: 0, restitution: 0.2 }
         },
     });
 
+    /*
+    *   Create Bat
+    */
+    ActorManager.createActor({
+        actorName: 'Bat_',
+        actorType: DEFS.ACTORTYPES.PHYSICAL,
+        meshes: [{
+            meshShape: DEFS.MESHSHAPES.CYLINDER,
+            meshOptions: {
+                diameter: 4,
+                height: 20
+            }
+        }],
+        updatable: true,
+        receiveShadows: true,
+        castShadows: true,
+        addToShadowMaps: ["spotlight"],
+        position: {
+            x: 0,
+            y: 50,
+            z: 0
+        },
+        rotation: {
+            x: 1.5,
+            y: 0,
+            z: 0
+        },
+        textureOptions: {
+            diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
+        },
+        physicsOptions: {
+            imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
+            options: { mass: 2, restitution: 0.8 }
+        },
+        animations: [{
+            property: 'rotation.z',
+            animateBy: 0.1
+        }]
+    });
 
     /*
-    *   Create 'Dice block'
+    *   Create 'Spheres'
     */
-let numDice = 200;
+    let numSpheres = 300;
 
-for(let i = 0; i < numDice; i++) {
+    for (let i = 0; i < numSpheres; i++) {
         ActorManager.createActor({
-            actorName: 'MergedMesh_' + i,
+            actorName: 'Ball_' + i,
             actorType: DEFS.ACTORTYPES.PHYSICAL,
             meshes: [
                 {
-                    meshShape: DEFS.MESHSHAPES.BOX,
+                    meshShape: DEFS.MESHSHAPES.SPHERE,
                     meshOptions: {
-                        size: 5
-                    },
-                    multifaceOption: {
-                        cols: 2,
-                        rows: 3,
-                        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-                        wrap: true
-                    },
-                    relativePosition: {
-                        x: 2,
-                        y: 2,
-                        z: 2
-                    },
-                    physicsOptions: {
-                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-                        options: { mass: 0, restitution: 0.5 }
-                    },
-                },
-                {
-                    meshShape: DEFS.MESHSHAPES.BOX,
-                    meshOptions: {
-                        size: 5
-                    },
-                    multifaceOption: {
-                        cols: 2,
-                        rows: 3,
-                        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
-                        wrap: true
-                    },
-                    relativePosition: {
-                        x: -2,
-                        y: -2,
-                        z: -2
-                    },
-                    physicsOptions: {
-                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-                        options: { mass: 0, restitution: 0.5 }
-                    },
+                        diameter: 4
+                    }
                 }
             ],
             updatable: true,
@@ -147,29 +150,17 @@ for(let i = 0; i < numDice; i++) {
             addToShadowMaps: ["spotlight"],
             checkCollisions: true,
             position: {
-                x: (Math.random() * 20) + 10,
+                x: (Math.random() * 50) - 25,
                 y: 5 + (9 * i),
-                z: (Math.random() * 20) - 10
+                z: (Math.random() * 50) - 25
             },
             textureOptions: {
-                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random()),
-                diffuseTexture: "imgs/dice.jpg",
-                specularTexture: "imgs/dice.jpg",
-                bumpTexture: "imgs/dice_bumpmap.jpg"
+                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
             },
             physicsOptions: {
-                imposter: DEFS.PHYSICSIMPOSTERS.NOIMPOSTER,
-                options: { mass: 2, restitution: 0.9 }
-            },
-            animations: [{
-                property: 'rotation.x',
-                animateBy: Math.random() - Math.random()
+                imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
+                options: { mass: 1, restitution: 0.4 }
             }
-            // ,{
-            //     property: 'position.z',
-            //     animateBy: Math.random() - Math.random()
-            // }
-        ]
         });
     }
 
@@ -178,17 +169,17 @@ for(let i = 0; i < numDice; i++) {
 
 
     // * Add before and after render logic
-    SceneManager.addLogicBeforeRender(function() {
+    SceneManager.addLogicBeforeRender(function () {
         console.log('before scene logic: stepID:' + SceneManager.getScene().getStepId());
 
-        if(SceneManager.getScene().getStepId() > 200) {
+        if (SceneManager.getScene().getStepId() > 200) {
             SceneManager.clearLogicBeforeRenderList();
         }
     });
-    SceneManager.addLogicAfterRender(function() {
+    SceneManager.addLogicAfterRender(function () {
         console.log('after scene logic: stepID:' + SceneManager.getScene().getStepId());
 
-        if(SceneManager.getScene().getStepId() > 200) {
+        if (SceneManager.getScene().getStepId() > 200) {
             SceneManager.clearLogicAfterRenderList();
         }
     });

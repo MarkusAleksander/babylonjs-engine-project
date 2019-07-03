@@ -46,6 +46,7 @@ const PHYSICSIMPOSTERS = {
     BOX: "box",
     SPHERE: "sphere",
     MESH: "mesh",
+    CYLINDER: "cylinder",
     NOIMPOSTER: "noimposter"
 }
 

@@ -278,6 +278,11 @@ const MeshManager = (function MeshManager() {
         meshObject.position = new BABYLON.Vector3(newPos.x, newPos.y, newPos.z);
     }
 
+    function _setMeshRotationByObject(meshObject, newRotation = {}) {
+        if (!_isInitialised || !meshObject) return;
+
+        meshObject.rotation = new BABYLON.Vector3(newRotation.x, newRotation.y, newRotation.z);
+    }
 
     /*
     * Move a mesh object based on World Axis
@@ -386,6 +391,7 @@ const MeshManager = (function MeshManager() {
         applyTextureByName: _applyTextureByName,
 
         setMeshPositionByObject: _setMeshPositionByObject,
+        setMeshRotationByObject: _setMeshRotationByObject,
 
         getMeshByName: _getMeshByName,
 

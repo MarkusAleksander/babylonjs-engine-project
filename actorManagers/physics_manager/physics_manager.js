@@ -16,12 +16,13 @@ const _physicsManager = (function () {
         if (!_isInitialised) return;
 
         _sceneManagerRef.getScene().enablePhysics(gravityVec, _physicsPlugin);
+        _physicsPlugin.setTimeStep(1/60);
     }
 
     function _init(sceneManager) {
         if (sceneManager) {
             _sceneManagerRef = sceneManager;
-            _physicsPlugin = new BABYLON.CannonJSPlugin();
+            _physicsPlugin = new BABYLON.CannonJSPlugin(false);
             _isInitialised = true;
         }
     }

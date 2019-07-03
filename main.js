@@ -12,7 +12,7 @@ import SceneManager from './scene_manager/scene_manager.js';
 
 import ActorManager from './actorManagers/ActorManager/ActorManager.js';
 
-import createScene from './scenes/scene_6.js';
+import createScene from './scenes/scene_7.js';
 
 /*
  * Initialise the engine
@@ -46,7 +46,7 @@ function initialise(canvasId) {
     CameraManager.initialise(SceneManager);
 
     // * Register Update Functions
-    SystemManager.registerUpdateFunction(ActorManager.update);
+    //SystemManager.registerUpdateFunction(ActorManager.update);
     // SystemManager.registerUpdateFunction(MeshManager.update);
     SystemManager.registerUpdateFunction(SceneManager.renderScene);
 }

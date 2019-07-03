@@ -5,12 +5,14 @@ import * as DEFS from '../DEFS/defs.js';
 const _sceneManager = (function () {
 
     var _isInitialised = false;
-
     var _sceneObject;
 
+    const _updateBeforeRenderList = [],
+        _updateAfterRenderList = [];
+
     function _renderScene() {
-        if(!_isInitialised) return
-        ;
+        if(!_isInitialised) return;
+
         _sceneObject.render();
     }
 
@@ -29,11 +31,39 @@ const _sceneManager = (function () {
         _isInitialised = true;
     }
 
+    function _registerBeforeFrameRender (update) {
+        //registerBeforeRender(update);
+    }
+
+    function _addUpdateBeforeRender (update) {
+        _updateBeforeRenderList.push(_sceneObject.onBeforeStepObservable.add(update));
+    }
+
+    function _addUpdateAfterRender (update) {
+        _updateAfterRenderList.push(_sceneObject.onAfterStepObservable.add(update));
+    }
+
+    function _clearBeforeRenderList () {
+        _updateBeforeRenderList.length = 0;
+        _sceneObject.onBeforeStepObservable.clear();
+    }
+
+    function _clearAfterRenderList () {
+        _updateAfterRenderList.length = 0;
+        _sceneObject.onAfterStepObservable.clear();
+    }
+
+
     return {
         initialise: _init,
         createScene: _createScene,
         getScene: _getScene,
         renderScene: _renderScene,
+
+        addUpdateBeforeRender:_addUpdateBeforeRender,
+        addUpdateAfterRender: _addUpdateAfterRender,
+        clearBeforeRenderList: _clearBeforeRenderList,
+        clearAfterRenderList: _clearAfterRenderList
     }
 
 })();

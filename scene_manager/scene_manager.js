@@ -31,24 +31,24 @@ const _sceneManager = (function () {
         _isInitialised = true;
     }
 
-    function _registerBeforeFrameRender (update) {
-        //registerBeforeRender(update);
+    function _registerFunctionBeforeFrameRender (update) {
+        _sceneObject.registerBeforeRender(update);
     }
 
-    function _addUpdateBeforeRender (update) {
+    function _addLogicBeforeRender (update) {
         _updateBeforeRenderList.push(_sceneObject.onBeforeStepObservable.add(update));
     }
 
-    function _addUpdateAfterRender (update) {
+    function _addLogicAfterRender (update) {
         _updateAfterRenderList.push(_sceneObject.onAfterStepObservable.add(update));
     }
 
-    function _clearBeforeRenderList () {
+    function _clearLogicBeforeRenderList () {
         _updateBeforeRenderList.length = 0;
         _sceneObject.onBeforeStepObservable.clear();
     }
 
-    function _clearAfterRenderList () {
+    function _clearLogicAfterRenderList () {
         _updateAfterRenderList.length = 0;
         _sceneObject.onAfterStepObservable.clear();
     }
@@ -60,10 +60,12 @@ const _sceneManager = (function () {
         getScene: _getScene,
         renderScene: _renderScene,
 
-        addUpdateBeforeRender:_addUpdateBeforeRender,
-        addUpdateAfterRender: _addUpdateAfterRender,
-        clearBeforeRenderList: _clearBeforeRenderList,
-        clearAfterRenderList: _clearAfterRenderList
+        addLogicBeforeRender:_addLogicBeforeRender,
+        addLogicAfterRender: _addLogicAfterRender,
+        clearLogicBeforeRenderList: _clearLogicBeforeRenderList,
+        clearLogicAfterRenderList: _clearLogicAfterRenderList,
+
+        registerFunctionBeforeFrameRender: _registerFunctionBeforeFrameRender
     }
 
 })();

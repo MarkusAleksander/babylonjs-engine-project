@@ -7,6 +7,7 @@ import SceneManager from './../scene_manager/scene_manager.js';
 
 import PhysicsManager from './../actorManagers/physics_manager/physics_manager.js';
 import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
+import AnimationManager from '../actorManagers/animation/animation_manager.js';
 
 /*
 *   Scene 7 Example
@@ -90,7 +91,7 @@ function createScene() {
     /*
     *   Create 'Dice block'
     */
-let numDice = 10;
+let numDice = 200;
 
 for(let i = 0; i < numDice; i++) {
         ActorManager.createActor({
@@ -158,8 +159,17 @@ for(let i = 0; i < numDice; i++) {
             },
             physicsOptions: {
                 imposter: DEFS.PHYSICSIMPOSTERS.NOIMPOSTER,
-                options: { mass: 2, restitution: 0.5 }
+                options: { mass: 2, restitution: 0.9 }
             },
+            animations: [{
+                property: 'position.y',
+                animateBy: Math.random() - Math.random()
+            }
+            // ,{
+            //     property: 'position.z',
+            //     animateBy: Math.random() - Math.random()
+            // }
+        ]
         });
     }
 
@@ -168,11 +178,19 @@ for(let i = 0; i < numDice; i++) {
 
 
     // * Add before and after render logic
-    SceneManager.addUpdateAfterRender(function() {
-        console.log('before scene logic');
+    SceneManager.addLogicBeforeRender(function() {
+        console.log('before scene logic: stepID:' + SceneManager.getScene().getStepId());
+
+        if(SceneManager.getScene().getStepId() > 200) {
+            SceneManager.clearLogicBeforeRenderList();
+        }
     });
-    SceneManager.addUpdateAfterRender(function() {
-        console.log('after scene logic');
+    SceneManager.addLogicAfterRender(function() {
+        console.log('after scene logic: stepID:' + SceneManager.getScene().getStepId());
+
+        if(SceneManager.getScene().getStepId() > 200) {
+            SceneManager.clearLogicAfterRenderList();
+        }
     });
 
 }

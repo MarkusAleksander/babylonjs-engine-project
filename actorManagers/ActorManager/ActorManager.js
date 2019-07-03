@@ -5,6 +5,8 @@ import AnimationManager from './../animation/animation_manager.js';
 import PhysicsManager from './../physics_manager/physics_manager.js';
 import LightManager from './../lights/light_manager.js';
 
+import SceneManager from './../../scene_manager/scene_manager.js';
+
 // todo - Add Debugging options
 // TODO - UPDATE MESH FUNCTIONALity
 
@@ -96,6 +98,10 @@ const ActorManager = (function ActorManager() {
     */
     function _createMesh(meshObject) {
         return MeshManager.createMesh(meshObject);
+    }
+
+    function _updateActorProperty (object, path, value) {
+        path.split('.').reduce((o,p,i) => o[p] = path.split('.').length === ++i ? (o[p] += value) : o[p] || {}, object)
     }
 
     /*
@@ -197,11 +203,20 @@ const ActorManager = (function ActorManager() {
         // *    STEP 4 and 5
         processedMesh = actorObject.isCompoundBody ? MeshManager.compoundMeshes(meshes) : meshes[0];
 
-        if (actorObject.animations && actorObject.animations.length > 0) {
+        // * Testing animations
+        // if (actorObject.animations && actorObject.animations.length > 0) {
+        //     actorObject.animations.forEach(animation => {
+        //         AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
+        //         AnimationManager.addAnimationToMesh(animation.animationName, processedMesh);
+        //     });
+        // }
+// debugger;
+        if(actorObject.animations && actorObject.animations.length > 0) {
             actorObject.animations.forEach(animation => {
-                AnimationManager.addAnimationObject(animation.animationName, animation.animationOptions);
-                AnimationManager.addAnimationToMesh(animation.animationName, processedMesh);
-            });
+                SceneManager.registerFunctionBeforeFrameRender(() => {
+                    _updateActorProperty(processedMesh, animation.property, animation.animateBy);
+                });
+            })
         }
 
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
@@ -226,7 +241,7 @@ const ActorManager = (function ActorManager() {
         });
 
         if (_checkIsValid(actorObject.physicsOptions)) {
-            PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
+           PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
         }
 
 

@@ -100,8 +100,8 @@ const ActorManager = (function ActorManager() {
         return MeshManager.createMesh(meshObject);
     }
 
-    function _updateActorProperty (object, path, value) {
-        path.split('.').reduce((o,p,i) => o[p] = path.split('.').length === ++i ? (o[p] += value) : o[p] || {}, object)
+    function _updateActorProperty(object, path, value) {
+        path.split('.').reduce((o, p, i) => o[p] = path.split('.').length === ++i ? (o[p] += value) : o[p] || {}, object)
     }
 
     /*
@@ -156,7 +156,7 @@ const ActorManager = (function ActorManager() {
 
         // * Set mesh relative positions
         actorObject.meshes.forEach((mesh, i) => {
-            if(mesh.relativePosition) MeshManager.setMeshPositionByObject(meshes[i], mesh.relativePosition);
+            if (mesh.relativePosition) MeshManager.setMeshPositionByObject(meshes[i], mesh.relativePosition);
         });
 
         // *    STEP 2 and 3
@@ -164,7 +164,6 @@ const ActorManager = (function ActorManager() {
 
 
         if (actorObject.hasBaseMeshTexture) {
-
             // *    Attach name to texture
             if (!actorObject.textureOptions.textureName) actorObject.textureOptions.textureName = actorObject.actorName + "_base_texture";
 
@@ -210,8 +209,8 @@ const ActorManager = (function ActorManager() {
         //         AnimationManager.addAnimationToMesh(animation.animationName, processedMesh);
         //     });
         // }
-// debugger;
-        if(actorObject.animations && actorObject.animations.length > 0) {
+        // debugger;
+        if (actorObject.animations && actorObject.animations.length > 0) {
             actorObject.animations.forEach(animation => {
                 SceneManager.registerFunctionBeforeFrameRender(() => {
                     _updateActorProperty(processedMesh, animation.property, animation.animateBy);
@@ -235,13 +234,13 @@ const ActorManager = (function ActorManager() {
         */
 
         actorObject.meshes.forEach((mesh, i) => {
-            if(mesh.physicsOptions) {
+            if (mesh.physicsOptions) {
                 PhysicsManager.createPhyiscsObject(meshes[i], mesh.physicsOptions);
             }
         });
 
         if (_checkIsValid(actorObject.physicsOptions)) {
-           PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
+            PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
         }
 
 

@@ -116,7 +116,7 @@ const MeshManager = (function MeshManager() {
     function _compoundMeshes(meshArray) {
         let compoundMesh = new BABYLON.Mesh("", _sceneManagerRef.getScene());
 
-        for(let i = 0; i < meshArray.length; i++) {
+        for (let i = 0; i < meshArray.length; i++) {
             compoundMesh.addChild(meshArray[i]);
         }
 
@@ -140,7 +140,7 @@ const MeshManager = (function MeshManager() {
 
         let texture = new BABYLON.StandardMaterial(textureObject.textureName, _sceneManagerRef.getScene());
 
-        texture.diffuseColor = textureObject.diffuseColor != undefined ? textureObject.diffuseColor : texture.diffuseColor;
+        texture.diffuseColor = textureObject.diffuseColor != undefined ? { 'r': textureObject.diffuseColor.x, 'g': textureObject.diffuseColor.y, 'b': textureObject.diffuseColor.z } : texture.diffuseColor;
         texture.specularColor = textureObject.specularColor != undefined ? textureObject.specularColor : texture.specularColor;
         texture.emissiveColor = textureObject.emissiveColor != undefined ? textureObject.emissiveColor : texture.emissiveColor;
         texture.ambientColor = textureObject.ambientColor != undefined ? textureObject.ambientColor : texture.ambientColor;
@@ -148,7 +148,7 @@ const MeshManager = (function MeshManager() {
 
         texture.diffuseTexture = textureObject.diffuseTexture != undefined ? new BABYLON.Texture(textureObject.diffuseTexture, _sceneManagerRef.getScene()) : texture.diffuseTexture;
 
-        if(texture.diffuseTexture) {
+        if (texture.diffuseTexture) {
             texture.diffuseTexture.hasAlpha = textureObject.hasAlpha != undefined ? textureObject.hasAlpha : false;
             texture.diffuseTexture.uScale = textureObject.uScale != undefined ? textureObject.uScale : texture.diffuseTexture.uScale;
             texture.diffuseTexture.vScale = textureObject.vScale != undefined ? textureObject.vScale : texture.diffuseTexture.vScale;

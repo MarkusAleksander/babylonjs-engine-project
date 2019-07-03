@@ -162,7 +162,7 @@ for(let i = 0; i < numDice; i++) {
                 options: { mass: 2, restitution: 0.9 }
             },
             animations: [{
-                property: 'position.y',
+                property: 'rotation.x',
                 animateBy: Math.random() - Math.random()
             }
             // ,{

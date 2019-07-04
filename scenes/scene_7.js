@@ -90,42 +90,42 @@ function createScene() {
     /*
     *   Create Bat
     */
-    ActorManager.createActor({
-        actorName: 'Bat_',
-        actorType: DEFS.ACTORTYPES.PHYSICAL,
-        meshes: [{
-            meshShape: DEFS.MESHSHAPES.CYLINDER,
-            meshOptions: {
-                diameter: 4,
-                height: 20
-            }
-        }],
-        updatable: true,
-        receiveShadows: true,
-        castShadows: true,
-        addToShadowMaps: ["spotlight"],
-        position: {
-            x: 0,
-            y: 50,
-            z: 0
-        },
-        rotation: {
-            x: 1.5,
-            y: 0,
-            z: 0
-        },
-        textureOptions: {
-            diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
-        },
-        physicsOptions: {
-            imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
-            options: { mass: 2, restitution: 0.8 }
-        },
-        animations: [{
-            property: 'rotation.z',
-            animateBy: 0.1
-        }]
-    });
+    // ActorManager.createActor({
+    //     actorName: 'Bat_',
+    //     actorType: DEFS.ACTORTYPES.PHYSICAL,
+    //     meshes: [{
+    //         meshShape: DEFS.MESHSHAPES.CYLINDER,
+    //         meshOptions: {
+    //             diameter: 4,
+    //             height: 20
+    //         }
+    //     }],
+    //     updatable: true,
+    //     receiveShadows: true,
+    //     castShadows: true,
+    //     addToShadowMaps: ["spotlight"],
+    //     position: {
+    //         x: 0,
+    //         y: 50,
+    //         z: 0
+    //     },
+    //     rotation: {
+    //         x: 1.5,
+    //         y: 0,
+    //         z: 0
+    //     },
+    //     textureOptions: {
+    //         diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
+    //     },
+    //     physicsOptions: {
+    //         imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
+    //         options: { mass: 2, restitution: 0.8 }
+    //     },
+    //     animations: [{
+    //         property: 'rotation.z',
+    //         animateBy: 0.1
+    //     }]
+    // });
 
     /*
     *   Create 'Spheres'
@@ -155,7 +155,7 @@ function createScene() {
                 z: (Math.random() * 50) - 25
             },
             textureOptions: {
-                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
+                diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
             },
             physicsOptions: {
                 imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,

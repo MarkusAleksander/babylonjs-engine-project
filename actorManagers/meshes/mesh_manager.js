@@ -140,7 +140,7 @@ const MeshManager = (function MeshManager() {
 
         let texture = new BABYLON.StandardMaterial(textureObject.textureName, _sceneManagerRef.getScene());
 
-        texture.diffuseColor = textureObject.diffuseColor != undefined ? { 'r': textureObject.diffuseColor.x, 'g': textureObject.diffuseColor.y, 'b': textureObject.diffuseColor.z } : texture.diffuseColor;
+        texture.diffuseColor = textureObject.diffuseColor != undefined ? textureObject.diffuseColor : texture.diffuseColor;
         texture.specularColor = textureObject.specularColor != undefined ? textureObject.specularColor : texture.specularColor;
         texture.emissiveColor = textureObject.emissiveColor != undefined ? textureObject.emissiveColor : texture.emissiveColor;
         texture.ambientColor = textureObject.ambientColor != undefined ? textureObject.ambientColor : texture.ambientColor;

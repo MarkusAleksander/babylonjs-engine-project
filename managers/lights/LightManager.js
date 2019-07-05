@@ -1,4 +1,4 @@
-import { LIGHTTYPES } from '../../DEFS/defs.js';
+import { LIGHTTYPES } from '../../definitions/definitions.js';
 
 const LightManager = (function LightManager() {
 

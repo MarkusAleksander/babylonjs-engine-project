@@ -1,4 +1,4 @@
-import { CAMERATYPES } from '../../DEFS/defs.js';
+import { CAMERATYPES } from '../../definitions/definitions.js';
 
 const CameraManager = (function CameraManager() {
 

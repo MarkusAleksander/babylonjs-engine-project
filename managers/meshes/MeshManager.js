@@ -1,4 +1,4 @@
-import { MESHSHAPES, ACTIONTYPES } from '../../DEFS/defs.js';
+import { MESHSHAPES, ACTIONTYPES } from '../../definitions/definitions.js';
 
 // TODO - Reduce functionality and move Mesh Interface to Actor Manager as an Actor Interface
 // TODO - MERGE MESH FUNCTIONALIT

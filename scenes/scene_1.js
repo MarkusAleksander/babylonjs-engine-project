@@ -1,11 +1,11 @@
-import * as DEFS from './../DEFS/defs.js';
+import * as DEFS from './../definitions/definitions.js';
 
-import CameraManager from './../actorManagers/camera/camera_manager.js';
-import LightManager from './../actorManagers/lights/light_manager.js';
-import SystemManager from './../system_manager/system_manager.js';
+import CameraManager from './../managers/camera/CameraManager.js';
+import LightManager from './../managers/lights/LightManager.js';
+import SystemManager from './../managers/system/SystemManager.js';
 
-import AnimationManager from './../actorManagers/animation/animation_manager.js';
-import ActorManager from './../actorManagers/ActorManager/ActorManager.js';
+import AnimationManager from './../managers/animation/AnimationManager.js';
+import ActorManager from './../managers/actor/ActorManager.js';
 
 /*
 *   Scene 1 Example

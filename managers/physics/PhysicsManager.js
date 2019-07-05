@@ -1,4 +1,4 @@
-import * as DEFS from './../../DEFS/defs.js';
+import * as DEFS from './../../definitions/definitions.js';
 
 /*
 * Handle Physics

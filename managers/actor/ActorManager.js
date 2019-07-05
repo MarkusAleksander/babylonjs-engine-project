@@ -1,11 +1,11 @@
-import * as DEFS from './../../DEFS/defs.js';
+import * as DEFS from './../../definitions/definitions.js';
 
-import MeshManager from './../meshes/mesh_manager.js';
-import AnimationManager from './../animation/animation_manager.js';
-import PhysicsManager from './../physics_manager/physics_manager.js';
-import LightManager from './../lights/light_manager.js';
+import MeshManager from '../meshes/MeshManager.js';
+import AnimationManager from '../animation/AnimationManager';
+import PhysicsManager from './../physics/PhysicsManager.js';
+import LightManager from '../lights/LightManager.js';
 
-import SceneManager from './../../scene_manager/scene_manager.js';
+import SceneManager from './../../managers/scene/SceneManager.js';
 
 // todo - Add Debugging options
 // TODO - UPDATE MESH FUNCTIONALity

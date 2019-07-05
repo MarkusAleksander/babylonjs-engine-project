@@ -1,4 +1,4 @@
-import { LINETYPES } from '../../DEFS/defs.js';
+import { LINETYPES } from '../../definitions/definitions.js';
 
 const LineManager = (function LineManager() {
 

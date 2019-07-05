@@ -1,16 +1,16 @@
-import * as DEFS from './DEFS/defs.js';
+import * as DEFS from './definitions/definitions.js';
 
-import LightManager from './actorManagers/lights/light_manager.js';
-import LineManager from './actorManagers/lines/line_manager.js';
-import CameraManager from './actorManagers/camera/camera_manager.js';
-import MeshManager from './actorManagers/meshes/mesh_manager.js';
-import AnimationManager from './actorManagers/animation/animation_manager.js';
-import PhysicsManager from './actorManagers/physics_manager/physics_manager.js';
+import LightManager from './managers/lights/LightManager.js';
+import LineManager from './managers/lines/LineManager.js';
+import CameraManager from './managers/camera/CameraManager.js';
+import MeshManager from './managers/meshes/MeshManager.js';
+import AnimationManager from './managers/animation/AnimationManager.js';
+import PhysicsManager from './managers/physics/PhysicsManager.js';
 
-import SystemManager from './system_manager/system_manager.js';
-import SceneManager from './scene_manager/scene_manager.js';
+import SystemManager from './managers/system/SystemManager.js';
+import SceneManager from './managers/scene/SceneManager.js';
 
-import ActorManager from './actorManagers/ActorManager/ActorManager.js';
+import ActorManager from './managers/actor/ActorManager.js';
 
 import createScene from './scenes/scene_7.js';
 

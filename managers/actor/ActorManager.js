@@ -28,30 +28,6 @@ const ActorManager = (function ActorManager() {
     var _isInitialised = false,
         _sceneManagerRef;
 
-    // * Actor Template
-    var actorTemplate = {
-        // ! REQUIRED PROPERTIES
-        actorName: '',
-        meshes: [{
-            actorName: '',
-            meshShape: DEFS.MESHSHAPES.BOX,
-            meshOptions: {},
-            multifaceOption: null || {},
-            textureOptions: {
-                diffuseTexture: '',
-                specularTexture: '',
-                bumpMap: ''
-            }
-        }],
-        actorType: DEFS.ACTORTYPES.STATIC || DEFS.ACTORTYPES.PHYSICAL,
-
-        // ! OPTIONAL
-        animation: null || {},
-        textureOptions: null || {},
-        physicsOptions: null || {},
-        hasCollisions: false
-    }
-
     function _checkIsValid(item) {
         // * Check if object passed is not empty
         if (typeof item === "object" && item != null) {
@@ -100,10 +76,6 @@ const ActorManager = (function ActorManager() {
         return MeshManager.createMesh(meshObject);
     }
 
-    function _updateActorProperty(object, path, value) {
-        path.split('.').reduce((o, p, i) => o[p] = path.split('.').length === ++i ? (o[p] += value) : o[p] || {}, object)
-    }
-
     /*
     *   Create An Actor
     *   PUBLIC
@@ -117,16 +89,13 @@ const ActorManager = (function ActorManager() {
         if (_getActorByName(actorObject.name)) return;
 
         // *    Validate that actor meets minimum requirements 
-        if (!_validateActorObject(actorObject)) return null;
+        //if (!_validateActorObject(actorObject)) return null;
 
         // *    Check what processing needs doing on the Actor
 
-        // *    Flag if more than 1 mesh
-        actorObject.isCompoundBody = actorObject.meshes.length > 1;
-
-        // *    Check non-required options and apply defaults if not specified
+        // *    Check mesh updatable / receieveShadows and checkCollisions options and apply defaults if not specified
         actorObject.meshes.forEach((mesh, i) => {
-            mesh.meshName = mesh.meshName != undefined && mesh.meshName != "" ? mesh.meshName : actorObject.actorName + "_" + i;
+            mesh.meshName = actorObject.actorName + "_mesh_" + i;
             mesh.meshOptions.updatable = actorObject.updatable != undefined ? actorObject.updatable : false;
             mesh.meshOptions.receiveShadows = actorObject.receiveShadows != undefined ? actorObject.receiveShadows : false;
             mesh.meshOptions.checkCollisions = actorObject.checkCollisions !== undefined ? actorObject.checkCollisions : false;
@@ -139,68 +108,74 @@ const ActorManager = (function ActorManager() {
         */
         actorObject.hasBaseMeshTexture = _checkIsValid(actorObject.textureOptions);
 
-        // * Step 1 .. create Meshes
-        // * Step 2 .. create Textures (full mesh texture and individual textures)
-        // * Step 3 .. Apply Textures (full mesh texture and individual textures)
-        // * Step 4 .. Merge Meshes (if required)
-        // * Step 5 .. Register Final Actor Mesh
-        // * Step 6 .. Apply Animations (if required) 
-        // * Step  .. Apply Physics
+        // *    STEP 1 - Create Mesh
+        // *    STEP 2 - Position and Rotate Mesh
+        // *    STEP 3 - Configure Texturing
+        // * Repeat for each mesh and combine to final compound mesh
 
-        let meshes = [];
+        let actorMeshList = [];
+
 
         // *    STEP 1
         actorObject.meshes.forEach(mesh => {
-            meshes.push(_createMesh(mesh));
+            actorMeshList.push({
+                ...mesh,
+                meshObject: _createMesh(mesh)
+            });
         });
 
-        // * Set mesh relative positions
-        actorObject.meshes.forEach((mesh, i) => {
-            if (mesh.relativePosition) MeshManager.setMeshPositionByObject(meshes[i], mesh.relativePosition);
+
+        // *    STEP 2
+
+        // * Set mesh relative position then rotation
+        actorMeshList.forEach((meshData, i) => {
+            if (meshData.relativePosition) MeshManager.setMeshPositionByObject(meshData.meshObject, meshData.relativePosition);
         });
 
-        // *    STEP 2 and 3
+        actorMeshList.forEach((meshData, i) => {
+            if (meshData.relativeRotation) MeshManager.setMeshRotationByObject(meshData.meshObject, meshData.relativeRotation);
+        });
+
+
+        // *    STEP 3
+
         // *    Check if full texture before individual mesh textures
-
-
-        if (actorObject.hasBaseMeshTexture) {
+        if (actorObject.textureOptions != undefined) {
             // *    Attach name to texture
-            if (!actorObject.textureOptions.textureName) actorObject.textureOptions.textureName = actorObject.actorName + "_base_texture";
+            actorObject.textureOptions.textureName = actorObject.actorName + "_base_texture";
 
             // *    Create texture
             let texture = MeshManager.createTexture(actorObject.textureOptions);
 
             // *    For each mesh, apply the base texture
-            meshes.forEach(mesh => {
-                MeshManager.applyTextureByObject(mesh, texture);
+            actorMeshList.forEach(mesh => {
+                MeshManager.applyTextureByObject(mesh.meshObject, texture);
             });
 
             // *    Register the texture to the MeshManager
-            MeshManager.registerTexture(texture);
+            //MeshManager.registerTexture(texture);
         }
         // *    Go through each mesh and if there is a texture options present, apply it
-        actorObject.meshes.forEach((mesh, i) => {
-
+        actorMeshList.forEach((mesh, i) => {
             // *    First check if there is a texture to apply
-            if (mesh.textureOptions) {
+            if (mesh.textureOptions != undefined) {
 
                 // *    Attach a texture name if required
-                if (!mesh.textureOptions.textureName) mesh.textureOptions.textureName = mesh.meshName + "_texture";
+                mesh.textureOptions.textureName = mesh.meshName + "_texture";
 
                 // *    Create the texture
                 let texture = MeshManager.createTexture(mesh.textureOptions);
 
                 // *    Apply the texture to the object
-                MeshManager.applyTextureByObject(meshes[i], texture);
+                MeshManager.applyTextureByObject(mesh.meshObject, texture);
             }
-
         });
 
 
-        let processedMesh;
+        let compoundActorMesh;
 
         // *    STEP 4 and 5
-        processedMesh = actorObject.isCompoundBody ? MeshManager.compoundMeshes(meshes) : meshes[0];
+        compoundActorMesh = actorObject.meshes.length > 1 ? MeshManager.compoundMeshes(actorMeshList.map((mesh) => {return mesh.meshObject})) : actorMeshList[0].meshObject;
 
         // * Testing animations
         // if (actorObject.animations && actorObject.animations.length > 0) {
@@ -210,46 +185,45 @@ const ActorManager = (function ActorManager() {
         //     });
         // }
         // debugger;
-        if (actorObject.animations && actorObject.animations.length > 0) {
-            actorObject.animations.forEach(animation => {
-                SceneManager.registerFunctionBeforeFrameRender(() => {
-                    //processedMesh.rotation.y += 0.1;
-                    processedMesh.rotate(BABYLON.Axis.Y, (Math.PI)/30, BABYLON.Space.WORLD)
-                });
-            })
-        }
-        if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
+        // if (actorObject.animations && actorObject.animations.length > 0) {
+        //     actorObject.animations.forEach(animation => {
+        //         SceneManager.registerFunctionBeforeFrameRender(() => {
+        //             //processedMesh.rotation.y += 0.1;
+        //             processedMesh.rotate(BABYLON.Axis.Y, (Math.PI)/30, BABYLON.Space.WORLD)
+        //         });
+        //     })
+        // }
 
-        if (actorObject.rotation) MeshManager.setMeshRotationByObject(processedMesh, actorObject.rotation);
+        if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
+
+        if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
 
         // * Register Mesh
-        MeshManager.registerMesh(processedMesh);
+        MeshManager.registerMesh(compoundActorMesh);
 
         if (actorObject.castShadows && actorObject.addToShadowMaps && actorObject.addToShadowMaps.length > 0) {
             actorObject.addToShadowMaps.forEach(function addToShadowMap(shadowMapLight) {
-                LightManager.addMeshToShadowMap("spotlight", processedMesh);
+                LightManager.addMeshToShadowMap("spotlight", compoundActorMesh);
             });
         }
 
         /*
         *   Check if physics options applied
         */
-        if(meshes.length > 1) {
-            actorObject.meshes.forEach((mesh, i) => {
-                if (mesh.physicsOptions) {
-                    PhysicsManager.createPhyiscsObject(meshes[i], mesh.physicsOptions);
-                }
-            });
-        }
+        actorMeshList.forEach((mesh, i) => {
+            if (mesh.physicsOptions != undefined) {
+                PhysicsManager.createPhyiscsObject(mesh.meshObject, mesh.physicsOptions);
+            }
+        });
 
-        if (_checkIsValid(actorObject.physicsOptions)) {
-            PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);
+        if (actorObject.physicsOptions != undefined) {
+            PhysicsManager.createPhyiscsObject(compoundActorMesh, actorObject.physicsOptions);
         }
 
 
         _actors.push({
             actorName: actorObject.actorName,
-            meshes: meshes
+            meshObject: compoundActorMesh
         });
     }
 

@@ -71,13 +71,13 @@ function createScene() {
         checkCollisions: true,
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         textureOptions: {
-            diffuseTexture: "imgs/grass.jpg",
+            diffuseTexture: "assets/imgs/grass.jpg",
             uScale: 16,
             vScale: 16,
             vOffset: 0.5,
             uOffset: 0.5,
-            specularTexture: "imgs/grass.jpg",
-            bumpTexture: "imgs/grass_bumpmap.jpg",
+            specularTexture: "assets/imgs/grass.jpg",
+            bumpTexture: "assets/imgs/grass_bumpmap.jpg",
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.BOX,
@@ -129,9 +129,9 @@ function createScene() {
             },
             textureOptions: {
                 diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random()),
-                diffuseTexture: "imgs/dice.jpg",
-                specularTexture: "imgs/dice.jpg",
-                bumpTexture: "imgs/dice_bumpmap.jpg"
+                diffuseTexture: "assets/imgs/dice.jpg",
+                specularTexture: "assets/imgs/dice.jpg",
+                bumpTexture: "assets/imgs/dice_bumpmap.jpg"
             },
             physicsOptions: {
                 imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,

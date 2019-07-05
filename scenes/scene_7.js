@@ -7,7 +7,6 @@ import SceneManager from './../managers/scene/SceneManager.js';
 
 import PhysicsManager from './../managers/physics/PhysicsManager.js';
 import ActorManager from './../managers/actor/ActorManager.js';
-import AnimationManager from '../managers/animation/AnimationManager.js';
 
 /*
 *   Scene 7 Example
@@ -91,7 +90,7 @@ function createScene() {
     *   Create Bat
     */
     ActorManager.createActor({
-        actorName: 'Bat_',
+        actorName: 'Bat',
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         meshes: [{
             meshShape: DEFS.MESHSHAPES.CYLINDER,

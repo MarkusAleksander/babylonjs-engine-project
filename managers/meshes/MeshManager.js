@@ -214,7 +214,7 @@ const MeshManager = (function MeshManager() {
     *   textureObject: Texture Object
     */
     function _applyTextureByObject(meshObject, textureObject) {
-        // TODO - Applying texture after registration
+        // TODO - Overrides previous mesh textures - could they be blended?
 
         if (!textureObject || !meshObject) return;
 
@@ -272,94 +272,21 @@ const MeshManager = (function MeshManager() {
     // * ------------- */
 
 
-    function _setMeshPositionByObject(meshObject, newPos = {}) {
+    function _setMeshPosition(meshObject, newPos = {}) {
         if (!_isInitialised || !meshObject) return;
 
         meshObject.position = new BABYLON.Vector3(newPos.x, newPos.y, newPos.z);
     }
 
-    function _setMeshRotationByObject(meshObject, newRotation = {}) {
+    function _setMeshRotation(meshObject, newRotation = {}) {
         if (!_isInitialised || !meshObject) return;
 
         meshObject.rotation = new BABYLON.Vector3(newRotation.x, newRotation.y, newRotation.z);
-        //meshObject.rotate(BABYLON.Axis.Z, Math.PI, BABYLON.Space.LOCAL);
     }
 
-    /*
-    * Move a mesh object based on World Axis
-    * PRIVATE
-    * name: String
-    * newPos: Object {x, y, z}
-    */
-    function _moveMeshAbsolutely(name, newPos = {}) {
-        let meshObj = _getMesh(name);
+    function _setMeshScale () {
 
-        if (meshObj) meshObj.moveAbsolutely(newPos);
     }
-
-    /*
-    * Move a mesh object based on Local Axis
-    * PRIVATE
-    * name: String
-    * newPos: Object {x, y, z}
-    */
-    function _moveMeshRelatively(name, newPos = {}) {
-        let meshObj = _getMesh(name);
-
-        if (meshObj) meshObj.moveRelatively(newPos);
-    }
-
-    /*
-    * Rotate a mesh object based on World Rotation
-    * PRIVATE
-    * name: String
-    * rotation: Object {x, y, z}
-    */
-    function _rotateMeshToWorldAxis(name, rotation = {}) {
-        let meshObj = _getMesh(name);
-
-        if (!meshObj) return;
-
-        meshObj.mesh.rotation.x = rotation.x != undefined ? rotation.x : 0;
-        meshObj.mesh.rotation.y = rotation.y != undefined ? rotation.y : 0;
-        meshObj.mesh.rotation.z = rotation.z != undefined ? rotation.z : 0;
-    }
-
-    /*
-    * Rotate a mesh object based on Local Rotation
-    * PRIVATE
-    * name: String
-    * rotation: Object {x, y, z}
-    */
-    function _rotateMeshToLocalAxis(name, rotation) {
-        let meshObj = _getMesh(name);
-
-        if (!meshObj) return;
-
-        let localRotation = [
-            rotation.x != undefined ? rotation.x : 0,
-            rotation.y != undefined ? rotation.y : 0,
-            rotation.z != undefined ? rotation.z : 0
-        ]
-        meshObj.mesh.addRotation(...localRotation);
-    }
-
-    /*
-    * Scale a mesh object
-    * PRIVATE
-    * name: String
-    * scaling: Object {x, y, z}
-    */
-    function _scaleMesh(name, scaling) {
-        let meshObj = _getMesh(name);
-
-        if (!meshObj) return;
-
-        meshObj.mesh.scaling.x = scaling.x != undefined ? scaling.x : meshObj.mesh.scaling.x;
-        meshObj.mesh.scaling.y = scaling.y != undefined ? scaling.y : meshObj.mesh.scaling.y;
-        meshObj.mesh.scaling.z = scaling.z != undefined ? scaling.z : meshObj.mesh.scaling.z;
-    }
-
 
     // * ------------- */
     // *  MATERIALS AND TEXTURES
@@ -391,8 +318,8 @@ const MeshManager = (function MeshManager() {
         applyTextureByObject: _applyTextureByObject,
         applyTextureByName: _applyTextureByName,
 
-        setMeshPositionByObject: _setMeshPositionByObject,
-        setMeshRotationByObject: _setMeshRotationByObject,
+        setMeshPositionByObject: _setMeshPosition,
+        setMeshRotationByObject: _setMeshRotation,
 
         getMeshByName: _getMeshByName,
 

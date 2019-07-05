@@ -1,7 +1,7 @@
 import * as DEFS from './../../definitions/definitions.js';
 
 import MeshManager from '../meshes/MeshManager.js';
-import AnimationManager from '../animation/AnimationManager';
+import AnimationManager from '../animation/AnimationManager.js';
 import PhysicsManager from './../physics/PhysicsManager.js';
 import LightManager from '../lights/LightManager.js';
 

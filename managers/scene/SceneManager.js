@@ -1,4 +1,4 @@
-import * as DEFS from '../definitions/definitions.js';
+import * as DEFS from '../../definitions/definitions.js';
 /*
  * Handle scene actors
 */

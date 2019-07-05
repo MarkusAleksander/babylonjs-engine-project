@@ -46,8 +46,6 @@ function initialise(canvasId) {
     CameraManager.initialise(SceneManager);
 
     // * Register Update Functions
-    //SystemManager.registerUpdateFunction(ActorManager.update);
-    // SystemManager.registerUpdateFunction(MeshManager.update);
     SystemManager.registerUpdateFunction(SceneManager.renderScene);
 }
 
@@ -96,3 +94,4 @@ run();
 handleWindowEvents();
 
 // * TODOs: Wireframe Modes
+// * TODO: Debug mode

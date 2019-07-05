@@ -73,13 +73,13 @@ function createScene() {
         checkCollisions: true,
         actorType: DEFS.ACTORTYPES.PHYSICAL,
         textureOptions: {
-            diffuseTexture: "imgs/grass.jpg",
+            diffuseTexture: "assets/imgs/grass.jpg",
             uScale: 16,
             vScale: 16,
             vOffset: 0.5,
             uOffset: 0.5,
-            specularTexture: "imgs/grass.jpg",
-            bumpTexture: "imgs/grass_bumpmap.jpg",
+            specularTexture: "assets/imgs/grass.jpg",
+            bumpTexture: "assets/imgs/grass_bumpmap.jpg",
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.BOX,
@@ -119,7 +119,7 @@ function createScene() {
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
-            options: { mass: 0, restitution: 0.8 }
+            options: { mass: 2, restitution: 0.8 }
         },
         animations: [{
             property: 'rotation.z',

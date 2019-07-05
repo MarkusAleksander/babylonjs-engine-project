@@ -22,7 +22,7 @@ const _physicsManager = (function () {
     function _init(sceneManager) {
         if (sceneManager) {
             _sceneManagerRef = sceneManager;
-            _physicsPlugin = new BABYLON.CannonJSPlugin(false);
+            _physicsPlugin = new BABYLON.AmmoJSPlugin(false);
             _isInitialised = true;
         }
     }

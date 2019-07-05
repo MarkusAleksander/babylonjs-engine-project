@@ -282,6 +282,7 @@ const MeshManager = (function MeshManager() {
         if (!_isInitialised || !meshObject) return;
 
         meshObject.rotation = new BABYLON.Vector3(newRotation.x, newRotation.y, newRotation.z);
+        //meshObject.rotate(BABYLON.Axis.Z, Math.PI, BABYLON.Space.LOCAL);
     }
 
     /*

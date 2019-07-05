@@ -11,7 +11,7 @@ import AnimationManager from '../actorManagers/animation/animation_manager.js';
 
 /*
 *   Scene 7 Example
-*   Attach before and after render functionality
+*   Attach before and after render functionality - bat hitting balls
 */
 function createScene() {
     /*
@@ -90,42 +90,42 @@ function createScene() {
     /*
     *   Create Bat
     */
-    // ActorManager.createActor({
-    //     actorName: 'Bat_',
-    //     actorType: DEFS.ACTORTYPES.PHYSICAL,
-    //     meshes: [{
-    //         meshShape: DEFS.MESHSHAPES.CYLINDER,
-    //         meshOptions: {
-    //             diameter: 4,
-    //             height: 20
-    //         }
-    //     }],
-    //     updatable: true,
-    //     receiveShadows: true,
-    //     castShadows: true,
-    //     addToShadowMaps: ["spotlight"],
-    //     position: {
-    //         x: 0,
-    //         y: 50,
-    //         z: 0
-    //     },
-    //     rotation: {
-    //         x: 1.5,
-    //         y: 0,
-    //         z: 0
-    //     },
-    //     textureOptions: {
-    //         diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
-    //     },
-    //     physicsOptions: {
-    //         imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
-    //         options: { mass: 2, restitution: 0.8 }
-    //     },
-    //     animations: [{
-    //         property: 'rotation.z',
-    //         animateBy: 0.1
-    //     }]
-    // });
+    ActorManager.createActor({
+        actorName: 'Bat_',
+        actorType: DEFS.ACTORTYPES.PHYSICAL,
+        meshes: [{
+            meshShape: DEFS.MESHSHAPES.CYLINDER,
+            meshOptions: {
+                diameter: 6,
+                height: 100
+            }
+        }],
+        updatable: true,
+        receiveShadows: true,
+        castShadows: true,
+        addToShadowMaps: ["spotlight"],
+        position: {
+            x: 0,
+            y: 3,
+            z: 0
+        },
+        rotation: {
+            x: Math.PI/2,
+            y: 0,
+            z: 0
+        },
+        textureOptions: {
+            diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
+        },
+        physicsOptions: {
+            imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
+            options: { mass: 0, restitution: 0.8 }
+        },
+        animations: [{
+            property: 'rotation.z',
+            animateBy: 0.1
+        }]
+    });
 
     /*
     *   Create 'Spheres'
@@ -151,7 +151,7 @@ function createScene() {
             checkCollisions: true,
             position: {
                 x: (Math.random() * 50) - 25,
-                y: 5 + (9 * i),
+                y: 5 + (5 * i),
                 z: (Math.random() * 50) - 25
             },
             textureOptions: {

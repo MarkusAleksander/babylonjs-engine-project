@@ -24,7 +24,14 @@
 
         </style>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script> -->
+        <!-- <script src="https://raw.githubusercontent.com/kripken/ammo.js/master/builds/ammo.js"></script> -->
+        <script src="ammo.js"></script>
+        <script>
+        if(!Ammo) {
+            console.log('Please download Ammo JS file and include locally')
+        }
+        </script>
         <script src="https://preview.babylonjs.com/babylon.js"></script>
         <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
         <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>

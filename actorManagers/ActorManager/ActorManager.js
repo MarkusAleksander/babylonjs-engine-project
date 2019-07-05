@@ -213,11 +213,11 @@ const ActorManager = (function ActorManager() {
         if (actorObject.animations && actorObject.animations.length > 0) {
             actorObject.animations.forEach(animation => {
                 SceneManager.registerFunctionBeforeFrameRender(() => {
-                    _updateActorProperty(processedMesh, animation.property, animation.animateBy);
+                    //processedMesh.rotation.y += 0.1;
+                    processedMesh.rotate(BABYLON.Axis.Y, (Math.PI)/30, BABYLON.Space.WORLD)
                 });
             })
         }
-
         if (actorObject.position) MeshManager.setMeshPositionByObject(processedMesh, actorObject.position);
 
         if (actorObject.rotation) MeshManager.setMeshRotationByObject(processedMesh, actorObject.rotation);
@@ -234,12 +234,13 @@ const ActorManager = (function ActorManager() {
         /*
         *   Check if physics options applied
         */
-
-        actorObject.meshes.forEach((mesh, i) => {
-            if (mesh.physicsOptions) {
-                PhysicsManager.createPhyiscsObject(meshes[i], mesh.physicsOptions);
-            }
-        });
+        if(meshes.length > 1) {
+            actorObject.meshes.forEach((mesh, i) => {
+                if (mesh.physicsOptions) {
+                    PhysicsManager.createPhyiscsObject(meshes[i], mesh.physicsOptions);
+                }
+            });
+        }
 
         if (_checkIsValid(actorObject.physicsOptions)) {
             PhysicsManager.createPhyiscsObject(processedMesh, actorObject.physicsOptions);

@@ -89,9 +89,9 @@ function createScene() {
     /*
     *   Create 'Dice block'
     */
-let numDice = 10;
+    let numDice = 10;
 
-for(let i = 0; i < numDice; i++) {
+    for (let i = 0; i < numDice; i++) {
         ActorManager.createActor({
             actorName: 'MergedMesh_' + i,
             actorType: DEFS.ACTORTYPES.PHYSICAL,
@@ -148,7 +148,7 @@ for(let i = 0; i < numDice; i++) {
                         options: { mass: 0, restitution: 0.5 }
                     },
                     textureOptions: {
-                        diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random())
+                        diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
                     }
                 }
             ],
@@ -163,7 +163,7 @@ for(let i = 0; i < numDice; i++) {
                 z: (Math.random() * 20) - 10
             },
             textureOptions: {
-                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random()),
+                diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random()),
                 diffuseTexture: "assets/imgs/dice.jpg",
                 specularTexture: "assets/imgs/dice.jpg",
                 bumpTexture: "assets/imgs/dice_bumpmap.jpg"

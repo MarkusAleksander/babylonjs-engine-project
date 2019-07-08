@@ -1,7 +1,6 @@
 const AnimationManager = (function AnimationManager() {
 
-    const _animations = [],
-        _animatedMeshes = [];
+    const _animations = [];
 
     var _isInitialised = false,
         _sceneManagerRef,
@@ -24,35 +23,54 @@ const AnimationManager = (function AnimationManager() {
         }
     }
 
-    function _addAnimationObject(name, animationOptions) {
+    function _createAnimation(animationData) {
+        if(animationData.type == "rotation") {
+            return function () {
+                this.rotate(animationData.axis, animationData.fps, animationData.frameReference);
+            }
+        }
+        if(animationData.type == "position") {
+            return function (actorObj) {
+
+            }
+        }
+    }
+
+    function _addAnimationObject(animationName, animationOptions) {
         if (!_isInitialised) return;
 
         if (!_getAnimationObject(name)) {
-            _animations.push(_createAnimationObject(name, animationOptions));
+            _animations.push({
+                animationName: animationName,
+                animation: _createAnimation(animationOptions)
+            });
+            //_animations.push(_createAnimationObject(name, animationOptions));
         }
 
-        let animation = _getAnimationObject(name);
+        //let animation = _getAnimationObject(name);
         //debugger;
-        animation.animation.setKeys(animationOptions.keys);
+        //animation.animation.setKeys(animationOptions.keys);
     }
 
     function _getAnimationObject(name) {
         if (!_isInitialised) return;
 
         return _animations.find(function findAnimationObjectByName(el) {
-            return el.name == name;
+            return el.animationName == name;
         });
     }
 
-    function _addAnimationToMesh(animationName, meshObject) {
+    function _addAnimationToMesh(meshObject, animationName) {
         if (!_isInitialised) return;
 
         let animationObj = _getAnimationObject(animationName);
+
+        animationObj.animation = animationObj.animation.bind(meshObject);
         // let meshObj = _meshManagerRef.getMeshInterface(meshName);
 
-        meshObject.animations.push(animationObj.animation);
+        //meshObject.animations.push(animationObj.animation);
 
-        _sceneManagerRef.getScene().beginAnimation(meshObject, 0, 100, true);
+        //_sceneManagerRef.getScene().beginAnimation(meshObject, 0, 100, true);
         // _animatedMeshes.push(meshName);
     }
 
@@ -70,6 +88,12 @@ const AnimationManager = (function AnimationManager() {
     }
 
     function _runAnimations() {
+
+        _animations.forEach((animation) => {
+            _sceneManagerRef.registerFunctionBeforeFrameRender(() => {
+                animation.animation();
+            })
+        });
 
         // for (let i = 0; i < _animations.length; i++) {
         //     if (_animations[i].meshName) {

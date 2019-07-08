@@ -133,9 +133,18 @@ const ActorManager = (function ActorManager() {
         });
 
         actorMeshList.forEach((meshData, i) => {
+            // let overallRotation = {x:0, y:0, z:0}
+            // if(actorObject.rotation != undefined) {
+            //     overallRotation = actorObject.rotation;
+            // }
+            // if (meshData.relativeRotation) MeshManager.setMeshRotationByObject(meshData.meshObject, {
+            //     x: meshData.relativeRotation.x + overallRotation.x,
+            //     y: meshData.relativeRotation.y + overallRotation.y,
+            //     z: meshData.relativeRotation.z + overallRotation.z
+            // });
+
             if (meshData.relativeRotation) MeshManager.setMeshRotationByObject(meshData.meshObject, meshData.relativeRotation);
         });
-
 
         // *    STEP 3
 
@@ -171,6 +180,7 @@ const ActorManager = (function ActorManager() {
             }
         });
 
+        //  * Add meshes to shadow maps - has to be per mesh, not compound
 
         if (actorObject.castShadows && actorObject.addToShadowMaps && actorObject.addToShadowMaps.length > 0) {
             actorMeshList.forEach(mesh => {
@@ -187,7 +197,9 @@ const ActorManager = (function ActorManager() {
 
         // *    Set Compound Position and Rotation
         if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
-        if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
+// debugger;
+        //if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
+        //compoundActorMesh.rotate(BABYLON.Axis.Y, (Math.PI) / 400, BABYLON.Space.LOCAL);
 
         // * Testing animations
         // if (actorObject.animations && actorObject.animations.length > 0) {
@@ -197,14 +209,19 @@ const ActorManager = (function ActorManager() {
         //     });
         // }
         // debugger;
-        // if (actorObject.animations && actorObject.animations.length > 0) {
-        //     actorObject.animations.forEach(animation => {
-        //         SceneManager.registerFunctionBeforeFrameRender(() => {
-        //             //processedMesh.rotation.y += 0.1;
-        //             processedMesh.rotate(BABYLON.Axis.Y, (Math.PI)/30, BABYLON.Space.WORLD)
-        //         });
-        //     })
-        // }
+
+        if (actorObject.animations && actorObject.animations.length > 0) {
+            actorObject.animations.forEach(animation => {
+                AnimationManager.addAnimationObject(animation.animationName, animation.animationData);
+                AnimationManager.addAnimationToMesh(compoundActorMesh, animation.animationName);
+                //SceneManager.registerFunctionBeforeFrameRender(() => {
+                    //debugger;
+                    //compoundActorMesh.rotation.y += (Math.PI) / 100;
+                    //compoundActorMesh.rotate(BABYLON.Axis.Y, (Math.PI) / 200, BABYLON.Space.WORLD)
+                    //console.log(compoundActorMesh.rotationQuaternion);
+                //});
+            })
+        }
 
         //debugger;
 

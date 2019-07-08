@@ -6,6 +6,7 @@ import SystemManager from './../managers/system/SystemManager.js';
 
 import AnimationManager from './../managers/animation/AnimationManager.js';
 import ActorManager from './../managers/actor/ActorManager.js';
+import PhysicsManager from './../managers/physics/PhysicsManager.js';
 
 /*
 *   Scene 4 Example
@@ -32,12 +33,12 @@ function createScene() {
     * Add lights to the scene and configure
     */
     LightManager.addLight(DEFS.LIGHTTYPES.HEMISPHERIC, "hemilight", { direction: new BABYLON.Vector3(0, 1, 0) });
-    LightManager.setLightIntensity("hemilight", 0.2);
+    LightManager.setLightIntensity("hemilight", 0.7);
     LightManager.addLight(DEFS.LIGHTTYPES.SPOT, "spotlight", {
-        position: new BABYLON.Vector3(-20, 30, -20),
-        direction: new BABYLON.Vector3(0.7, -1, 0.7),
+        position: new BABYLON.Vector3(0, 100, 0),
+        direction: new BABYLON.Vector3(0, -1, 0),
         angle: Math.PI / 4,
-        exponent: 50,
+        exponent: 80,
         castShadows: true
     });
     LightManager.setDiffuseColour("spotlight", new BABYLON.Color3(1, 1, 1));
@@ -47,7 +48,7 @@ function createScene() {
     /*
     *   Enable Physics
     */
-    //PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
+    PhysicsManager.enablePhysics(new BABYLON.Vector3(0, -9.81, 0));
 
     /*
     * Create Actors
@@ -78,7 +79,11 @@ function createScene() {
             uOffset: 0.5,
             specularTexture: "assets/imgs/grass.jpg",
             bumpTexture: "assets/imgs/grass_bumpmap.jpg",
-        }
+        },
+        physicsOptions: {
+            imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+            options: { mass: 0, restitution: 0.9 }
+        },
     });
 
 
@@ -99,50 +104,45 @@ function createScene() {
                     rows: 3,
                     faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
                     wrap: true
-                }
+                },
+                relativeRotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0.5
+                },
+                physicsOptions: {
+                    imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+                    options: { mass: 0  }
+                },
             },
             {
                 meshShape: DEFS.MESHSHAPES.SPHERE,
                 meshOptions: {
                     diameter: 10
-                }
+                },
+                relativeRotation: {
+                    x: 0,
+                    y: 0,
+                    z: 0.5
+                },
+                relativePosition: {
+                    x: 0,
+                    y: -1,
+                    z: -1
+                },
+                physicsOptions: {
+                    imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
+                    options: { mass: 0  }
+                },
             }
         ],
         animations: [{
             animationName: "rotationX",
-            animationOptions: {
-                property: "rotation.x",
-                fps: 30,
-                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-                keys: [{
-                    frame: 0,
-                    value: 0
-                }, {
-                    frame: 50,
-                    value: Math.PI
-                }, {
-                    frame: 100,
-                    value: Math.PI * 2
-                }]
-            }
-        }, {
-            animationName: "rotationY",
-            animationOptions: {
-                property: "rotation.y",
-                fps: 30,
-                type: BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-                mode: BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE,
-                keys: [{
-                    frame: 0,
-                    value: 0
-                }, {
-                    frame: 50,
-                    value: Math.PI
-                }, {
-                    frame: 100,
-                    value: Math.PI * 2
-                }]
+            animationData: {
+                type: 'rotation',
+                axis: BABYLON.Axis.Y,
+                fps: (Math.PI) / 200,
+                frameReference: BABYLON.Space.WORLD
             }
         }],
         updatable: true,
@@ -151,19 +151,31 @@ function createScene() {
         addToShadowMaps: ["spotlight"],
         checkCollisions: true,
         position: {
-            x: 10,
-            y: 15,
-            z: 10
+            x: 0,
+            y: 20,
+            z: 0
+        },
+        rotation: {
+            x: 0,
+            y: 0,
+            z: 0.5
         },
         textureOptions: {
             diffuseTexture: "assets/imgs/dice.jpg",
             specularTexture: "assets/imgs/dice.jpg",
             bumpTexture: "assets/imgs/dice_bumpmap.jpg"
-        }
+        },
+        physicsOptions: {
+            imposter: DEFS.PHYSICSIMPOSTERS.NOIMPOSTER,
+            options: { mass: 2, restitution: 0.1 }
+        },
     });
 
     // * Begin animations
     AnimationManager.runAnimations();
+
+    // * Apply physics to all the objects
+    PhysicsManager.applyPhysics();
 }
 
 export default createScene;

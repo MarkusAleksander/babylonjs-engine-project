@@ -172,10 +172,22 @@ const ActorManager = (function ActorManager() {
         });
 
 
+        if (actorObject.castShadows && actorObject.addToShadowMaps && actorObject.addToShadowMaps.length > 0) {
+            actorMeshList.forEach(mesh => {
+                actorObject.addToShadowMaps.forEach(function addToShadowMap(shadowMapLight) {
+                    LightManager.addMeshToShadowMap(shadowMapLight, mesh.meshObject);
+                });
+            })
+        }
+
         let compoundActorMesh;
 
         // *    STEP 4 and 5
-        compoundActorMesh = actorObject.meshes.length > 1 ? MeshManager.compoundMeshes(actorMeshList.map((mesh) => {return mesh.meshObject})) : actorMeshList[0].meshObject;
+        compoundActorMesh = actorObject.meshes.length > 1 ? MeshManager.compoundMeshes(actorMeshList.map((mesh) => { return mesh.meshObject })) : actorMeshList[0].meshObject;
+
+        // *    Set Compound Position and Rotation
+        if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
+        if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
 
         // * Testing animations
         // if (actorObject.animations && actorObject.animations.length > 0) {
@@ -194,18 +206,10 @@ const ActorManager = (function ActorManager() {
         //     })
         // }
 
-        if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
-
-        if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
 
         // * Register Mesh
         MeshManager.registerMesh(compoundActorMesh);
 
-        if (actorObject.castShadows && actorObject.addToShadowMaps && actorObject.addToShadowMaps.length > 0) {
-            actorObject.addToShadowMaps.forEach(function addToShadowMap(shadowMapLight) {
-                LightManager.addMeshToShadowMap("spotlight", compoundActorMesh);
-            });
-        }
 
         /*
         *   Check if physics options applied

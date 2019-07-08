@@ -1,16 +1,15 @@
 import * as DEFS from './../definitions/definitions.js';
 
-import CameraManager from '../managers/camera/CameraManager.js';
+import CameraManager from './../managers/camera/CameraManager.js';
 import LightManager from './../managers/lights/LightManager.js';
 import SystemManager from './../managers/system/SystemManager.js';
-import SceneManager from './../managers/scene/SceneManager.js';
 
 import PhysicsManager from './../managers/physics/PhysicsManager.js';
 import ActorManager from './../managers/actor/ActorManager.js';
 
 /*
-*   Scene 7 Example
-*   Attach before and after render functionality - bat hitting balls
+*   Scene 6 Example
+*   Non standard mesh physics shape
 */
 function createScene() {
     /*
@@ -21,7 +20,7 @@ function createScene() {
     CameraManager.createCamera(DEFS.CAMERATYPES.ARCROTATE, "main_camera", {
         alpha: Math.PI / 4,
         beta: Math.PI / 3,
-        radius: 175,
+        radius: 75,
         target: new BABYLON.Vector3(0, 0, 0)
     });
 
@@ -82,64 +81,74 @@ function createScene() {
         },
         physicsOptions: {
             imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-            options: { mass: 0, restitution: 0.2 }
+            options: { mass: 0, restitution: 0.9 }
         },
     });
 
-    /*
-    *   Create Bat
-    */
-    ActorManager.createActor({
-        actorName: 'Bat',
-        actorType: DEFS.ACTORTYPES.PHYSICAL,
-        meshes: [{
-            meshShape: DEFS.MESHSHAPES.CYLINDER,
-            meshOptions: {
-                diameter: 6,
-                height: 100
-            }
-        }],
-        updatable: true,
-        receiveShadows: true,
-        castShadows: true,
-        addToShadowMaps: ["spotlight"],
-        position: {
-            x: 0,
-            y: 3,
-            z: 0
-        },
-        rotation: {
-            x: Math.PI / 2,
-            y: 0,
-            z: 0
-        },
-        textureOptions: {
-            diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
-        },
-        physicsOptions: {
-            imposter: DEFS.PHYSICSIMPOSTERS.CYLINDER,
-            options: { mass: 0, restitution: 0.8 }
-        },
-        animations: [{
-            property: 'rotation.z',
-            animateBy: 0.1
-        }]
-    });
 
     /*
-    *   Create 'Spheres'
+    *   Create 'Dice block'
     */
-    let numSpheres = 300;
+    let numDice = 4;
 
-    for (let i = 0; i < numSpheres; i++) {
+    for (let i = 0; i < numDice; i++) {
         ActorManager.createActor({
-            actorName: 'Ball_' + i,
+            actorName: 'MergedMesh_' + i,
             actorType: DEFS.ACTORTYPES.PHYSICAL,
             meshes: [
                 {
-                    meshShape: DEFS.MESHSHAPES.SPHERE,
+                    meshShape: DEFS.MESHSHAPES.BOX,
                     meshOptions: {
-                        diameter: 4
+                        size: 5
+                    },
+                    multifaceOption: {
+                        cols: 2,
+                        rows: 3,
+                        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+                        wrap: true
+                    },
+                    relativePosition: {
+                        x: 2,
+                        y: 2,
+                        z: 2
+                    },
+                    relativeRotation: {
+                        x: 1,
+                        y: 0,
+                        z: 0
+                    },
+                    physicsOptions: {
+                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+                        options: { mass: 0, restitution: 0.5 }
+                    },
+                },
+                {
+                    meshShape: DEFS.MESHSHAPES.BOX,
+                    meshOptions: {
+                        size: 5
+                    },
+                    multifaceOption: {
+                        cols: 2,
+                        rows: 3,
+                        faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
+                        wrap: true
+                    },
+                    relativePosition: {
+                        x: -2,
+                        y: -2,
+                        z: -2
+                    },
+                    relativeRotation: {
+                        x: 0,
+                        y: 0,
+                        z: 1
+                    },
+                    physicsOptions: {
+                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+                        options: { mass: 0, restitution: 0.5 }
+                    },
+                    textureOptions: {
+                        diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
                     }
                 }
             ],
@@ -149,40 +158,25 @@ function createScene() {
             addToShadowMaps: ["spotlight"],
             checkCollisions: true,
             position: {
-                x: (Math.random() * 50) - 25,
-                y: 5 + (5 * i),
-                z: (Math.random() * 50) - 25
+                x: (Math.random() * 20) + 10,
+                y: 5 + (9 * i),
+                z: (Math.random() * 20) - 10
             },
             textureOptions: {
-                diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random())
+                diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random()),
+                diffuseTexture: "assets/imgs/dice.jpg",
+                specularTexture: "assets/imgs/dice.jpg",
+                bumpTexture: "assets/imgs/dice_bumpmap.jpg"
             },
             physicsOptions: {
-                imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
-                options: { mass: 1, restitution: 0.4 }
-            }
+                imposter: DEFS.PHYSICSIMPOSTERS.NOIMPOSTER,
+                options: { mass: 2, restitution: 0.5 }
+            },
         });
     }
 
     // * Apply physics to all the objects
     PhysicsManager.applyPhysics();
-
-
-    // * Add before and after render logic
-    SceneManager.addLogicBeforeRender(function () {
-        console.log('before scene logic: stepID:' + SceneManager.getScene().getStepId());
-
-        if (SceneManager.getScene().getStepId() > 200) {
-            SceneManager.clearLogicBeforeRenderList();
-        }
-    });
-    SceneManager.addLogicAfterRender(function () {
-        console.log('after scene logic: stepID:' + SceneManager.getScene().getStepId());
-
-        if (SceneManager.getScene().getStepId() > 200) {
-            SceneManager.clearLogicAfterRenderList();
-        }
-    });
-
 }
 
 export default createScene;

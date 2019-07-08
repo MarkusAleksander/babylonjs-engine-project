@@ -193,7 +193,12 @@ const ActorManager = (function ActorManager() {
         let compoundActorMesh;
 
         // *    STEP 4 and 5
-        compoundActorMesh = actorObject.meshes.length > 1 ? MeshManager.compoundMeshes(actorMeshList.map((mesh) => { return mesh.meshObject })) : actorMeshList[0].meshObject;
+        if (actorObject.meshes.length > 1) {
+            compoundActorMesh = MeshManager.compoundMeshes(actorMeshList.map((mesh) => { return mesh.meshObject }));
+            compoundActorMesh.name = actorMeshList[0].meshObject.name + "_parent";
+        } else {
+            compoundActorMesh = actorMeshList[0].meshObject;
+        }
 
         // *    Set Compound Position and Rotation
         if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
@@ -212,8 +217,9 @@ const ActorManager = (function ActorManager() {
 
         if (actorObject.animations && actorObject.animations.length > 0) {
             actorObject.animations.forEach(animation => {
-                AnimationManager.addAnimationObject(animation.animationName, animation.animationData);
-                AnimationManager.addAnimationToMesh(compoundActorMesh, animation.animationName);
+                let animName = compoundActorMesh.name + "_" + animation.animationName;
+                AnimationManager.addAnimationObject(animName, animation.animationData);
+                AnimationManager.addAnimationToMesh(compoundActorMesh, animName);
                 //SceneManager.registerFunctionBeforeFrameRender(() => {
                 //debugger;
                 //compoundActorMesh.rotation.y += (Math.PI) / 100;
@@ -245,7 +251,11 @@ const ActorManager = (function ActorManager() {
         // *    Rotation applied after Physics Initialised
 
         if (actorObject.rotation) {
-            compoundActorMesh.rotate(BABYLON.Axis.X, 1, BABYLON.Space.LOCAL);
+            compoundActorMesh.rotate(
+                actorObject.rotation.axis,
+                actorObject.rotation.rotation,
+                actorObject.rotation.frameReference
+            );
         }
 
 

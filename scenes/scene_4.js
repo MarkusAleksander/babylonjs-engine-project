@@ -123,7 +123,7 @@ function createScene() {
                 relativeRotation: {
                     x: 0,
                     y: 0,
-                    z: 0
+                    z: 1
                 },
                 relativePosition: {
                     x: 0,
@@ -145,15 +145,15 @@ function createScene() {
                 frameReference: BABYLON.Space.WORLD
             }
         },
-            // {
-            //     animationName: "rotationX",
-            //     animationData: {
-            //         type: 'rotation',
-            //         axis: BABYLON.Axis.X,
-            //         fps: (Math.PI) / 100,
-            //         frameReference: BABYLON.Space.LOCAL
-            //     }
-            // }
+        {
+            animationName: "rotationX",
+            animationData: {
+                type: 'rotation',
+                axis: BABYLON.Axis.X,
+                fps: (Math.PI) / 200,
+                frameReference: BABYLON.Space.LOCAL
+            }
+        }
         ],
         updatable: true,
         receiveShadows: true,
@@ -166,9 +166,9 @@ function createScene() {
             z: 0
         },
         rotation: {
-            x: 0,
-            y: 0,
-            z: 0
+            axis: BABYLON.Axis.X,
+            rotation: 1,
+            frameReference: BABYLON.Space.LOCAL
         },
         textureOptions: {
             diffuseTexture: "assets/imgs/dice.jpg",

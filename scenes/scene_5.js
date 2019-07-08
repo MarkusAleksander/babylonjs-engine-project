@@ -4,6 +4,7 @@ import CameraManager from './../managers/camera/CameraManager.js';
 import LightManager from './../managers/lights/LightManager.js';
 import SystemManager from './../managers/system/SystemManager.js';
 
+import AnimationManager from './../managers/animation/AnimationManager.js';
 import PhysicsManager from './../managers/physics/PhysicsManager.js';
 import ActorManager from './../managers/actor/ActorManager.js';
 
@@ -90,10 +91,10 @@ function createScene() {
     *   Create 'Dice block'
     */
 
-    let numSpheres = 500,
+    let numSpheres = 100,
         sphereSize = 4;
 
-    for(let i = 0; i < numSpheres; i++) {
+    for (let i = 0; i < numSpheres; i++) {
         ActorManager.createActor({
             actorName: 'MergedMesh_' + i,
             actorType: DEFS.ACTORTYPES.PHYSICAL,
@@ -111,7 +112,7 @@ function createScene() {
                     },
                     physicsOptions: {
                         imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-                        options: { mass: 0  }
+                        options: { mass: 0 }
                     },
                 },
                 {
@@ -121,22 +122,31 @@ function createScene() {
                     },
                     physicsOptions: {
                         imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-                        options: { mass: 0  }
+                        options: { mass: 0 }
                     },
                 }
             ],
+            animations: [{
+                animationName: "rotationY",
+                animationData: {
+                    type: 'rotation',
+                    axis: BABYLON.Axis.Y,
+                    fps: (Math.PI) / 60,
+                    frameReference: BABYLON.Space.WORLD
+                }
+            }],
             updatable: true,
             receiveShadows: true,
             castShadows: true,
             addToShadowMaps: ["spotlight"],
             checkCollisions: true,
             position: {
-                x: Math.random(),
-                y: (sphereSize / 2) + (sphereSize * i),
-                z: Math.random()
+                x: (Math.random() * 20) - 10,
+                y: (sphereSize / 2) + (sphereSize * i) + Math.random(),
+                z: (Math.random() * 20) - 10
             },
             textureOptions: {
-                diffuseColor: new BABYLON.Vector3(Math.random(), Math.random(), Math.random()),
+                diffuseColor: new BABYLON.Color3(Math.random(), Math.random(), Math.random()),
                 diffuseTexture: "assets/imgs/dice.jpg",
                 specularTexture: "assets/imgs/dice.jpg",
                 bumpTexture: "assets/imgs/dice_bumpmap.jpg"
@@ -148,8 +158,11 @@ function createScene() {
         });
     }
 
+    // * Begin animations
+    AnimationManager.runAnimations();
+
     // * Apply physics to all the objects
-    PhysicsManager.applyPhysics();
+    //PhysicsManager.applyPhysics();
 }
 
 export default createScene;

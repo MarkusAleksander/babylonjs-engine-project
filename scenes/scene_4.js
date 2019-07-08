@@ -108,7 +108,7 @@ function createScene() {
                 relativeRotation: {
                     x: 0,
                     y: 0,
-                    z: 0.5
+                    z: 0
                 },
                 physicsOptions: {
                     imposter: DEFS.PHYSICSIMPOSTERS.BOX,
@@ -141,18 +141,20 @@ function createScene() {
             animationData: {
                 type: 'rotation',
                 axis: BABYLON.Axis.Y,
-                fps: (Math.PI) / 200,
+                fps: (Math.PI) / 60,
                 frameReference: BABYLON.Space.WORLD
             }
-        }, {
-            animationName: "rotationX",
-            animationData: {
-                type: 'rotation',
-                axis: BABYLON.Axis.X,
-                fps: (Math.PI) / 100,
-                frameReference: BABYLON.Space.LOCAL
-            }
-        }],
+        },
+            // {
+            //     animationName: "rotationX",
+            //     animationData: {
+            //         type: 'rotation',
+            //         axis: BABYLON.Axis.X,
+            //         fps: (Math.PI) / 100,
+            //         frameReference: BABYLON.Space.LOCAL
+            //     }
+            // }
+        ],
         updatable: true,
         receiveShadows: true,
         castShadows: true,
@@ -166,7 +168,7 @@ function createScene() {
         rotation: {
             x: 0,
             y: 0,
-            z: 0.5
+            z: 0
         },
         textureOptions: {
             diffuseTexture: "assets/imgs/dice.jpg",
@@ -183,7 +185,7 @@ function createScene() {
     AnimationManager.runAnimations();
 
     // * Apply physics to all the objects
-    PhysicsManager.applyPhysics();
+    //PhysicsManager.applyPhysics();
 }
 
 export default createScene;

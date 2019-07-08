@@ -197,7 +197,7 @@ const ActorManager = (function ActorManager() {
 
         // *    Set Compound Position and Rotation
         if (actorObject.position) MeshManager.setMeshPositionByObject(compoundActorMesh, actorObject.position);
-// debugger;
+        // debugger;
         //if (actorObject.rotation) MeshManager.setMeshRotationByObject(compoundActorMesh, actorObject.rotation);
         //compoundActorMesh.rotate(BABYLON.Axis.Y, (Math.PI) / 400, BABYLON.Space.LOCAL);
 
@@ -215,10 +215,10 @@ const ActorManager = (function ActorManager() {
                 AnimationManager.addAnimationObject(animation.animationName, animation.animationData);
                 AnimationManager.addAnimationToMesh(compoundActorMesh, animation.animationName);
                 //SceneManager.registerFunctionBeforeFrameRender(() => {
-                    //debugger;
-                    //compoundActorMesh.rotation.y += (Math.PI) / 100;
-                    //compoundActorMesh.rotate(BABYLON.Axis.Y, (Math.PI) / 200, BABYLON.Space.WORLD)
-                    //console.log(compoundActorMesh.rotationQuaternion);
+                //debugger;
+                //compoundActorMesh.rotation.y += (Math.PI) / 100;
+                //compoundActorMesh.rotate(BABYLON.Axis.Y, (Math.PI) / 200, BABYLON.Space.WORLD)
+                //console.log(compoundActorMesh.rotationQuaternion);
                 //});
             })
         }
@@ -240,6 +240,12 @@ const ActorManager = (function ActorManager() {
 
         if (actorObject.physicsOptions != undefined) {
             PhysicsManager.createPhyiscsObject(compoundActorMesh, actorObject.physicsOptions);
+        }
+
+        // *    Rotation applied after Physics Initialised
+
+        if (actorObject.rotation) {
+            compoundActorMesh.rotate(BABYLON.Axis.X, 1, BABYLON.Space.LOCAL);
         }
 
 

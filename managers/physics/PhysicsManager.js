@@ -47,11 +47,13 @@ const _physicsManager = (function () {
     function _createPhyiscsObject(meshObject, physicsOptions) {
         if (!_isInitialised) return;
 
-        _physicsObjects.push({
-            meshObject: meshObject,
-            imposter: physicsOptions.imposter,
-            physicsOptions: physicsOptions.options
-        });
+        meshObject.physicsImpostor = new BABYLON.PhysicsImpostor(meshObject, _getImposter(physicsOptions.imposter), physicsOptions.options, _sceneManagerRef.getScene());
+
+        // _physicsObjects.push({
+        //     meshObject: meshObject,
+        //     imposter: physicsOptions.imposter,
+        //     physicsOptions: physicsOptions.options
+        // });
 
     }
 

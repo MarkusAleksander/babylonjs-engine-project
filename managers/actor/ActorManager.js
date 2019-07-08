@@ -206,6 +206,7 @@ const ActorManager = (function ActorManager() {
         //     })
         // }
 
+        //debugger;
 
         // * Register Mesh
         MeshManager.registerMesh(compoundActorMesh);

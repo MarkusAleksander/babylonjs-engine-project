@@ -108,13 +108,21 @@ function createScene() {
                         rows: 3,
                         faces: [[0, 2], [1, 0], [0, 1], [1, 1], [0, 0], [1, 2]],
                         wrap: true
-                    }
+                    },
+                    physicsOptions: {
+                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+                        options: { mass: 0  }
+                    },
                 },
                 {
                     meshShape: DEFS.MESHSHAPES.SPHERE,
                     meshOptions: {
                         diameter: sphereSize
-                    }
+                    },
+                    physicsOptions: {
+                        imposter: DEFS.PHYSICSIMPOSTERS.BOX,
+                        options: { mass: 0  }
+                    },
                 }
             ],
             updatable: true,
@@ -134,8 +142,8 @@ function createScene() {
                 bumpTexture: "assets/imgs/dice_bumpmap.jpg"
             },
             physicsOptions: {
-                imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
-                options: { mass: 1, restitution: 0.5 }
+                imposter: DEFS.PHYSICSIMPOSTERS.NOIMPOSTER,
+                options: { mass: 2, restitution: 0.1 }
             },
         });
     }

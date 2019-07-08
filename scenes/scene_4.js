@@ -112,7 +112,7 @@ function createScene() {
                 },
                 physicsOptions: {
                     imposter: DEFS.PHYSICSIMPOSTERS.BOX,
-                    options: { mass: 0  }
+                    options: { mass: 0 }
                 },
             },
             {
@@ -123,26 +123,34 @@ function createScene() {
                 relativeRotation: {
                     x: 0,
                     y: 0,
-                    z: 0.5
+                    z: 0
                 },
                 relativePosition: {
                     x: 0,
-                    y: -1,
-                    z: -1
+                    y: 0,
+                    z: 0
                 },
                 physicsOptions: {
                     imposter: DEFS.PHYSICSIMPOSTERS.SPHERE,
-                    options: { mass: 0  }
+                    options: { mass: 0 }
                 },
             }
         ],
         animations: [{
-            animationName: "rotationX",
+            animationName: "rotationY",
             animationData: {
                 type: 'rotation',
                 axis: BABYLON.Axis.Y,
                 fps: (Math.PI) / 200,
                 frameReference: BABYLON.Space.WORLD
+            }
+        }, {
+            animationName: "rotationX",
+            animationData: {
+                type: 'rotation',
+                axis: BABYLON.Axis.X,
+                fps: (Math.PI) / 100,
+                frameReference: BABYLON.Space.LOCAL
             }
         }],
         updatable: true,
